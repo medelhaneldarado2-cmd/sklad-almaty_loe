@@ -3,187 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Складской дашборд — Автоматический</title>
+<title>Складской дашборд — PRO Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
-:root{
-  --bg:#f3f5fa; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e6eaf2;
-  --purple:#7c3aed; --blue:#2563eb; --cyan:#06b6d4; --green:#10b981; --amber:#f59e0b; --rose:#f43f5e; --indigo:#6366f1;
-  --shadow:0 10px 30px rgba(15,23,42,.07); --shadow-lg:0 18px 45px rgba(15,23,42,.10);
-  --r:20px;
+:root {
+  /* Dark Theme Colors */
+  --bg: #0b1121;
+  --card: #151e32;
+  --card-hover: #1b253c;
+  --line: #2a3548;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  
+  /* Accents */
+  --primary: #38bdf8;
+  --primary-glow: rgba(56, 189, 248, 0.2);
+  --purple: #818cf8;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --rose: #fb7185;
+  --cyan: #22d3ee;
+  
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --r: 12px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;background:
-  radial-gradient(1200px 500px at 85% -10%, rgba(124,58,237,.10), transparent 60%),
-  radial-gradient(900px 400px at -10% 0%, rgba(37,99,235,.10), transparent 55%),
-  var(--bg);
-  color:var(--ink);min-height:100vh;padding:26px 28px 60px}
-.wrap{max-width:1480px;margin:0 auto}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.04), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.04), transparent 25%);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 24px 28px 60px;
+}
+.wrap { max-width: 1500px; margin: 0 auto; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 /* Loader */
-#globalLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.3s; }
-.spinner { width: 50px; height: 50px; border: 4px solid var(--line); border-top-color: var(--blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
+#globalLoader { position: fixed; inset: 0; background: rgba(11, 17, 33, 0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.3s; backdrop-filter: blur(5px); }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--line); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:16px}
-.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px rgba(124,58,237,.35)}
-.logo svg{width:28px;height:28px;stroke:#fff}
-.brand h1{font-size:24px;font-weight:800;letter-spacing:-.4px}
-.brand p{font-size:13px;color:var(--muted);margin-top:2px}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
-.btn{border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;padding:12px 18px;border-radius:14px;display:inline-flex;align-items:center;gap:8px;transition:.2s}
-.btn svg{width:17px;height:17px;stroke:currentColor}
-.btn-primary{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;box-shadow:0 10px 24px rgba(124,58,237,.35)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(124,58,237,.45)}
-.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow)}
-.btn-ghost:hover{border-color:#c7d0e0;transform:translateY(-2px)}
-.btn-sm{padding:8px 13px;font-size:12.5px;border-radius:11px}
+header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+.brand { display:flex; align-items:center; gap:16px; }
+.logo { width:48px; height:48px; border-radius:12px; background: linear-gradient(135deg, var(--primary), var(--purple)); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px var(--primary-glow); }
+.logo svg { width:24px; height:24px; stroke:#fff; }
+.brand h1 { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+.brand p { font-size:13px; color:var(--muted); margin-top:4px; }
+.actions { display:flex; gap:12px; flex-wrap:wrap; }
+.btn { border:none; cursor:pointer; font-family:inherit; font-weight:600; font-size:13px; padding:10px 16px; border-radius:8px; display:inline-flex; align-items:center; gap:8px; transition:0.2s; }
+.btn svg { width:16px; height:16px; stroke:currentColor; }
+.btn-primary { background: var(--primary); color: #0f172a; box-shadow: 0 0 15px var(--primary-glow); }
+.btn-primary:hover { background: #7dd3fc; transform: translateY(-1px); }
+.btn-ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--primary); background: var(--card-hover); }
+.btn-sm { padding:8px 12px; font-size:12px; }
 
-.filters{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
-.filters-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.filters-head h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
-.filters-head h2 svg{width:17px;height:17px;stroke:var(--purple)}
-.f-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.f-group{background:#f8faff;border:1px solid var(--line);border-radius:16px;padding:14px}
-.f-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.f-title .dot{width:9px;height:9px;border-radius:50%}
-.date-range{display:flex;gap:8px;margin-bottom:10px}
-.date-range input{flex:1;min-width:0;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;background:#fff;outline:none}
-.date-range input:focus{border-color:var(--blue)}
-.pills{display:flex;gap:5px;flex-wrap:wrap}
-.pill{border:1.5px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;padding:6px 11px;border-radius:99px;cursor:pointer;transition:.15s}
-.pill.active{background:linear-gradient(135deg,#7c3aed,#2563eb);border-color:transparent;color:#fff;box-shadow:0 6px 14px rgba(124,58,237,.3)}
-.pill:hover:not(.active){border-color:#c4cdea}
+.filters { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); }
+.filters-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.filters-head h2 { font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.filters-head h2 svg { width:16px; height:16px; stroke:var(--primary); }
+.f-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px; }
+.f-group { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.f-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+.f-title .dot { width:8px; height:8px; border-radius:50%; }
+.date-range { display:flex; gap:8px; margin-bottom:10px; }
+.date-range input { flex:1; min-width:0; padding:8px; border:1px solid var(--line); border-radius:6px; font-family:inherit; font-size:12px; background:var(--bg); color:var(--ink); outline:none; color-scheme: dark; }
+.date-range input:focus { border-color:var(--primary); }
+.pills { display:flex; gap:6px; flex-wrap:wrap; }
+.pill { border:1px solid var(--line); background:var(--bg); color:var(--muted); font-family:inherit; font-size:11px; font-weight:600; padding:6px 12px; border-radius:6px; cursor:pointer; transition:0.2s; }
+.pill.active { background: var(--primary); border-color: var(--primary); color: #0f172a; }
+.pill:hover:not(.active) { border-color: var(--primary); color: var(--ink); }
 
-.ms{position:relative}
-.ms-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink)}
-.ms-btn:hover{border-color:#c4cdea}
-.ms-btn .chev{transition:.2s;color:var(--muted)}
-.ms.open .ms-btn .chev{transform:rotate(180deg)}
-.ms-panel{display:none;position:absolute;z-index:50;top:calc(100%+6px);left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);padding:10px;margin-top:6px}
-.ms.open .ms-panel{display:block;animation:fadeUp .18s ease}
-.ms-search{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13px;margin-bottom:8px;outline:none}
-.ms-search:focus{border-color:var(--purple)}
-.ms-list{max-height:280px;overflow:auto;display:flex;flex-direction:column;gap:2px}
-.ms-item{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:500}
-.ms-item:hover{background:#f3f0ff}
-.ms-item input{accent-color:var(--purple);width:15px;height:15px;cursor:pointer}
-.ms-tools{display:flex;gap:8px;margin-top:9px}
-.ms-tools button{flex:1;border:none;background:#f1f5f9;color:var(--ink);font-family:inherit;font-size:12px;font-weight:600;padding:7px;border-radius:9px;cursor:pointer}
-.ms-tools button:hover{background:#e2e8f0}
+.ms { position:relative; }
+.ms-btn { width:100%; display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border:1px solid var(--line); border-radius:6px; background:var(--bg); font-family:inherit; font-size:12px; font-weight:500; cursor:pointer; color:var(--ink); }
+.ms-btn:hover { border-color:var(--primary); }
+.ms-btn .chev { transition:0.2s; color:var(--muted); }
+.ms.open .ms-btn .chev { transform:rotate(180deg); }
+.ms-panel { display:none; position:absolute; z-index:50; top:calc(100% + 6px); left:0; right:0; background:var(--card); border:1px solid var(--line); border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,0.5); padding:10px; }
+.ms.open .ms-panel { display:block; animation:fadeUp 0.2s ease; }
+.ms-search { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font-family:inherit; font-size:12px; margin-bottom:8px; outline:none; background:var(--bg); color:var(--ink); }
+.ms-search:focus { border-color:var(--primary); }
+.ms-list { max-height:240px; overflow:auto; display:flex; flex-direction:column; gap:2px; }
+.ms-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:500; }
+.ms-item:hover { background:var(--bg); }
+.ms-item input { accent-color:var(--primary); width:14px; height:14px; cursor:pointer; }
+.ms-tools { display:flex; gap:6px; margin-top:8px; }
+.ms-tools button { flex:1; border:1px solid var(--line); background:var(--bg); color:var(--muted); font-family:inherit; font-size:11px; font-weight:600; padding:6px; border-radius:6px; cursor:pointer; }
+.ms-tools button:hover { background:var(--line); color:var(--ink); }
 
-.radio-list{display:flex;flex-direction:column;gap:6px}
-.radio-item{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;padding:5px 7px;border-radius:9px;transition:.15s}
-.radio-item:hover{background:#eef2ff}
-.radio-item input{accent-color:var(--purple);width:15px;height:15px;cursor:pointer}
-.radio-item .tag{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#eef2ff;color:var(--indigo)}
+.radio-list { display:flex; flex-direction:column; gap:6px; }
+.radio-item { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:500; color:var(--muted); cursor:pointer; padding:4px 6px; border-radius:6px; transition:0.2s; }
+.radio-item:hover { color:var(--ink); background:var(--bg); }
+.radio-item input { accent-color:var(--primary); width:14px; height:14px; cursor:pointer; }
+.radio-item input:checked ~ span:not(.tag) { color:var(--ink); }
+.radio-item .tag { margin-left:auto; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:var(--bg); border:1px solid var(--line); color:var(--muted); }
 
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:22px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;position:relative;overflow:hidden;transition:.25s}
-.kpi:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--acc,linear-gradient(90deg,#7c3aed,#2563eb))}
-.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.kpi-ic{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--icbg,#f3e8ff)}
-.kpi-ic svg{width:21px;height:21px;stroke:var(--icc,#7c3aed)}
-.kpi-val{font-size:25px;font-weight:800;letter-spacing:-.6px;line-height:1.1;word-break:break-word}
-.kpi-lbl{font-size:12.5px;font-weight:600;color:var(--muted);margin-top:5px}
-.kpi-sub{font-size:12px;color:var(--muted);margin-top:7px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.kpi-sub b{color:var(--ink)}
-.kpi-name{font-size:15px;font-weight:800;color:var(--ink);line-height:1.25;word-break:break-word}
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; position: relative; transition: 0.2s; box-shadow: var(--shadow); }
+.kpi:hover { transform: translateY(-3px); border-color: var(--line-hover, #334155); }
+.kpi::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background: var(--c); border-radius: var(--r) 0 0 var(--r); }
+.kpi-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.kpi-ic { width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.05); }
+.kpi-ic svg { width:18px; height:18px; stroke: var(--c); }
+.kpi-val { font-size:24px; font-weight:800; letter-spacing:-0.5px; line-height:1.1; color: var(--ink); word-break:break-word; }
+.kpi-lbl { font-size:12px; font-weight:600; color:var(--muted); margin-top:6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.kpi-sub { font-size:11.5px; color:var(--muted); margin-top:8px; display:flex; align-items:center; gap:5px; flex-wrap:wrap; border-top: 1px solid var(--line); padding-top: 8px; }
+.kpi-sub b { color:var(--ink); font-weight: 700; }
+.kpi-name { font-size:15px; font-weight:700; color:var(--ink); line-height:1.3; word-break:break-word; }
 
-.charts{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-bottom:22px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;transition:.25s}
-.card:hover{box-shadow:var(--shadow-lg)}
-.card h3{font-size:15px;font-weight:700;margin-bottom:3px}
-.card .sub{font-size:12px;color:var(--muted);margin-bottom:14px}
-.chart-box{position:relative;height:300px}
-.chart-box.sm{height:260px}
-.c-line{grid-column:span 8}.c-donut{grid-column:span 4}
-.c-week,.c-bar,.c-seg,.c-status{grid-column:span 6}
-@media(max-width:1100px){.c-line,.c-donut,.c-week,.c-bar,.c-seg,.c-status{grid-column:span 12}}
+.charts { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; margin-bottom:24px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; box-shadow: var(--shadow); }
+.card h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+.card .sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
+.chart-box { position:relative; height:280px; }
+.chart-box.sm { height:240px; }
+.c-line { grid-column:span 8; } .c-donut { grid-column:span 4; }
+.c-week, .c-bar, .c-seg, .c-status { grid-column:span 6; }
+@media(max-width:1100px) { .c-line, .c-donut, .c-week, .c-bar, .c-seg, .c-status { grid-column:span 12; } }
 
-.table-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-.table-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px 14px;flex-wrap:wrap}
-.table-head h3{font-size:16px;font-weight:800}
-.table-head .sub{font-size:12px;color:var(--muted);margin-top:2px}
-.table-tools{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.search-box{position:relative}
-.search-box input{padding:9px 13px 9px 36px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:13px;width:230px;outline:none;background:#fff}
-.search-box input:focus{border-color:var(--purple)}
-.search-box svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted)}
-.table-scroll{overflow:auto;max-height:560px;border-top:1px solid var(--line)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{position:sticky;top:0;background:#f8faff;z-index:2;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap}
-thead th:hover{color:var(--ink)}
-thead th .arr{font-size:9px;margin-left:4px;color:var(--purple)}
-tbody td{padding:11px 14px;border-bottom:1px solid #f1f4f9;white-space:nowrap}
-tbody tr:hover{background:#f8faff}
-tbody tr:last-child td{border-bottom:none}
-td.num{font-variant-numeric:tabular-nums;font-weight:600}
-.art{font-weight:700;color:var(--indigo)}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:99px}
-.badge::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
-.b-ok{background:#e7f9f1;color:#0b9e6d}
-.b-low{background:#fef4e2;color:#c47c0a}
-.b-out{background:#ffe9ec;color:#d81f45}
-.b-over{background:#eef0ff;color:#4f46e5}
-.mini-bar{width:70px;height:6px;border-radius:99px;background:#eef1f7;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
-.mini-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#2563eb)}
-tbody tr.is-new{background:#eafff5}
-tbody tr.is-new:hover{background:#d9fbec}
-tbody tr.is-new td.art{position:relative}
-.new-badge{display:inline-block;margin-left:7px;font-size:9.5px;font-weight:800;letter-spacing:.3px;color:#0b9e6d;background:#d3f7e6;padding:2px 7px;border-radius:99px;vertical-align:middle}
-.btn-toggle-active{background:linear-gradient(135deg,#10b981,#34d399)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 10px 24px rgba(16,185,129,.35)!important}
-.empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:14px}
-.pager{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:#fbfcff;flex-wrap:wrap}
-.pager button{border:1.5px solid var(--line);background:#fff;font-family:inherit;font-weight:600;font-size:12.5px;padding:8px 15px;border-radius:10px;cursor:pointer;color:var(--ink)}
-.pager button:hover:not(:disabled){border-color:#c4cdea;transform:translateY(-1px)}
-.pager button:disabled{opacity:.35;cursor:default}
-.pg-info{font-size:12.5px;color:var(--muted);font-weight:600}
+.table-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); overflow:hidden; }
+.table-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px; flex-wrap:wrap; border-bottom: 1px solid var(--line); }
+.table-head h3 { font-size:16px; font-weight:700; }
+.table-head .sub { font-size:12px; color:var(--muted); margin-top:4px; }
+.table-tools { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.search-box { position:relative; }
+.search-box input { padding:8px 12px 8px 32px; border:1px solid var(--line); border-radius:8px; font-family:inherit; font-size:12px; width:220px; outline:none; background:var(--bg); color:var(--ink); }
+.search-box input:focus { border-color:var(--primary); }
+.search-box svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; stroke:var(--muted); }
+.table-scroll { overflow:auto; max-height:600px; }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+thead th { position:sticky; top:0; background:#111827; z-index:2; text-align:left; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer; user-select:none; white-space:nowrap; }
+thead th:hover { color:var(--ink); background:#151e32; }
+thead th .arr { font-size:9px; margin-left:6px; color:var(--primary); }
+tbody td { padding:12px 16px; border-bottom:1px solid var(--line); white-space:nowrap; color:#cbd5e1; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); color: var(--ink); }
+tbody tr:last-child td { border-bottom:none; }
+td.num { font-variant-numeric:tabular-nums; font-weight:600; }
+.art { font-weight:700; color:var(--primary); }
 
-#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:#0f172a;color:#fff;padding:13px 22px;border-radius:14px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:99;box-shadow:0 14px 34px rgba(15,23,42,.35);display:flex;align-items:center;gap:9px;max-width:90vw}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast .t-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}
+.badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; }
+.b-ok { background:rgba(52, 211, 153, 0.15); color:#34d399; border: 1px solid rgba(52, 211, 153, 0.2); }
+.b-low { background:rgba(251, 191, 36, 0.15); color:#fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); }
+.b-out { background:rgba(244, 63, 94, 0.15); color:#fb7185; border: 1px solid rgba(244, 63, 94, 0.2); }
+.b-over { background:rgba(129, 140, 248, 0.15); color:#818cf8; border: 1px solid rgba(129, 140, 248, 0.2); }
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.7}
+.mini-bar { width:60px; height:4px; border-radius:4px; background:var(--line); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:8px; }
+.mini-bar i { display:block; height:100%; border-radius:4px; background: linear-gradient(90deg, var(--primary), var(--purple)); }
+
+tbody tr.is-new td { background: rgba(16, 185, 129, 0.05); }
+tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
+.new-badge { display:inline-block; margin-left:8px; font-size:9px; font-weight:800; letter-spacing:0.5px; color:#fff; background:#059669; padding:2px 6px; border-radius:4px; vertical-align:middle; }
+.btn-toggle-active { background: var(--green)!important; color:#0f172a!important; box-shadow:0 0 15px rgba(52,211,153,0.3)!important; border-color:transparent!important; }
+
+.empty { padding:60px 20px; text-align:center; color:var(--muted); font-size:13px; }
+.pager { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 20px; border-top:1px solid var(--line); background:var(--card); flex-wrap:wrap; }
+.pager button { border:1px solid var(--line); background:var(--bg); font-family:inherit; font-weight:600; font-size:12px; padding:8px 14px; border-radius:6px; cursor:pointer; color:var(--ink); }
+.pager button:hover:not(:disabled) { border-color:var(--primary); }
+.pager button:disabled { opacity:0.4; cursor:default; }
+.pg-info { font-size:12px; color:var(--muted); font-weight:500; }
+
+#toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(20px); background:#1e293b; color:#fff; padding:12px 20px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-weight:600; opacity:0; pointer-events:none; transition:0.3s; z-index:99; box-shadow:0 10px 30px rgba(0,0,0,0.5); display:flex; align-items:center; gap:10px; }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+#toast .t-dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex:none; }
+
+@keyframes fadeUp { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+.footer-note { text-align:center; color:var(--muted); font-size:12px; margin-top:30px; line-height:1.6; }
+
+#syncOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(4px); }
+.modal-box { background:var(--card); border:1px solid var(--line); border-radius:16px; max-width:500px; width:100%; padding:24px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+.modal-box h3 { font-size:16px; font-weight:700; margin-bottom:8px; color:var(--ink); }
+.modal-box p { font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:16px; }
+.modal-box input { width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--ink); font-family:inherit; font-size:13px; margin-top:6px; outline:none; }
+.modal-box input:focus { border-color:var(--primary); }
 
 @media(max-width:768px){
-  body{padding:16px 12px 44px}
-  .wrap{max-width:100%}
-  .brand h1{font-size:19px}
-  .brand p{font-size:11.5px}
-  .logo{width:44px;height:44px;border-radius:13px}
-  .btn{padding:10px 14px;font-size:13px}
-  .actions{width:100%}
-  .actions .btn{flex:1;justify-content:center}
-  .f-grid{grid-template-columns:1fr}
-  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:11px}
-  .kpi{padding:14px}
-  .kpi-val{font-size:19px}
-  .kpi-name{font-size:13px}
-  .c-line,.c-donut,.c-week,.c-bar,.c-seg,.c-status{grid-column:span 12}
-  .chart-box{height:250px}
-  .chart-box.sm{height:230px}
-  .table-head{padding:16px 14px 10px}
-  .table-tools{width:100%}
-  .search-box{flex:1}
-  .search-box input{width:100%}
-  table{font-size:12px}
-  thead th{padding:10px 10px}
-  tbody td{padding:9px 10px}
-  .ms-panel{position:fixed;top:auto;left:10px;right:10px;z-index:100;max-height:60vh}
-  .ms-list{max-height:38vh}
+  body { padding:16px 12px 40px; }
+  .brand h1 { font-size:18px; }
+  .actions { width:100%; }
+  .actions .btn { flex:1; justify-content:center; }
+  .kpi-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+  .kpi { padding:14px; }
+  .kpi-val { font-size:18px; }
+  .chart-box { height:240px; }
+  .table-head { padding:14px; }
+  .search-box { flex:1; }
+  .search-box input { width:100%; }
 }
 @media(max-width:420px){
-  .kpi-grid{grid-template-columns:1fr 1fr;gap:9px}
-  .kpi-lbl{font-size:11px}
-  .kpi-sub{font-size:11px}
-  .brand p{display:none}
+  .kpi-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -191,33 +210,33 @@ tbody tr.is-new td.art{position:relative}
 
 <div id="globalLoader">
   <div class="spinner"></div>
-  <h2 style="font-weight:700; color:#0f172a; margin-bottom:8px;">Синхронизация с таблицей...</h2>
-  <p style="color:#64748b; font-size:13px; text-align:center;">Загружаем свежие остатки, продажи и сезоны</p>
+  <h2 style="font-weight:700; color:var(--ink); margin-bottom:8px;">Синхронизация данных...</h2>
+  <p style="color:var(--muted); font-size:13px; text-align:center;">PRO Analytics загружает свежие остатки и продажи</p>
 </div>
 
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.3L12 13l8.7-4.7"/><path d="M12 13v9"/></svg></div>
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg></div>
       <div>
-        <h1>Складской дашборд — Алматы</h1>
-        <p>Остатки и продажи · обновлено <span id="nowDate"></span> <span id="syncStatusInline" style="color:var(--green); font-weight:600;">(Синхронизировано)</span></p>
+        <h1>Складской дашборд</h1>
+        <p>Analytics Engine · Обновлено <span id="nowDate"></span> <span id="syncStatusInline" style="color:var(--green); font-weight:600; margin-left:4px;">(Синхронизировано)</span></p>
       </div>
     </div>
     <div class="actions">
-      <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Обновить данные</button>
-      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки связи<span id="syncDot" style="display:none;width:8px;height:8px;border-radius:50%;background:#10b981;margin-left:2px"></span></button>
+      <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.1-5.7L3 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 1 0-2.1 5.7l2.1-1.7"/></svg>Обновить сейчас</button>
+      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки связи<span id="syncDot" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--green);margin-left:4px;box-shadow:0 0 8px var(--green)"></span></button>
     </div>
   </header>
 
   <div class="filters">
     <div class="filters-head">
-      <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 3H2l8 9.5V19l4 2v-8.5L22 3z"/></svg>Фильтры отчёта</h2>
-      <button class="btn btn-ghost btn-sm" onclick="resetFilters()">Сбросить все фильтры</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Панель управления</h2>
+      <button class="btn btn-ghost btn-sm" onclick="resetFilters()">Сбросить всё</button>
     </div>
     <div class="f-grid">
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#2563eb"></span>1 · Период</div>
+        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период</div>
         <div class="date-range">
           <input type="date" id="dateFrom" onchange="setDate()">
           <input type="date" id="dateTo" onchange="setDate()">
@@ -230,44 +249,43 @@ tbody tr.is-new td.art{position:relative}
         </div>
       </div>
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#0ea5e9"></span>2 · Бренд</div>
+        <div class="f-title"><span class="dot" style="background:var(--purple)"></span>2 · Бренд</div>
         <div class="ms" id="msBrands">
-          <button class="ms-btn" onclick="toggleMs(event, 'msBrands')"><span id="msBrandLabel">Все бренды</span><svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button class="ms-btn" onclick="toggleMs(event, 'msBrands')"><span id="msBrandLabel">Все бренды</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="ms-panel">
-            <input class="ms-search" id="msBrandSearch" placeholder="Поиск бренда…" oninput="renderBrandList()">
+            <input class="ms-search" id="msBrandSearch" placeholder="Поиск…" oninput="renderBrandList()">
             <div class="ms-list" id="msBrandList"></div>
             <div class="ms-tools">
-              <button onclick="selectAllBrands(true)">Выбрать все</button>
+              <button onclick="selectAllBrands(true)">Все</button>
               <button onclick="selectAllBrands(false)">Очистить</button>
             </div>
           </div>
         </div>
       </div>
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#7c3aed"></span>3 · Артикул</div>
+        <div class="f-title"><span class="dot" style="background:var(--cyan)"></span>3 · Артикул</div>
         <div class="ms" id="msArticles">
-          <button class="ms-btn" onclick="toggleMs(event, 'msArticles')"><span id="msLabel">Все артикулы</span><svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button class="ms-btn" onclick="toggleMs(event, 'msArticles')"><span id="msLabel">Все артикулы</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="ms-panel">
-            <input class="ms-search" id="msSearch" placeholder="Поиск артикула…" oninput="renderArticleList()">
+            <input class="ms-search" id="msSearch" placeholder="Поиск…" oninput="renderArticleList()">
             <div class="ms-list" id="msList"></div>
             <div class="ms-tools">
-              <button onclick="selectAllArticles(true)">Выбрать все</button>
+              <button onclick="selectAllArticles(true)">Все</button>
               <button onclick="selectAllArticles(false)">Очистить</button>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- НОВЫЙ БЛОК: СЕЗОН -->
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#14b8a6"></span>4 · Сезон</div>
+        <div class="f-title"><span class="dot" style="background:var(--rose)"></span>4 · Сезон</div>
         <div class="ms" id="msSeasons">
-          <button class="ms-btn" onclick="toggleMs(event, 'msSeasons')"><span id="msSeasonLabel">Все сезоны</span><svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button class="ms-btn" onclick="toggleMs(event, 'msSeasons')"><span id="msSeasonLabel">Все сезоны</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
           <div class="ms-panel">
-            <input class="ms-search" id="msSeasonSearch" placeholder="Поиск сезона…" oninput="renderSeasonList()">
+            <input class="ms-search" id="msSeasonSearch" placeholder="Поиск…" oninput="renderSeasonList()">
             <div class="ms-list" id="msSeasonList"></div>
             <div class="ms-tools">
-              <button onclick="selectAllSeasons(true)">Выбрать все</button>
+              <button onclick="selectAllSeasons(true)">Все</button>
               <button onclick="selectAllSeasons(false)">Очистить</button>
             </div>
           </div>
@@ -275,76 +293,76 @@ tbody tr.is-new td.art{position:relative}
       </div>
       
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#f59e0b"></span>5 · Продажи</div>
+        <div class="f-title"><span class="dot" style="background:var(--amber)"></span>5 · Продажи</div>
         <div class="radio-list">
-          <label class="radio-item"><input type="radio" name="sf" value="all" checked onchange="setSalesFilter('all')">Все товары<span class="tag" id="cnt-all">—</span></label>
-          <label class="radio-item"><input type="radio" name="sf" value="hit" onchange="setSalesFilter('hit')">Хиты (топ 25%)<span class="tag" id="cnt-hit">—</span></label>
-          <label class="radio-item"><input type="radio" name="sf" value="mid" onchange="setSalesFilter('mid')">Средние продажи<span class="tag" id="cnt-mid">—</span></label>
-          <label class="radio-item"><input type="radio" name="sf" value="low" onchange="setSalesFilter('low')">Низкие продажи<span class="tag" id="cnt-low">—</span></label>
-          <label class="radio-item"><input type="radio" name="sf" value="zero" onchange="setSalesFilter('zero')">Не продаются<span class="tag" id="cnt-zero">—</span></label>
+          <label class="radio-item"><input type="radio" name="sf" value="all" checked onchange="setSalesFilter('all')"><span>Все товары</span><span class="tag" id="cnt-all">—</span></label>
+          <label class="radio-item"><input type="radio" name="sf" value="hit" onchange="setSalesFilter('hit')"><span>Хиты (топ 25%)</span><span class="tag" id="cnt-hit">—</span></label>
+          <label class="radio-item"><input type="radio" name="sf" value="mid" onchange="setSalesFilter('mid')"><span>Средние продажи</span><span class="tag" id="cnt-mid">—</span></label>
+          <label class="radio-item"><input type="radio" name="sf" value="low" onchange="setSalesFilter('low')"><span>Низкие продажи</span><span class="tag" id="cnt-low">—</span></label>
+          <label class="radio-item"><input type="radio" name="sf" value="zero" onchange="setSalesFilter('zero')"><span>Не продаются</span><span class="tag" id="cnt-zero">—</span></label>
         </div>
       </div>
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:#10b981"></span>6 · Остаток</div>
+        <div class="f-title"><span class="dot" style="background:var(--green)"></span>6 · Остаток</div>
         <div class="radio-list">
-          <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')">Любой статус<span class="tag" id="scnt-all">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')">В наличии (4–50)<span class="tag" id="scnt-ok">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')">Заканчивается (1–3)<span class="tag" id="scnt-low">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')">Нет в наличии (≤0)<span class="tag" id="scnt-out">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="over" onchange="setStockFilter('over')">Избыток (>50)<span class="tag" id="scnt-over">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')"><span>Любой статус</span><span class="tag" id="scnt-all">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии (4–50)</span><span class="tag" id="scnt-ok">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')"><span>Заканчивается</span><span class="tag" id="scnt-low">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')"><span>Нет в наличии</span><span class="tag" id="scnt-out">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="over" onchange="setStockFilter('over')"><span>Избыток (>50)</span><span class="tag" id="scnt-over">—</span></label>
         </div>
       </div>
     </div>
   </div>
 
   <div class="kpi-grid">
-    <div class="kpi" style="--acc:linear-gradient(90deg,#7c3aed,#a78bfa);--icbg:#f3e8ff;--icc:#7c3aed">
+    <div class="kpi" style="--c:var(--primary)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.3L12 13l8.7-4.7"/><path d="M12 13v9"/></svg></div></div>
       <div class="kpi-val" id="kStock">0</div>
       <div class="kpi-lbl">Общий остаток, шт</div>
-      <div class="kpi-sub">позиций в выборке: <b id="kStockSku">0</b></div>
+      <div class="kpi-sub">Ассортимент: <b id="kStockSku">0</b> SKU</div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#2563eb,#38bdf8);--icbg:#e3efff;--icc:#2563eb">
+    <div class="kpi" style="--c:var(--purple)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
       <div class="kpi-val" id="kCap">0 ₸</div>
-      <div class="kpi-lbl">Капитализация (в рознице)</div>
-      <div class="kpi-sub">ср. розничная цена: <b id="kAvgPrice">0 ₸</b></div>
+      <div class="kpi-lbl">Капитализация (Розница)</div>
+      <div class="kpi-sub">Средняя цена: <b id="kAvgPrice">0 ₸</b></div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#0ea5e9,#7dd3fc);--icbg:#e0f2fe;--icc:#0284c7">
+    <div class="kpi" style="--c:var(--cyan)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="M7 15h0M2 9.5h20"/></svg></div></div>
       <div class="kpi-val" id="kTotalCost">0 ₸</div>
       <div class="kpi-lbl">Себестоимость остатков</div>
-      <div class="kpi-sub">расчетная ед: <b id="kAvgCost">0 ₸</b></div>
+      <div class="kpi-sub">Расчетная ед: <b id="kAvgCost">0 ₸</b></div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#f59e0b,#fbbf24);--icbg:#fef4e2;--icc:#d97706">
+    <div class="kpi" style="--c:var(--amber)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div></div>
       <div class="kpi-val" id="kSales">0</div>
-      <div class="kpi-lbl">Продажи за период, шт</div>
-      <div class="kpi-sub">выручка: <b id="kRevenue">0 ₸</b></div>
+      <div class="kpi-lbl">Продажи за период</div>
+      <div class="kpi-sub">Выручка: <b id="kRevenue">0 ₸</b></div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#10b981,#34d399);--icbg:#e7f9f1;--icc:#0b9e6d">
+    <div class="kpi" style="--c:var(--green)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
       <div class="kpi-val" id="kProfit">0 ₸</div>
-      <div class="kpi-lbl">Прибыль за период</div>
-      <div class="kpi-sub">средняя маржа: <b id="kMargin">0%</b></div>
+      <div class="kpi-lbl">Чистая прибыль</div>
+      <div class="kpi-sub">Средняя маржа: <b id="kMargin">0%</b></div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#6366f1,#818cf8);--icbg:#eef0ff;--icc:#4f46e5">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M8 21h8M12 17v4M17 4H7v6a5 5 0 0 0 10 0V4z"/><path d="M17 5h3a1 1 0 0 1 1 1c0 2.5-2 4-4 4M7 5H4a1 1 0 0 0-1 1c0 2.5 2 4 4 4"/></svg></div></div>
+    <div class="kpi" style="--c:#a855f7">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div></div>
       <div class="kpi-name" id="kLeader">—</div>
-      <div class="kpi-lbl">Лидер продаж</div>
-      <div class="kpi-sub">продано: <b id="kLeaderQty">0 шт</b></div>
+      <div class="kpi-lbl">Товар-лидер</div>
+      <div class="kpi-sub">Продано: <b id="kLeaderQty">0 шт</b></div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#06b6d4,#67e8f9);--icbg:#e0f7fb;--icc:#0891b2">
+    <div class="kpi" style="--c:#6366f1">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
       <div class="kpi-val" id="kSku">0</div>
-      <div class="kpi-lbl">SKU в ассортименте</div>
-      <div class="kpi-sub">без продаж: <b id="kNoSales">0</b></div>
+      <div class="kpi-lbl">Активный ассортимент</div>
+      <div class="kpi-sub">Без продаж: <b id="kNoSales">0</b> шт</div>
     </div>
-    <div class="kpi" style="--acc:linear-gradient(90deg,#f43f5e,#fb7185);--icbg:#ffe9ec;--icc:#d81f45">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div></div>
+    <div class="kpi" style="--c:var(--rose)">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
       <div class="kpi-val" id="kRisk">0</div>
-      <div class="kpi-lbl">Товары под риском</div>
-      <div class="kpi-sub">нет на складе: <b id="kOut">0</b> · заканчивается: <b id="kLow">0</b></div>
+      <div class="kpi-lbl">Требуют внимания</div>
+      <div class="kpi-sub">Пусто: <b id="kOut">0</b> · Мало: <b id="kLow">0</b></div>
     </div>
   </div>
 
@@ -355,29 +373,29 @@ tbody tr.is-new td.art{position:relative}
       <div class="chart-box"><canvas id="chDyn"></canvas></div>
     </div>
     <div class="card c-donut">
-      <h3>Бренды</h3>
-      <p class="sub">Доля выручки по брендам</p>
+      <h3>Выручка по брендам</h3>
+      <p class="sub">Структура доходов</p>
       <div class="chart-box"><canvas id="chBrand"></canvas></div>
     </div>
     
     <div class="card c-week">
-      <h3>Еженедельные продажи (шт)</h3>
-      <p class="sub">Количество проданных товаров по неделям года</p>
+      <h3>Еженедельные тренды</h3>
+      <p class="sub">Количество проданных товаров (шт)</p>
       <div class="chart-box sm"><canvas id="chWeek"></canvas></div>
     </div>
     <div class="card c-bar">
-      <h3>Топ-10 по продажам</h3>
-      <p class="sub">Артикулы-лидеры за выбранный период</p>
+      <h3>Топ-10 товаров</h3>
+      <p class="sub">Артикулы-лидеры по штукам</p>
       <div class="chart-box sm"><canvas id="chTop"></canvas></div>
     </div>
     <div class="card c-seg">
       <h3>Ценовые сегменты</h3>
-      <p class="sub">Кол-во SKU и капитализация по ценовым диапазонам</p>
+      <p class="sub">Кол-во товаров и заблокированные деньги</p>
       <div class="chart-box sm"><canvas id="chSeg"></canvas></div>
     </div>
     <div class="card c-status">
-      <h3>Статусы остатков</h3>
-      <p class="sub">Контроль запасов в текущей выборке</p>
+      <h3>Статус запасов</h3>
+      <p class="sub">Распределение товаров по наличию</p>
       <div class="chart-box sm"><canvas id="chStatus"></canvas></div>
     </div>
   </div>
@@ -385,17 +403,17 @@ tbody tr.is-new td.art{position:relative}
   <div class="table-card">
     <div class="table-head">
       <div>
-        <h3>Общий список товаров на складе</h3>
-        <p class="sub" id="tblSub">Подробные данные по каждой позиции со статусом остатка</p>
+        <h3>Спецификация товаров</h3>
+        <p class="sub" id="tblSub">Детализированная аналитика по каждой позиции</p>
       </div>
       <div class="table-tools">
-        <button class="btn btn-ghost btn-sm" id="onlyChangedBtn" style="display:none" onclick="toggleOnlyChanged()">🟢 Новые/изменённые: <span id="changedCount">0</span></button>
+        <button class="btn btn-ghost btn-sm" id="onlyChangedBtn" style="display:none; color:var(--green); border-color:var(--green);" onclick="toggleOnlyChanged()">🟢 Изменённые: <span id="changedCount">0</span></button>
         <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input id="tblSearch" placeholder="Поиск по таблице…" oninput="setSearch(this.value)">
+          <input id="tblSearch" placeholder="Глобальный поиск…" oninput="setSearch(this.value)">
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="exportCSV()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>CSV</button>
-        <button class="btn btn-ghost btn-sm" onclick="exportExcel()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>Excel</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportExcel()">Excel</button>
       </div>
     </div>
     <div class="table-scroll">
@@ -404,36 +422,34 @@ tbody tr.is-new td.art{position:relative}
         <tbody id="tblBody"></tbody>
       </table>
       <div class="pager" id="pager"></div>
-      <div class="empty" id="tblEmpty" style="display:none">Нет данных по заданным фильтрам. Попробуйте изменить условия отбора.</div>
+      <div class="empty" id="tblEmpty" style="display:none">По вашим фильтрам ничего не найдено.</div>
     </div>
   </div>
 
-  <p class="footer-note">Сайт опубликован через GitHub Pages.<br>
-  Новые продажи, остатки и сезоны подгружаются автоматически каждые 5 минут, страница обновляется без участия человека.</p>
+  <p class="footer-note">PRO Analytics Engine · Разработано для автоматизированного складского учета.<br>
+  Система синхронизируется по API каждые 5 минут.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
 
-<div id="syncOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:200;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:24px;box-shadow:0 25px 60px rgba(15,23,42,.35)">
+<div id="syncOverlay">
+  <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="font-size:17px;font-weight:800">⚙ Автообновление из Google Таблиц</h3>
-      <button onclick="closeSyncModal()" style="border:none;background:#f1f5f9;width:30px;height:30px;border-radius:10px;cursor:pointer;font-size:16px;color:#64748b">✕</button>
+      <h3>Настройки синхронизации</h3>
+      <button onclick="closeSyncModal()" style="border:none;background:var(--bg);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--muted)">✕</button>
     </div>
-    <p style="font-size:12.5px;color:#64748b;line-height:1.6;margin-bottom:16px">
-      Сайт автоматически запрашивает листы "ПРОДАЖА", "ОСТАТОК ТОВАРА" и ваш новый лист "СЕЗОН" напрямую из таблицы по API.
-    </p>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
-      <label style="font-size:12px;font-weight:700;color:#0f172a">Проверять обновления каждые (минут)
-        <input id="syncInterval" type="number" min="1" max="120" value="5" style="width:100px;margin-top:5px;padding:9px 11px;border:1.5px solid #e6eaf2;border-radius:10px;font-family:inherit;font-size:12.5px">
+    <p>Сайт работает по безопасному API-подключению к Google Spreadsheets. Все запросы происходят локально.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <label style="font-size:12px;font-weight:600;color:var(--muted)">Проверять обновления каждые (минут)
+        <input id="syncInterval" type="number" min="1" max="120" value="5">
       </label>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn btn-primary btn-sm" onclick="saveSyncSettings(true)">Сохранить и включить</button>
-      <button class="btn btn-ghost btn-sm" onclick="showLoader(); runAutoSync(false)">Проверить сейчас</button>
-      <button class="btn btn-ghost btn-sm" onclick="saveSyncSettings(false)">Выключить автообновление</button>
+      <button class="btn btn-primary" onclick="saveSyncSettings(true)">Сохранить</button>
+      <button class="btn btn-ghost" onclick="showLoader(); runAutoSync(false)">Проверить сейчас</button>
+      <button class="btn btn-ghost" onclick="saveSyncSettings(false)">Выключить</button>
     </div>
-    <p id="syncStatus" style="font-size:12px;color:#64748b;margin-bottom:16px">Автообновление включено</p>
+    <p id="syncStatus" style="font-size:12px;color:var(--primary);margin-bottom:0">Активно</p>
   </div>
 </div>
 
@@ -444,9 +460,10 @@ let charts = {};
 let sortKey = 'sales', sortDir = -1;
 let page = 1; const PAGE_SIZE = 100;
 const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'', onlyChanged:false };
-const PALETTE = ['#7c3aed','#2563eb','#06b6d4','#10b981','#f59e0b','#f43f5e','#6366f1','#14b8a6','#f97316','#8b5cf6','#0ea5e9','#84cc16'];
+// Neon Palette for Dark Mode
+const PALETTE = ['#38bdf8', '#818cf8', '#34d399', '#fbbf24', '#f472b6', '#a78bfa', '#2dd4bf', '#fb923c', '#facc15', '#e879f9'];
 let changedSet = new Set();
-const LS_KEY = 'sklad_almaty_data_v4'; // Обновленный кэш
+const LS_KEY = 'sklad_almaty_data_pro';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
@@ -455,7 +472,7 @@ const pdate= v => { if(!v) return null; if(v instanceof Date) return isNaN(v)?nu
 const dstr = d => d? d.toLocaleDateString('ru-RU') : '—';
 const cleanName = s => String(s==null?'':s).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 
-/* ================= ПАРСЕР ДАННЫХ ================= */
+/* ================= PARSER ================= */
 function buildDataset(saleRows, stockRows, seasonRows){
   const isSep = v => /^\d+-\d+$/.test(String(v==null?'':v).trim());
   const bad = v => { const s=String(v==null?'':v).trim().toLowerCase(); return !s || s==='наименование' || s==='артикул' || isSep(s); };
@@ -465,15 +482,11 @@ function buildDataset(saleRows, stockRows, seasonRows){
       let header = (seasonRows[0]||[]).map(s=>String(s).toLowerCase().trim());
       let aIdx = header.findIndex(s=>s.includes('артикул') || s==='штрихкод');
       let sIdx = header.findIndex(s=>s.includes('сезон'));
-      
-      if(aIdx === -1) aIdx = 0; 
-      if(sIdx === -1) sIdx = header.length > 1 ? header.length - 1 : 1; 
-      
+      if(aIdx === -1) aIdx = 0; if(sIdx === -1) sIdx = header.length > 1 ? header.length - 1 : 1; 
       for(let i=1; i<seasonRows.length; i++){
           let row = seasonRows[i];
           if(!row || row.length === 0) continue;
-          let art = String(row[aIdx]||'').trim();
-          let seas = String(row[sIdx]||'').trim();
+          let art = String(row[aIdx]||'').trim(); let seas = String(row[sIdx]||'').trim();
           if(art && seas) seasonMap[art] = seas;
       }
   }
@@ -483,13 +496,11 @@ function buildDataset(saleRows, stockRows, seasonRows){
       stockRows.forEach(r=>{
         if(!r || r.length < 4 || bad(r[2])) return;
         let a=String(r[1]==null?'':r[1]).trim(); if(!a) a='Б/А·'+cleanName(r[2]); if(isSep(a)) return;
-        if(!(a in stock)) stock[a]={name:cleanName(r[2]), qty:pnum(r[3]), price:pnum(r[4])};
-        else stock[a].qty+=pnum(r[3]);
+        if(!(a in stock)) stock[a]={name:cleanName(r[2]), qty:pnum(r[3]), price:pnum(r[4])}; else stock[a].qty+=pnum(r[3]);
       });
   }
 
-  const agg = {};
-  const A = a => agg[a] || (agg[a]={qty:0,income:0,profit:0,last:null,name:null});
+  const agg = {}; const A = a => agg[a] || (agg[a]={qty:0,income:0,profit:0,last:null,name:null});
   if (saleRows) {
       saleRows.forEach(r=>{
         if(!r || r.length < 6 || bad(r[2])) return;
@@ -512,13 +523,10 @@ function buildDataset(saleRows, stockRows, seasonRows){
   
   Object.keys(products).forEach(a=>{
     const g=agg[a];
-    products[a].sales = g? g.qty : 0;
-    products[a].revenue = g? g.income : 0;
-    products[a].profit = g? g.profit : 0;
-    products[a].date = g? g.last : null;
+    products[a].sales = g? g.qty : 0; products[a].revenue = g? g.income : 0;
+    products[a].profit = g? g.profit : 0; products[a].date = g? g.last : null;
     products[a].season = seasonMap[a] || 'Не указан'; 
   });
-  
   return Object.values(products);
 }
 
@@ -530,138 +538,65 @@ function updateDataMerge(newData){
       if(!o) changed.add(r.article);
       else if(o.stock!==r.stock || o.sales!==r.sales || o.revenue!==r.revenue || o.profit!==r.profit || o.price!==r.price || o.name!==r.name || o.season!==r.season) changed.add(r.article);
     });
-    DATA=newData;
-    changedSet=changed;
-    F.onlyChanged = changed.size>0;
-    page=1;
-    saveToStorage();
-    initDashboard();
-    updateChangedUI();
+    DATA=newData; changedSet=changed; F.onlyChanged = changed.size>0; page=1;
+    saveToStorage(); initDashboard(); updateChangedUI();
 }
 
 function saveToStorage(){
-  try{
-    const plain=DATA.map(r=>({...r, date: r.date? r.date.toISOString().slice(0,10) : null}));
-    localStorage.setItem(LS_KEY, JSON.stringify(plain));
-  }catch(e){}
+  try{ const plain=DATA.map(r=>({...r, date: r.date? r.date.toISOString().slice(0,10) : null})); localStorage.setItem(LS_KEY, JSON.stringify(plain)); }catch(e){}
 }
 function loadFromStorage(){
-  try{
-    const raw=localStorage.getItem(LS_KEY);
-    if(!raw) return null;
-    const arr=JSON.parse(raw);
+  try{ const raw=localStorage.getItem(LS_KEY); if(!raw) return null; const arr=JSON.parse(raw);
     if(!Array.isArray(arr) || !arr.length) return null;
     return arr.map(r=>({...r, date: r.date? new Date(r.date+'T00:00:00') : null, season: r.season||'Не указан'}));
   }catch(e){ return null; }
 }
 
-/* ================= АВТООБНОВЛЕНИЕ ИЗ GOOGLE ТАБЛИЦ ================= */
+/* ================= SYNC ================= */
 const SHEET_ID = '1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg';
 const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}`;
-
-const SYNC = {
-  salesUrl: csvUrlGid('368756623'),    // ПРОДАЖА
-  stockUrl: csvUrlGid('663742317'),    // ОСТАТОК ТОВАРА
-  seasonUrl: csvUrlGid('476452638'),   // СЕЗОН (Новая вкладка)
-  intervalMin: 5, enabled: true, lastRun: null, lastResult: ''
-};
-
+const SYNC = { salesUrl: csvUrlGid('368756623'), stockUrl: csvUrlGid('663742317'), seasonUrl: csvUrlGid('476452638'), intervalMin: 5, enabled: true, lastRun: null, lastResult: '' };
 let syncTimer=null; let syncInFlight=false;
 
-function openSyncModal(){
-  document.getElementById('syncInterval').value=SYNC.intervalMin||5;
-  updateSyncStatusText();
-  document.getElementById('syncOverlay').style.display='flex';
-}
+function openSyncModal(){ document.getElementById('syncInterval').value=SYNC.intervalMin||5; updateSyncStatusText(); document.getElementById('syncOverlay').style.display='flex'; }
 function closeSyncModal(){ document.getElementById('syncOverlay').style.display='none'; }
-
 function updateSyncStatusText(){
   const el=document.getElementById('syncStatus'); if(!el) return;
-  if(!SYNC.enabled){ el.textContent='Автообновление выключено'; return; }
-  let txt='Автообновление включено · проверка каждые '+SYNC.intervalMin+' мин.';
-  if(SYNC.lastRun) txt+=' · последняя: '+new Date(SYNC.lastRun).toLocaleTimeString('ru-RU');
-  if(SYNC.lastResult) txt+=' · '+SYNC.lastResult;
+  if(!SYNC.enabled){ el.textContent='Отключено'; return; }
+  let txt='Активно · '+SYNC.intervalMin+' мин';
+  if(SYNC.lastRun) txt+=' · Обновлено: '+new Date(SYNC.lastRun).toLocaleTimeString('ru-RU');
   el.textContent=txt;
   const dot=document.getElementById('syncDot'); if(dot) dot.style.display='inline-block';
 }
-
 function saveSyncSettings(enable){
   SYNC.intervalMin=Math.max(1, parseInt(document.getElementById('syncInterval').value,10)||5);
-  SYNC.enabled=!!enable;
-  const dot=document.getElementById('syncDot');
-  if(dot) dot.style.display = SYNC.enabled ? 'inline-block' : 'none';
-  restartSyncTimer();
-  if(enable && SYNC.enabled){ toast('Автообновление включено'); showLoader(); runAutoSync(true); }
-  else { toast('Автообновление выключено'); }
-  updateSyncStatusText();
+  SYNC.enabled=!!enable; const dot=document.getElementById('syncDot'); if(dot) dot.style.display = SYNC.enabled ? 'inline-block' : 'none';
+  restartSyncTimer(); if(enable && SYNC.enabled){ toast('Автообновление включено'); showLoader(); runAutoSync(true); } else { toast('Автообновление выключено'); }
+  updateSyncStatusText(); closeSyncModal();
 }
+function restartSyncTimer(){ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } if(SYNC.enabled){ syncTimer=setInterval(()=>runAutoSync(true), Math.max(1,SYNC.intervalMin)*60000); } }
 
-function restartSyncTimer(){
-  if(syncTimer){ clearInterval(syncTimer); syncTimer=null; }
-  if(SYNC.enabled){ syncTimer=setInterval(()=>runAutoSync(true), Math.max(1,SYNC.intervalMin)*60000); }
-}
-
-function csvUrlToRows(csvText){
-  const cleanedText = csvText.replace(/^"|"$/g, '').replace(/","/g, '","');
-  const wb=XLSX.read(cleanedText,{type:'string'});
-  return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
-}
-
-async function fetchCsv(url){
-  const bust = url + (url.includes('?')?'&':'?') + '_ts=' + Date.now();
-  const res = await fetch(bust, {cache:'no-store'});
-  if(!res.ok) throw new Error('HTTP '+res.status);
-  return await res.text();
-}
-
-function showLoader() {
-    const loader = document.getElementById('globalLoader');
-    if(loader) { loader.style.display = 'flex'; loader.style.opacity = '1'; }
-}
+function csvUrlToRows(csvText){ const cleanedText = csvText.replace(/^"|"$/g, '').replace(/","/g, '","'); const wb=XLSX.read(cleanedText,{type:'string'}); return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true}); }
+async function fetchCsv(url){ const res = await fetch(url + (url.includes('?')?'&':'?') + '_ts=' + Date.now(), {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status); return await res.text(); }
+function showLoader() { const loader = document.getElementById('globalLoader'); if(loader) { loader.style.display = 'flex'; loader.style.opacity = '1'; } }
 
 async function runAutoSync(silent){
-  if(!SYNC.enabled) return;
-  if(syncInFlight) return; syncInFlight=true;
+  if(!SYNC.enabled || syncInFlight) return; syncInFlight=true;
   try{
-    const [saleTxt, stockTxt, seasonTxt] = await Promise.all([
-        fetchCsv(SYNC.salesUrl), 
-        fetchCsv(SYNC.stockUrl),
-        fetchCsv(SYNC.seasonUrl)
-    ]);
+    const [saleTxt, stockTxt, seasonTxt] = await Promise.all([ fetchCsv(SYNC.salesUrl), fetchCsv(SYNC.stockUrl), fetchCsv(SYNC.seasonUrl) ]);
     const rows=buildDataset(csvUrlToRows(saleTxt), csvUrlToRows(stockTxt), csvUrlToRows(seasonTxt));
-    if(!rows || !rows.length) throw new Error('пустые данные или ошибка чтения');
-    
-    updateDataMerge(rows);
-    
-    SYNC.lastRun=Date.now();
-    if(changedSet.size>0){
-      SYNC.lastResult='обновлено позиций: '+fmt(changedSet.size);
-      if(!silent) toast('Таблица Google синхронизирована: обновлено '+fmt(changedSet.size)+' позиций');
-    } else {
-      SYNC.lastResult='изменений нет';
-      if(!silent) toast('Синхронизировано: новых изменений не найдено');
-    }
-  }catch(err){
-    SYNC.lastResult='ошибка загрузки';
-    if(!silent) toast('Ошибка чтения. Убедитесь, что таблица доступна "Всем в интернете"');
-  }finally{
-    updateSyncStatusText(); syncInFlight=false;
-    const loader = document.getElementById('globalLoader');
-    if(loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => { loader.style.display = 'none'; }, 300);
-    }
-  }
+    if(!rows || !rows.length) throw new Error('Empty');
+    updateDataMerge(rows); SYNC.lastRun=Date.now();
+    if(changedSet.size>0){ SYNC.lastResult='Обновлено: '+fmt(changedSet.size); if(!silent) toast('Синхронизация: обновлено '+fmt(changedSet.size)+' позиций'); } 
+    else { SYNC.lastResult='Без изменений'; if(!silent) toast('Синхронизация завершена. Изменений нет.'); }
+  }catch(err){ SYNC.lastResult='Ошибка API'; if(!silent) toast('Сбой подключения. Проверьте права таблицы.'); }
+  finally{ updateSyncStatusText(); syncInFlight=false; const loader = document.getElementById('globalLoader'); if(loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 300); } }
 }
 
 function toggleOnlyChanged(){ F.onlyChanged=!F.onlyChanged; page=1; updateChangedUI(); renderAll(); }
 function updateChangedUI(){
   const btn=document.getElementById('onlyChangedBtn');
-  if(btn){
-    document.getElementById('changedCount').textContent=fmt(changedSet.size);
-    btn.style.display = changedSet.size>0 ? 'inline-flex' : 'none';
-    btn.classList.toggle('btn-toggle-active', F.onlyChanged);
-  }
+  if(btn){ document.getElementById('changedCount').textContent=fmt(changedSet.size); btn.style.display = changedSet.size>0 ? 'inline-flex' : 'none'; btn.classList.toggle('btn-toggle-active', F.onlyChanged); }
 }
 
 /* ================= FILTERS ================= */
@@ -670,86 +605,38 @@ document.getElementById('periodPills').addEventListener('click',e=>{
   const b=e.target.closest('.pill'); if(!b) return;
   document.querySelectorAll('#periodPills .pill').forEach(p=>p.classList.remove('active'));
   b.classList.add('active'); F.period=b.dataset.p; page=1;
-  document.getElementById('dynSub').textContent='Агрегация по '+({day:'дням',week:'неделям',month:'месяцам',year:'годам'})[F.period];
-  renderAll();
+  document.getElementById('dynSub').textContent='Агрегация по '+({day:'дням',week:'неделям',month:'месяцам',year:'годам'})[F.period]; renderAll();
 });
-
-function toggleMs(e, id){
-  e.stopPropagation();
-  document.querySelectorAll('.ms').forEach(el => { if(el.id !== id) el.classList.remove('open'); });
-  document.getElementById(id).classList.toggle('open'); 
-}
+function toggleMs(e, id){ e.stopPropagation(); document.querySelectorAll('.ms').forEach(el => { if(el.id !== id) el.classList.remove('open'); }); document.getElementById(id).classList.toggle('open'); }
 document.addEventListener('click',e=>{ if(!e.target.closest('.ms')) document.querySelectorAll('.ms').forEach(el => el.classList.remove('open')); });
 
-/* Бренды */
-function brandOf(name){
-  let t=String(name||'').trim().split(/\s+/)[0]||'Прочее';
-  t=t.replace(/[^\wЀ-ӿ&.-]/g,'').toUpperCase();
-  const map={GG:'GOLDEN GOOSE',GGDB:'GOLDEN GOOSE',LP:'LORO PIANA','LP.':'LORO PIANA','LV':'LOUIS VUITTON','LV.LOVE':'LOUIS VUITTON','AX':'ARMANI EXCHANGE'};
-  return map[t]||t;
-}
+function brandOf(name){ let t=String(name||'').trim().split(/\s+/)[0]||'Прочее'; t=t.replace(/[^\wЀ-ӿ&.-]/g,'').toUpperCase(); const map={GG:'GOLDEN GOOSE',GGDB:'GOLDEN GOOSE',LP:'LORO PIANA','LP.':'LORO PIANA','LV':'LOUIS VUITTON','LV.LOVE':'LOUIS VUITTON','AX':'ARMANI EXCHANGE'}; return map[t]||t; }
 function uniqueBrands(){ return [...new Set(DATA.map(r=>brandOf(r.name)))].sort((a,b)=>a.localeCompare(b)); }
-function renderBrandList(){
-  const list=document.getElementById('msBrandList');
-  const q=(document.getElementById('msBrandSearch').value||'').toLowerCase();
-  const brands=uniqueBrands().filter(b=>b.toLowerCase().includes(q));
-  let html=brands.map(b=>'<label class="ms-item"><input type="checkbox" '+(F.brands.has(b)?'checked':'')+' onchange="toggleBrand(\''+b.replace(/'/g,"\\'")+'\',this.checked)">'+esc(b)+'</label>').join('');
-  list.innerHTML=brands.length ? html : '<div style="padding:8px;font-size:12.5px;color:#94a3b8">Не найдено</div>';
-}
+function renderBrandList(){ const list=document.getElementById('msBrandList'); const q=(document.getElementById('msBrandSearch').value||'').toLowerCase(); const brands=uniqueBrands().filter(b=>b.toLowerCase().includes(q)); list.innerHTML=brands.length ? brands.map(b=>'<label class="ms-item"><input type="checkbox" '+(F.brands.has(b)?'checked':'')+' onchange="toggleBrand(\''+b.replace(/'/g,"\\'")+'\',this.checked)">'+esc(b)+'</label>').join('') : '<div style="padding:8px;font-size:12px;color:var(--muted)">Не найдено</div>'; }
 function toggleBrand(b,on){ page=1; on? F.brands.add(b) : F.brands.delete(b); updateMsBrandLabel(); renderAll(); }
 function selectAllBrands(on){ page=1; F.brands = on? new Set(uniqueBrands()) : new Set(); renderBrandList(); updateMsBrandLabel(); renderAll(); }
-function updateMsBrandLabel(){
-  const all=uniqueBrands().length;
-  document.getElementById('msBrandLabel').textContent = F.brands.size===0? 'Все бренды ('+all+')' : 'Выбрано: '+F.brands.size;
-}
+function updateMsBrandLabel(){ document.getElementById('msBrandLabel').textContent = F.brands.size===0? 'Все бренды' : 'Выбрано: '+F.brands.size; }
 
-/* Артикулы */
 function uniqueArticles(){ return [...new Set(DATA.map(r=>r.article))].sort((a,b)=>a.localeCompare(b)); }
-function renderArticleList(){
-  const list=document.getElementById('msList');
-  const q=(document.getElementById('msSearch').value||'').toLowerCase();
-  const arts=uniqueArticles().filter(a=>a.toLowerCase().includes(q));
-  let html=arts.map(a=>'<label class="ms-item"><input type="checkbox" '+(F.articles.has(a)?'checked':'')+' onchange="toggleArticle(\''+a.replace(/'/g,"\\'")+'\',this.checked)">'+esc(a)+'</label>').join('');
-  list.innerHTML=arts.length ? html : '<div style="padding:8px;font-size:12.5px;color:#94a3b8">Не найдено</div>';
-}
+function renderArticleList(){ const list=document.getElementById('msList'); const q=(document.getElementById('msSearch').value||'').toLowerCase(); const arts=uniqueArticles().filter(a=>a.toLowerCase().includes(q)); list.innerHTML=arts.length ? arts.map(a=>'<label class="ms-item"><input type="checkbox" '+(F.articles.has(a)?'checked':'')+' onchange="toggleArticle(\''+a.replace(/'/g,"\\'")+'\',this.checked)">'+esc(a)+'</label>').join('') : '<div style="padding:8px;font-size:12px;color:var(--muted)">Не найдено</div>'; }
 function toggleArticle(a,on){ page=1; on? F.articles.add(a) : F.articles.delete(a); updateMsLabel(); renderAll(); }
 function selectAllArticles(on){ page=1; F.articles = on? new Set(uniqueArticles()) : new Set(); renderArticleList(); updateMsLabel(); renderAll(); }
-function updateMsLabel(){
-  const all=uniqueArticles().length;
-  document.getElementById('msLabel').textContent = F.articles.size===0? 'Все артикулы ('+all+')' : 'Выбрано: '+F.articles.size;
-}
+function updateMsLabel(){ document.getElementById('msLabel').textContent = F.articles.size===0? 'Все артикулы' : 'Выбрано: '+F.articles.size; }
 
-/* Сезоны */
 function uniqueSeasons(){ return [...new Set(DATA.map(r=>r.season||'Не указан'))].sort((a,b)=>a.localeCompare(b)); }
-function renderSeasonList(){
-  const list=document.getElementById('msSeasonList');
-  const q=(document.getElementById('msSeasonSearch').value||'').toLowerCase();
-  const seasons=uniqueSeasons().filter(s=>s.toLowerCase().includes(q));
-  let html=seasons.map(s=>'<label class="ms-item"><input type="checkbox" '+(F.seasons.has(s)?'checked':'')+' onchange="toggleSeason(\''+s.replace(/'/g,"\\'")+'\',this.checked)">'+esc(s)+'</label>').join('');
-  list.innerHTML=seasons.length ? html : '<div style="padding:8px;font-size:12.5px;color:#94a3b8">Не найдено</div>';
-}
+function renderSeasonList(){ const list=document.getElementById('msSeasonList'); const q=(document.getElementById('msSeasonSearch').value||'').toLowerCase(); const seasons=uniqueSeasons().filter(s=>s.toLowerCase().includes(q)); list.innerHTML=seasons.length ? seasons.map(s=>'<label class="ms-item"><input type="checkbox" '+(F.seasons.has(s)?'checked':'')+' onchange="toggleSeason(\''+s.replace(/'/g,"\\'")+'\',this.checked)">'+esc(s)+'</label>').join('') : '<div style="padding:8px;font-size:12px;color:var(--muted)">Не найдено</div>'; }
 function toggleSeason(s,on){ page=1; on? F.seasons.add(s) : F.seasons.delete(s); updateMsSeasonLabel(); renderAll(); }
 function selectAllSeasons(on){ page=1; F.seasons = on? new Set(uniqueSeasons()) : new Set(); renderSeasonList(); updateMsSeasonLabel(); renderAll(); }
-function updateMsSeasonLabel(){
-  const all=uniqueSeasons().length;
-  document.getElementById('msSeasonLabel').textContent = F.seasons.size===0? 'Все сезоны ('+all+')' : 'Выбрано: '+F.seasons.size;
-}
+function updateMsSeasonLabel(){ document.getElementById('msSeasonLabel').textContent = F.seasons.size===0? 'Все сезоны' : 'Выбрано: '+F.seasons.size; }
 
 function setSalesFilter(v){ page=1; F.sales=v; renderAll(); }
 function setStockFilter(v){ page=1; F.stock=v; renderAll(); }
 function setSearch(v){ page=1; F.search=v.toLowerCase(); renderAll(); }
 function resetFilters(){
-  page=1;
-  F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.onlyChanged=false;
-  document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value='';
-  document.getElementById('tblSearch').value='';
-  document.querySelector('input[name="sf"][value="all"]').checked=true;
-  document.querySelector('input[name="stf"][value="all"]').checked=true;
-  updateChangedUI();
-  renderBrandList(); updateMsBrandLabel();
-  renderArticleList(); updateMsLabel();
-  renderSeasonList(); updateMsSeasonLabel();
-  renderAll(); toast('Фильтры сброшены');
+  page=1; F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.onlyChanged=false;
+  document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value=''; document.getElementById('tblSearch').value='';
+  document.querySelector('input[name="sf"][value="all"]').checked=true; document.querySelector('input[name="stf"][value="all"]').checked=true;
+  updateChangedUI(); renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll(); toast('Фильтры сброшены');
 }
 
 /* ================= PIPELINE ================= */
@@ -757,16 +644,13 @@ function statusOf(r){ if(r.stock<=0) return 'out'; if(r.stock<=3) return 'low'; 
 function applyFilters(){
   let rows = DATA.filter(r=>{
     if(F.from && r.date && r.date < new Date(F.from)) return false;
-    if(F.to && r.date){ const t=new Date(F.to); t.setDate(t.getDate()+1); if(r.date>=t) return false; }
-    return true;
+    if(F.to && r.date){ const t=new Date(F.to); t.setDate(t.getDate()+1); if(r.date>=t) return false; } return true;
   });
   if(F.brands.size) rows = rows.filter(r => F.brands.has(brandOf(r.name)));
   if(F.articles.size) rows = rows.filter(r => F.articles.has(r.article));
   if(F.seasons.size) rows = rows.filter(r => F.seasons.has(r.season||'Не указан'));
-  
   if(F.sales!=='all'){
-    const sv = rows.map(r=>r.sales).sort((a,b)=>a-b);
-    const q = p => sv.length? sv[Math.min(sv.length-1, Math.floor(p*sv.length))] : 0;
+    const sv = rows.map(r=>r.sales).sort((a,b)=>a-b); const q = p => sv.length? sv[Math.min(sv.length-1, Math.floor(p*sv.length))] : 0;
     const q25=q(.25), q75=q(.75);
     if(F.sales==='hit') rows=rows.filter(r=>r.sales>0 && r.sales>=q75);
     if(F.sales==='mid') rows=rows.filter(r=>r.sales>q25 && r.sales<q75);
@@ -782,162 +666,90 @@ function applyFilters(){
 /* ================= RENDER ================= */
 function animateNum(el, to, isMoney){
   const start = parseFloat(el.dataset.v||0), dur=600, t0=performance.now();
-  const step=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3);
-    el.textContent = isMoney? money(start+(to-start)*e) : fmt(start+(to-start)*e);
-    if(k<1) requestAnimationFrame(step); };
+  const step=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); el.textContent = isMoney? money(start+(to-start)*e) : fmt(start+(to-start)*e); if(k<1) requestAnimationFrame(step); };
   requestAnimationFrame(step); el.dataset.v=to;
 }
 
 function renderAll(){
-  const rows = applyFilters();
-  const base = DATA;
-  const sv=base.map(r=>r.sales).sort((a,b)=>a-b);
-  const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0;
-  const q25=q(.25),q75=q(.75);
-  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.sales>0&&r.sales>=q75).length);
-  setCnt('cnt-mid',base.filter(r=>r.sales>q25&&r.sales<q75).length); setCnt('cnt-low',base.filter(r=>r.sales>0&&r.sales<=q25).length);
-  setCnt('cnt-zero',base.filter(r=>r.sales===0).length);
-  setCnt('scnt-all',base.length); setCnt('scnt-ok',base.filter(r=>statusOf(r)==='ok').length);
-  setCnt('scnt-low',base.filter(r=>statusOf(r)==='low').length); setCnt('scnt-out',base.filter(r=>statusOf(r)==='out').length);
-  setCnt('scnt-over',base.filter(r=>statusOf(r)==='over').length);
+  const rows = applyFilters(); const base = DATA;
+  const sv=base.map(r=>r.sales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
+  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.sales>0&&r.sales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.sales>q25&&r.sales<q75).length); setCnt('cnt-low',base.filter(r=>r.sales>0&&r.sales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.sales===0).length);
+  setCnt('scnt-all',base.length); setCnt('scnt-ok',base.filter(r=>statusOf(r)==='ok').length); setCnt('scnt-low',base.filter(r=>statusOf(r)==='low').length); setCnt('scnt-out',base.filter(r=>statusOf(r)==='out').length); setCnt('scnt-over',base.filter(r=>statusOf(r)==='over').length);
 
-  const stock=rows.reduce((s,r)=>s+r.stock,0);
-  const cap=rows.reduce((s,r)=>s+r.stock*r.price,0); 
-  
-  const totalRev = rows.reduce((s,r)=>s+r.revenue,0);
-  const totalProf = rows.reduce((s,r)=>s+r.profit,0);
+  const stock=rows.reduce((s,r)=>s+r.stock,0); const cap=rows.reduce((s,r)=>s+r.stock*r.price,0); 
+  const totalRev = rows.reduce((s,r)=>s+r.revenue,0); const totalProf = rows.reduce((s,r)=>s+r.profit,0);
   const avgMargin = totalRev > 0 ? (totalProf / totalRev) : 0.45; 
-
-  const getUnitCost = r => {
-      if(r.sales > 0 && r.revenue > 0) return (r.revenue - r.profit) / r.sales; 
-      return r.price * (1 - avgMargin); 
-  };
-
+  const getUnitCost = r => { if(r.sales > 0 && r.revenue > 0) return (r.revenue - r.profit) / r.sales; return r.price * (1 - avgMargin); };
   const totalStockCost = rows.reduce((s,r) => s + (r.stock > 0 ? r.stock * getUnitCost(r) : 0), 0);
   const avgUnitCost = stock > 0 ? totalStockCost / stock : 0;
+  const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
+  const noSales=rows.filter(r=>r.sales===0).length; const out=rows.filter(r=>r.stock<=0).length, low=rows.filter(r=>r.stock>0&&r.stock<=3).length;
+  
+  animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
+  animateNum(document.getElementById('kCap'),cap,true); document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
+  animateNum(document.getElementById('kTotalCost'), totalStockCost, true); document.getElementById('kAvgCost').textContent=money(avgUnitCost);
+  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalRev);
+  animateNum(document.getElementById('kProfit'),totalProf,true); document.getElementById('kMargin').textContent=(totalRev>0? (totalProf/totalRev*100).toFixed(1) : '0')+'%';
+  document.getElementById('kLeader').textContent=leader? leader.name : '—'; document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
+  animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
+  animateNum(document.getElementById('kRisk'),out+low); document.getElementById('kOut').textContent=fmt(out); document.getElementById('kLow').textContent=fmt(low);
 
-  const salesQty=rows.reduce((s,r)=>s+r.sales,0);
-  const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
-  const noSales=rows.filter(r=>r.sales===0).length;
-  const out=rows.filter(r=>r.stock<=0).length, low=rows.filter(r=>r.stock>0&&r.stock<=3).length;
-  
-  animateNum(document.getElementById('kStock'),stock);
-  document.getElementById('kStockSku').textContent=fmt(rows.length);
-  
-  animateNum(document.getElementById('kCap'),cap,true);
-  document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
-
-  animateNum(document.getElementById('kTotalCost'), totalStockCost, true);
-  document.getElementById('kAvgCost').textContent=money(avgUnitCost);
-  
-  animateNum(document.getElementById('kSales'),salesQty);
-  document.getElementById('kRevenue').textContent=money(totalRev);
-  
-  animateNum(document.getElementById('kProfit'),totalProf,true);
-  document.getElementById('kMargin').textContent=(totalRev>0? (totalProf/totalRev*100).toFixed(1) : '0')+'%';
-  
-  document.getElementById('kLeader').textContent=leader? leader.name : '—';
-  document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
-  
-  animateNum(document.getElementById('kSku'),rows.length);
-  document.getElementById('kNoSales').textContent=fmt(noSales);
-  
-  animateNum(document.getElementById('kRisk'),out+low);
-  document.getElementById('kOut').textContent=fmt(out);
-  document.getElementById('kLow').textContent=fmt(low);
-
-  updateCharts(rows);
-  renderTable(rows);
-  document.getElementById('tblSub').textContent='Показано '+fmt(rows.length)+' из '+fmt(DATA.length)+' позиций';
+  updateCharts(rows); renderTable(rows);
+  document.getElementById('tblSub').textContent='Отображено '+fmt(rows.length)+' позиций (Всего в базе: '+fmt(DATA.length)+')';
 }
 function setCnt(id,n){ const el=document.getElementById(id); if(el) el.textContent=fmt(n); }
 
 /* ================= CHARTS ================= */
 function bucket(d){
   if(F.period==='day') return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit'});
-  if(F.period==='month') return d.toLocaleDateString('ru-RU',{month:'long',year:'numeric'});
+  if(F.period==='month') return d.toLocaleDateString('ru-RU',{month:'short',year:'2-digit'});
   if(F.period==='year') return String(d.getFullYear());
-  const onejan=new Date(d.getFullYear(),0,1); const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
-  return d.getFullYear()+' · нед '+w;
+  const onejan=new Date(d.getFullYear(),0,1); const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7); return d.getFullYear()+' W'+w;
 }
 function initCharts(){
-  Chart.defaults.font.family='Inter'; Chart.defaults.color='#64748b'; Chart.defaults.font.size=11.5;
-  const grid={color:'rgba(100,116,139,.10)'};
+  Chart.defaults.font.family='Plus Jakarta Sans'; Chart.defaults.color='#94a3b8'; Chart.defaults.font.size=11;
+  const grid={color:'rgba(255,255,255,0.05)', drawBorder:false};
   charts.dyn=new Chart(document.getElementById('chDyn'),{type:'bar',
-    data:{labels:[],datasets:[
-      {label:'Продажи, шт',data:[],backgroundColor:'rgba(124,58,237,.75)',borderRadius:7,yAxisID:'y',order:2},
-      {label:'Выручка, ₸',data:[],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.12)',fill:true,tension:.4,yAxisID:'y1',type:'line',pointRadius:3,order:1}]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}},
-      scales:{x:{grid:{display:false}},y:{grid:grid,title:{display:true,text:'шт'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'₸'}}}}});
+    data:{labels:[],datasets:[ {label:'Продажи (шт)',data:[],backgroundColor:'rgba(129, 140, 248, 0.8)',borderRadius:4,yAxisID:'y',order:2}, {label:'Выручка (₸)',data:[],borderColor:'#38bdf8',backgroundColor:'rgba(56, 189, 248, 0.1)',fill:true,tension:0.4,yAxisID:'y1',type:'line',pointRadius:0,pointHoverRadius:6,borderWidth:2,order:1}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false}, plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}}, scales:{x:{grid:{display:false}},y:{grid:grid,title:{display:false}},y1:{position:'right',grid:{display:false},title:{display:false}}}}});
   charts.brand=new Chart(document.getElementById('chBrand'),{type:'doughnut',
-    data:{labels:[],datasets:[{data:[],backgroundColor:PALETTE,borderWidth:3,borderColor:'#fff',hoverOffset:10}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:10.5}}},
-      tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.parsed)}}}}});
-  
+    data:{labels:[],datasets:[{data:[],backgroundColor:PALETTE,borderWidth:2,borderColor:'#151e32',hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%', plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:8,padding:10}}, tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.parsed)}}}}});
   charts.week=new Chart(document.getElementById('chWeek'),{type:'bar',
-    data:{labels:[],datasets:[{label:'Продажи (шт)',data:[],backgroundColor:'#0ea5e9',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false}},y:{grid:grid}}}});
-
+    data:{labels:[],datasets:[{label:'Продажи (шт)',data:[],backgroundColor:'#22d3ee',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{grid:grid}}}});
   charts.top=new Chart(document.getElementById('chTop'),{type:'bar',
-    data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:8}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
-      tooltip:{callbacks:{label:c=>' продано: '+fmt(c.parsed.x)+' шт'}}},
-      scales:{x:{grid:grid},y:{grid:{display:false},ticks:{font:{weight:600,size:11}}}}}});
+    data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>' продано: '+fmt(c.parsed.x)+' шт'}}}, scales:{x:{grid:grid},y:{grid:{display:false}}}}});
   charts.seg=new Chart(document.getElementById('chSeg'),{type:'bar',
-    data:{labels:['до 15 тыс','15–25 тыс','25–35 тыс','35–50 тыс','50+ тыс'],datasets:[
-      {label:'SKU, шт',data:[],backgroundColor:'rgba(37,99,235,.75)',borderRadius:8},
-      {label:'Капитализация, млн ₸',data:[],backgroundColor:'rgba(124,58,237,.75)',borderRadius:8}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:grid}}}});
+    data:{labels:['до 15k','15–25k','25–35k','35–50k','50k+'],datasets:[ {label:'SKU',data:[],backgroundColor:'rgba(16, 185, 129, 0.8)',borderRadius:4}, {label:'Капитализация (млн)',data:[],backgroundColor:'rgba(56, 189, 248, 0.8)',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}}, scales:{x:{grid:{display:false}},y:{grid:grid}}}});
   charts.status=new Chart(document.getElementById('chStatus'),{type:'doughnut',
-    data:{labels:['В наличии','Заканчивается','Нет в наличии','Избыток'],datasets:[{data:[0,0,0,0],backgroundColor:['#10b981','#f59e0b','#f43f5e','#6366f1'],borderWidth:3,borderColor:'#fff',hoverOffset:10}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:10}}}}});
+    data:{labels:['В наличии','Заканчивается','Нет в наличии','Избыток'],datasets:[{data:[0,0,0,0],backgroundColor:['#34d399','#fbbf24','#fb7185','#818cf8'],borderWidth:2,borderColor:'#151e32',hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%', plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:10}}}}});
 }
 function updateCharts(rows){
   const groups={}; const gdate={};
-  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date);
-    (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.revenue; gdate[k]=r.date; });
+  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date); (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.revenue; gdate[k]=r.date; });
   const keys=Object.keys(groups).sort((a,b)=>gdate[a]-gdate[b]);
-  charts.dyn.data.labels=keys;
-  charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s);
-  charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v);
-  charts.dyn.update();
+  charts.dyn.data.labels=keys; charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s); charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); charts.dyn.update();
 
   const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenue; });
-  let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]);
-  let bvals=bk.map(k=>bm[k]);
-  if(bk.length>8){ const other=bvals.slice(8).reduce((s,v)=>s+v,0); bk=bk.slice(0,8).concat(['Прочие']); bvals=bvals.slice(0,8).concat([other]); }
+  let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]); let bvals=bk.map(k=>bm[k]);
+  if(bk.length>7){ const other=bvals.slice(7).reduce((s,v)=>s+v,0); bk=bk.slice(0,7).concat(['Прочие']); bvals=bvals.slice(0,7).concat([other]); }
   charts.brand.data.labels=bk; charts.brand.data.datasets[0].data=bvals; charts.brand.update();
 
   const wg = {}; const wd = {};
-  rows.forEach(r=>{
-      if(!r.date) return;
-      const onejan=new Date(r.date.getFullYear(),0,1);
-      const w=Math.ceil((((r.date-onejan)/86400000)+onejan.getDay()+1)/7);
-      const wk = r.date.getFullYear() + ' нед ' + w;
-      wg[wk] = (wg[wk]||0) + r.sales; wd[wk] = r.date;
-  });
+  rows.forEach(r=>{ if(!r.date) return; const onejan=new Date(r.date.getFullYear(),0,1); const w=Math.ceil((((r.date-onejan)/86400000)+onejan.getDay()+1)/7); const wk = r.date.getFullYear() + ' W' + w; wg[wk] = (wg[wk]||0) + r.sales; wd[wk] = r.date; });
   const wkeys = Object.keys(wg).sort((a,b)=>wd[a]-wd[b]);
-  charts.week.data.labels = wkeys;
-  charts.week.data.datasets[0].data = wkeys.map(k=>wg[k]);
-  charts.week.update();
+  charts.week.data.labels = wkeys; charts.week.data.datasets[0].data = wkeys.map(k=>wg[k]); charts.week.update();
 
   const top=[...rows].sort((a,b)=>b.sales-a.sales).slice(0,10);
-  charts.top.data.labels=top.map(r=>r.article);
-  charts.top.data.datasets[0].data=top.map(r=>r.sales);
-  charts.top.data.datasets[0].backgroundColor=top.map((_,i)=>PALETTE[i%PALETTE.length]);
-  charts.top.update();
+  charts.top.data.labels=top.map(r=>r.article); charts.top.data.datasets[0].data=top.map(r=>r.sales); charts.top.data.datasets[0].backgroundColor=top.map((_,i)=>PALETTE[i%PALETTE.length]); charts.top.update();
 
-  const bounds=[0,15000,25000,35000,50000,Infinity];
-  const skuC=[0,0,0,0,0], capC=[0,0,0,0,0];
+  const bounds=[0,15000,25000,35000,50000,Infinity]; const skuC=[0,0,0,0,0], capC=[0,0,0,0,0];
   rows.forEach(r=>{ for(let i=0;i<5;i++){ if(r.price>=bounds[i]&&r.price<bounds[i+1]){ skuC[i]++; capC[i]+=r.stock*r.price; break; } } });
-  charts.seg.data.datasets[0].data=skuC;
-  charts.seg.data.datasets[1].data=capC.map(v=>Math.round(v/1e6*10)/10);
-  charts.seg.update();
+  charts.seg.data.datasets[0].data=skuC; charts.seg.data.datasets[1].data=capC.map(v=>Math.round(v/1e6*10)/10); charts.seg.update();
 
   const sc={ok:0,low:0,out:0,over:0}; rows.forEach(r=>sc[statusOf(r)]++);
   charts.status.data.datasets[0].data=[sc.ok,sc.low,sc.out,sc.over]; charts.status.update();
@@ -947,47 +759,33 @@ function updateCharts(rows){
 const COLS=[
   {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},{k:'price',l:'Цена',num:1,money:1},
   {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},{k:'sales',l:'Продажи',num:1},
-  {k:'revenue',l:'Выручка',num:1,money:1},{k:'profit',l:'Прибыль',num:1,money:1},{k:'date',l:'Послед. продажа'}
+  {k:'revenue',l:'Выручка',num:1,money:1},{k:'profit',l:'Прибыль',num:1,money:1},{k:'date',l:'Посл. продажа'}
 ];
 function renderTable(rows){
-  const head=document.getElementById('tblHead');
-  head.innerHTML=COLS.map(c=>'<th onclick="setSort(\''+c.k+'\')">'+c.l+(sortKey===c.k?'<span class="arr">'+(sortDir>0?'▲':'▼')+'</span>':'')+'</th>').join('');
+  const head=document.getElementById('tblHead'); head.innerHTML=COLS.map(c=>'<th onclick="setSort(\''+c.k+'\')">'+c.l+(sortKey===c.k?'<span class="arr">'+(sortDir>0?'▲':'▼')+'</span>':'')+'</th>').join('');
   const body=document.getElementById('tblBody');
-  const sorted=[...rows].sort((a,b)=>{
-    let x=a[sortKey],y=b[sortKey];
-    if(sortKey==='status'){x=statusOf(a);y=statusOf(b);}
-    if(x instanceof Date||y instanceof Date){x=x?x.getTime():0;y=y?y.getTime():0;}
-    if(typeof x==='string') return sortDir*x.localeCompare(y,'ru');
-    return sortDir*((x||0)-(y||0));
-  });
-  const maxPage=Math.max(1,Math.ceil(sorted.length/PAGE_SIZE));
-  if(page>maxPage)page=maxPage;
-  const slice=sorted.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
-  const maxSales=Math.max(1,...rows.map(r=>r.sales));
+  const sorted=[...rows].sort((a,b)=>{ let x=a[sortKey],y=b[sortKey]; if(sortKey==='status'){x=statusOf(a);y=statusOf(b);} if(x instanceof Date||y instanceof Date){x=x?x.getTime():0;y=y?y.getTime():0;} if(typeof x==='string') return sortDir*x.localeCompare(y,'ru'); return sortDir*((x||0)-(y||0)); });
+  const maxPage=Math.max(1,Math.ceil(sorted.length/PAGE_SIZE)); if(page>maxPage)page=maxPage;
+  const slice=sorted.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE); const maxSales=Math.max(1,...rows.map(r=>r.sales));
   const SB={ok:['b-ok','В наличии'],low:['b-low','Заканчивается'],out:['b-out','Нет в наличии'],over:['b-over','Избыток']};
   body.innerHTML=slice.map(r=>{
-    const st=SB[statusOf(r)];
-    const isChanged=changedSet.has(r.article);
+    const st=SB[statusOf(r)]; const isChanged=changedSet.has(r.article);
     return '<tr'+(isChanged?' class="is-new"':'')+'>'+
-      '<td class="art">'+esc(r.article)+(isChanged?'<span class="new-badge">НОВОЕ</span>':'')+'</td>'+
-      '<td style="white-space:normal;min-width:180px;font-weight:600">'+esc(r.name)+'</td>'+
-      '<td><span class="badge" style="background:#f1f5f9;color:#475569">'+esc(r.season||'—')+'</span></td>'+
-      '<td class="num">'+money(r.price)+'</td>'+
-      '<td class="num">'+fmt(r.stock)+'</td>'+
+      '<td class="art">'+esc(r.article)+(isChanged?'<span class="new-badge">NEW</span>':'')+'</td>'+
+      '<td style="white-space:normal;min-width:180px;font-weight:600;color:#f8fafc">'+esc(r.name)+'</td>'+
+      '<td><span class="badge" style="background:rgba(255,255,255,0.1);color:#94a3b8;font-weight:600;border:1px solid rgba(255,255,255,0.05);">'+esc(r.season||'—')+'</span></td>'+
+      '<td class="num">'+money(r.price)+'</td><td class="num">'+fmt(r.stock)+'</td>'+
       '<td><span class="badge '+st[0]+'">'+st[1]+'</span></td>'+
       '<td class="num"><span class="mini-bar"><i style="width:'+Math.round(r.sales/maxSales*100)+'%"></i></span>'+fmt(r.sales)+'</td>'+
-      '<td class="num">'+money(r.revenue)+'</td>'+
-      '<td class="num" style="color:'+(r.profit<0?'#d81f45':'inherit')+'">'+money(r.profit)+'</td>'+
+      '<td class="num">'+money(r.revenue)+'</td><td class="num" style="color:'+(r.profit<0?'#fb7185':'inherit')+'">'+money(r.profit)+'</td>'+
       '<td>'+dstr(r.date)+'</td></tr>';
   }).join('');
-  document.getElementById('tblEmpty').style.display=rows.length?'none':'block';
-  renderPager(sorted.length,maxPage);
+  document.getElementById('tblEmpty').style.display=rows.length?'none':'block'; renderPager(sorted.length,maxPage);
 }
 function renderPager(total,maxPage){
   const from=total? (page-1)*PAGE_SIZE+1 : 0; const to=Math.min(total,page*PAGE_SIZE);
-  document.getElementById('pager').innerHTML=
-    '<button '+(page<=1?'disabled':'')+' onclick="gotoPage(-1)">← Назад</button>'+
-    '<span class="pg-info">Позиции '+fmt(from)+'–'+fmt(to)+' из '+fmt(total)+' · стр. '+page+' / '+maxPage+'</span>'+
+  document.getElementById('pager').innerHTML= '<button '+(page<=1?'disabled':'')+' onclick="gotoPage(-1)">← Назад</button>'+
+    '<span class="pg-info">Записи '+fmt(from)+'–'+fmt(to)+' из '+fmt(total)+' · Стр. '+page+' / '+maxPage+'</span>'+
     '<button '+(page>=maxPage?'disabled':'')+' onclick="gotoPage(1)">Вперёд →</button>';
 }
 function gotoPage(d){ page=Math.max(1,page+d); renderAll(); }
@@ -995,60 +793,40 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;} renderAll(); }
 
 function exportCSV(){
-  const rows=applyFilters();
-  const head=['Артикул','Наименование','Сезон','Цена','Остаток','Статус','Продажи','Выручка','Прибыль','Последняя продажа'];
+  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена','Остаток','Статус','Продажи','Выручка','Прибыль','Последняя продажа'];
   const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
   const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.stock,SB[statusOf(r)],r.sales,r.revenue,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='sklad_almaty.csv'; a.click();
-  toast('CSV выгружен: '+rows.length+' строк');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Analytics_Export.csv'; a.click(); toast('CSV выгружен ('+rows.length+' строк)');
 }
-
 function exportExcel(){
-  const rows=applyFilters();
-  const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
+  const rows=applyFilters(); const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
   const aoa=[['Артикул','Наименование','Сезон','Цена','Остаток','Статус','Продажи','Выручка','Прибыль','Последняя продажа']]
     .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.stock,SB[statusOf(r)],r.sales,r.revenue,r.profit,dstr(r.date)]));
   const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:13},{wch:14}];
-  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Склад Алматы');
-  XLSX.writeFile(wb,'sklad_almaty.xlsx'); toast('Excel выгружен: '+rows.length+' строк');
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Экспорт'); XLSX.writeFile(wb,'Analytics_Export.xlsx'); toast('Excel выгружен ('+rows.length+' строк)');
 }
 
 /* ================= BOOT ================= */
-let toastTimer=null;
-function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3200); }
-
+let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3200); }
 function initDashboard(){
   F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.from=null; F.to=null;
-  renderBrandList(); updateMsBrandLabel();
-  renderArticleList(); updateMsLabel();
-  renderSeasonList(); updateMsSeasonLabel();
-  renderAll();
+  renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll();
 }
 
-document.getElementById('nowDate').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+document.getElementById('nowDate').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
 document.getElementById('msSearch').addEventListener('input',renderArticleList);
 document.getElementById('msBrandSearch').addEventListener('input',renderBrandList);
 document.getElementById('msSeasonSearch').addEventListener('input',renderSeasonList);
 
-initCharts();
-updateChangedUI();
+initCharts(); updateChangedUI();
 
 const STORED = loadFromStorage();
-if(STORED) {
-    DATA = STORED; 
-    initDashboard();
-}
+if(STORED) { DATA = STORED; initDashboard(); }
 
 if(SYNC.enabled){ 
-    document.getElementById('syncDot').style.display='inline-block'; 
-    restartSyncTimer(); 
-    showLoader();
-    runAutoSync(true);
-} else {
-    document.getElementById('globalLoader').style.display = 'none';
-    initDashboard();
-}
+    document.getElementById('syncDot').style.display='inline-block'; restartSyncTimer(); showLoader(); runAutoSync(true);
+} else { document.getElementById('globalLoader').style.display = 'none'; initDashboard(); }
 
 document.getElementById('syncOverlay').addEventListener('click',e=>{ if(e.target.id==='syncOverlay') closeSyncModal(); });
 </script>
