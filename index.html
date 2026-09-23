@@ -130,7 +130,6 @@ header { display:flex; align-items:center; justify-content:space-between; gap:20
 .search-box input { padding:10px 14px 10px 38px; border:1px solid var(--line); border-radius:10px; font-family:inherit; font-size:13px; width:260px; outline:none; background:var(--card); color:var(--ink); transition: 0.3s; }
 .search-box input:focus { border-color:var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
 .search-box svg { position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; stroke:var(--muted); }
-
 .table-scroll { overflow:auto; max-height:650px; }
 table { width:100%; border-collapse:separate; border-spacing: 0; font-size:13px; }
 thead th { position:sticky; top:0; background:var(--th-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index:2; text-align:left; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); padding:16px 18px; border-bottom:1px solid var(--line); cursor:pointer; user-select:none; white-space:nowrap; transition: color 0.3s; }
@@ -143,18 +142,8 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 .art { font-weight:800; color:var(--primary); }
 
 .badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:800; padding:6px 12px; border-radius:8px; letter-spacing: 0.3px; }
-.b-ok { background:rgba(16, 185, 129, 0.1); color:var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
-.b-low { background:rgba(245, 158, 11, 0.1); color:var(--amber); border: 1px solid rgba(245, 158, 11, 0.2); }
-.b-out { background:rgba(244, 63, 94, 0.1); color:var(--rose); border: 1px solid rgba(244, 63, 94, 0.2); }
-.b-over { background:rgba(139, 92, 246, 0.1); color:var(--purple); border: 1px solid rgba(139, 92, 246, 0.2); }
-
 .mini-bar { width:50px; height:6px; border-radius:6px; background:var(--line); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:10px; }
 .mini-bar i { display:block; height:100%; border-radius:6px; background: linear-gradient(90deg, var(--primary), var(--cyan)); }
-
-tbody tr.is-new td { background: rgba(16, 185, 129, 0.05); }
-tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
-.new-badge { display:inline-block; margin-left:8px; font-size:10px; font-weight:800; letter-spacing:0.5px; color:#fff; background:var(--green); padding:2px 8px; border-radius:6px; vertical-align:middle; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
-
 .empty { padding:80px 20px; text-align:center; color:var(--muted); font-size:14px; font-weight: 600; }
 .pager { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 24px; border-top:1px solid var(--line); background:var(--bg); flex-wrap:wrap; }
 .pager button { border:1px solid var(--line); background:var(--card); font-family:inherit; font-weight:700; font-size:13px; padding:10px 18px; border-radius:8px; cursor:pointer; color:var(--ink); transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
@@ -164,7 +153,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
 
 #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); padding:14px 24px; border-radius:12px; font-size:14px; font-weight:700; opacity:0; pointer-events:none; transition:0.3s cubic-bezier(0.5, 0, 0, 1); z-index:999; box-shadow:0 12px 40px rgba(0,0,0,0.3); display:flex; align-items:center; gap:12px; }
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-#toast .t-dot { width:10px; height:10px; border-radius:50%; background:var(--rose); flex:none; box-shadow: 0 0 10px var(--rose); }
+#toast .t-dot { width:10px; height:10px; border-radius:50%; background:var(--green); flex:none; box-shadow: 0 0 10px var(--green); }
 
 @keyframes fadeDown { from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:none} }
 .footer-note { text-align:center; color:var(--muted); font-size:13px; margin-top:40px; line-height:1.6; font-weight: 500; }
@@ -175,19 +164,13 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
 .modal-box p { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:24px; font-weight: 500; }
 .modal-box input { width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink); font-family:inherit; font-size:14px; margin-top:8px; outline:none; transition: border-color 0.2s; font-weight: 600; }
 .modal-box input:focus { border-color:var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-
 .sync-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 6px; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
 @media(max-width:768px){
-  body { padding:20px 16px 50px; }
-  .brand h1 { font-size:20px; }
-  .actions { width:100%; } .actions .btn { flex:1; justify-content:center; }
-  .kpi-grid { grid-template-columns:1fr 1fr; gap:16px; }
-  .kpi { padding:16px; } .kpi-val { font-size:20px; }
-  .chart-box { height:240px; }
-  .table-head { padding:16px; }
-  .search-box { flex:1; width: 100%; } .search-box input { width:100%; }
+  body { padding:20px 16px 50px; } .brand h1 { font-size:20px; } .actions { width:100%; } .actions .btn { flex:1; justify-content:center; }
+  .kpi-grid { grid-template-columns:1fr 1fr; gap:16px; } .kpi { padding:16px; } .kpi-val { font-size:20px; }
+  .chart-box { height:240px; } .table-head { padding:16px; } .search-box { flex:1; width: 100%; } .search-box input { width:100%; }
 }
 @media(max-width:480px){ .kpi-grid { grid-template-columns:1fr; } }
 </style>
@@ -196,8 +179,8 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
 
 <div id="globalLoader">
   <div class="spinner"></div>
-  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с базой...</h2>
-  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Установка защищенного API-соединения</p>
+  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация данных...</h2>
+  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Подключение к Google Sheets</p>
 </div>
 
 <div class="wrap">
@@ -205,14 +188,14 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
     <div class="brand">
       <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg></div>
       <div>
-        <h1>Складской дашборд</h1>
+        <h1>Аналитика Продаж</h1>
         <p>Master Data · Обновлено <span id="nowDate" style="margin-left:4px;"></span> <span id="syncStatusInline" style="color:var(--green); margin-left:8px; display:flex; align-items:center;">Синхронизировано <i class="sync-pulse"></i></span></p>
       </div>
     </div>
     <div class="actions">
       <button class="btn btn-ghost" id="themeToggleBtn" onclick="toggleTheme()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Тема</button>
       <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.1-5.7L3 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 1 0-2.1 5.7l2.1-1.7"/></svg>Обновить данные</button>
-      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
+      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
     </div>
   </header>
 
@@ -223,7 +206,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
     </div>
     <div class="f-grid">
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период</div>
+        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период продаж</div>
         <div class="date-range">
           <input type="date" id="dateFrom" onchange="setDate()">
           <input type="date" id="dateTo" onchange="setDate()">
@@ -269,7 +252,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
         </div>
       </div>
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:var(--amber)"></span>5 · Продажи</div>
+        <div class="f-title"><span class="dot" style="background:var(--amber)"></span>5 · Объемы продаж</div>
         <div class="radio-list">
           <label class="radio-item"><input type="radio" name="sf" value="all" checked onchange="setSalesFilter('all')"><span>Все товары</span><span class="tag" id="cnt-all">—</span></label>
           <label class="radio-item"><input type="radio" name="sf" value="hit" onchange="setSalesFilter('hit')"><span>Хиты (топ 25%)</span><span class="tag" id="cnt-hit">—</span></label>
@@ -278,55 +261,33 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
           <label class="radio-item"><input type="radio" name="sf" value="zero" onchange="setSalesFilter('zero')"><span>Не продаются</span><span class="tag" id="cnt-zero">—</span></label>
         </div>
       </div>
-      <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:var(--green)"></span>6 · Остаток</div>
-        <div class="radio-list">
-          <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')"><span>Любой статус</span><span class="tag" id="scnt-all">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии</span><span class="tag" id="scnt-ok">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')"><span>Заканчивается</span><span class="tag" id="scnt-low">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')"><span>Нет в наличии</span><span class="tag" id="scnt-out">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="over" onchange="setStockFilter('over')"><span>Избыток (>50)</span><span class="tag" id="scnt-over">—</span></label>
-        </div>
-      </div>
     </div>
   </div>
 
   <div class="kpi-grid">
     <div class="kpi" style="--c:var(--cyan)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.3L12 13l8.7-4.7"/><path d="M12 13v9"/></svg></div></div>
-      <div class="kpi-val" id="kStock">0</div>
-      <div class="kpi-lbl">Общий остаток, шт</div>
-      <div class="kpi-sub">Товаров в базе: <b id="kStockSku">0</b></div>
-    </div>
-    <div class="kpi" style="--c:var(--purple)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
-      <div class="kpi-val" id="kCap">0 ₸</div>
-      <div class="kpi-lbl">Капитализация (Розница)</div>
-      <div class="kpi-sub">Средняя цена: <b id="kAvgPrice">0 ₸</b></div>
+      <div class="kpi-val" id="kSku">0</div>
+      <div class="kpi-lbl">Ассортимент (SKU)</div>
+      <div class="kpi-sub">Товаров без продаж: <b id="kNoSales">0</b></div>
     </div>
     <div class="kpi" style="--c:var(--primary)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="M7 15h0M2 9.5h20"/></svg></div></div>
-      <div class="kpi-val" id="kTotalCost">0 ₸</div>
-      <div class="kpi-lbl">Сумма Себестоимостей</div>
-      <div class="kpi-sub">Ср. себестоимость 1 шт: <b id="kAvgCost">0 ₸</b></div>
-    </div>
-    <div class="kpi" style="--c:var(--amber)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div></div>
       <div class="kpi-val" id="kSales">0</div>
       <div class="kpi-lbl">Продажи за период (шт)</div>
-      <div class="kpi-sub">Доход (Себ×Кол): <b id="kRevenue">0 ₸</b></div>
+      <div class="kpi-sub">Товар-лидер: <b id="kLeader">—</b></div>
+    </div>
+    <div class="kpi" style="--c:var(--amber)">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
+      <div class="kpi-val" id="kRevenue">0 ₸</div>
+      <div class="kpi-lbl">Выручка (Доход)</div>
+      <div class="kpi-sub">Формула: <b style="color:var(--muted)">Себест-сть × Кол-во</b></div>
     </div>
     <div class="kpi" style="--c:var(--green)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
       <div class="kpi-val" id="kProfit">0 ₸</div>
-      <div class="kpi-lbl">Общая Прибыль</div>
-      <div class="kpi-sub">Средняя прибыль 1 шт: <b id="kMargin">0 ₸</b></div>
-    </div>
-    <div class="kpi" style="--c:#a855f7">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div></div>
-      <div class="kpi-name" id="kLeader">—</div>
-      <div class="kpi-lbl">Товар-лидер</div>
-      <div class="kpi-sub">Продано: <b id="kLeaderQty">0 шт</b></div>
+      <div class="kpi-lbl">Чистая Прибыль</div>
+      <div class="kpi-sub">Средняя маржа: <b id="kMargin">0%</b></div>
     </div>
   </div>
 
@@ -351,6 +312,16 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <p class="sub">Артикулы-лидеры по штукам</p>
       <div class="chart-box sm"><canvas id="chTop"></canvas></div>
     </div>
+    <div class="card c-seg">
+      <h3>Ценовые сегменты</h3>
+      <p class="sub">Количество товаров и объемы продаж</p>
+      <div class="chart-box sm"><canvas id="chSeg"></canvas></div>
+    </div>
+    <div class="card c-status">
+      <h3>Доход по сезонам</h3>
+      <p class="sub">Сравнение выручки</p>
+      <div class="chart-box sm"><canvas id="chStatus"></canvas></div>
+    </div>
   </div>
 
   <div class="table-card">
@@ -360,13 +331,12 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
         <p class="sub" id="tblSub">Детализированная аналитика по каждой позиции</p>
       </div>
       <div class="table-tools">
-        <button class="btn btn-ghost btn-sm" id="onlyChangedBtn" style="display:none; color:var(--green); border-color:var(--green);" onclick="toggleOnlyChanged()">🟢 Изменённые: <span id="changedCount">0</span></button>
         <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="tblSearch" placeholder="Глобальный поиск…" oninput="setSearch(this.value)">
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV</button>
-        <button class="btn btn-ghost btn-sm" onclick="exportExcel()">Excel</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Скачать CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportExcel()">Скачать Excel</button>
       </div>
     </div>
     <div class="table-scroll">
@@ -379,8 +349,8 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
     </div>
   </div>
 
-  <p class="footer-note">PRO Analytics Engine · Безопасное подключение к Google Sheets через GViz API.<br>
-  Система устойчива к блокировкам CORS и работает прямо в вашем браузере.</p>
+  <p class="footer-note">PRO Analytics Engine · Источник данных: Лист "Ежедневный продажа".<br>
+  Система синхронизируется по безопасному GViz API и использует локальные вычисления.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
@@ -391,10 +361,10 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <h3>Настройки синхронизации API</h3>
       <button onclick="closeSyncModal()" style="border:none;background:var(--badge-bg);width:32px;height:32px;border-radius:10px;cursor:pointer;color:var(--muted);transition:0.2s">✕</button>
     </div>
-    <p>Укажите любую ссылку на вашу Google Таблицу (мы сами конвертируем её в API-формат). Таблица должна быть доступна <b>«Всем в интернете»</b>.</p>
+    <p>Мы автоматически извлекаем данные из вашей Google Таблицы. Убедитесь, что таблица доступна <b>«Всем в интернете»</b>.</p>
     
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
-      <label style="font-size:13px;font-weight:700;color:var(--ink)">Прямая ссылка на таблицу
+      <label style="font-size:13px;font-weight:700;color:var(--ink)">Ссылка на Google Таблицу
         <input id="syncDataUrl" type="text" placeholder="https://docs.google.com/spreadsheets/d/...">
       </label>
       <label style="font-size:13px;font-weight:700;color:var(--ink)">Интервал обновления (минут)
@@ -402,8 +372,8 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       </label>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
-      <button class="btn btn-primary" onclick="saveSyncSettings(true)">Сохранить</button>
-      <button class="btn btn-ghost" onclick="showLoader(); runAutoSync(false)">Синхронизировать сейчас</button>
+      <button class="btn btn-primary" onclick="saveSyncSettings(true)">Сохранить и включить</button>
+      <button class="btn btn-ghost" onclick="showLoader(); runAutoSync(false)">Обновить сейчас</button>
       <button class="btn btn-ghost" style="color:var(--rose)" onclick="saveSyncSettings(false)">Отключить</button>
     </div>
     <div style="background:var(--bg); padding:12px; border-radius:10px; border:1px solid var(--line);">
@@ -439,9 +409,9 @@ window.addEventListener('load', () => {
 
 /* ================= STATE ================= */
 let DATA = []; let charts = {}; let sortKey = 'sales', sortDir = -1; let page = 1; const PAGE_SIZE = 100;
-const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'', onlyChanged:false };
+const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', search:'' };
 const PALETTE = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899', '#f97316', '#84cc16', '#eab308'];
-let changedSet = new Set(); const LS_KEY = 'sklad_almaty_master_v3';
+const LS_KEY = 'sklad_almaty_master_v9';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
@@ -462,12 +432,13 @@ const toLocalIso = d => {
 
 const pdate = v => {
   if(!v) return null;
-  if(v instanceof Date) return isNaN(v)?null:v;
-  if(typeof v==='number'){ const d=XLSX.SSF.parse_date_code(v); return d? new Date(d.y,d.m-1,d.d) : null; }
   const s = String(v).trim();
   let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
   m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})/); if(m) return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
   m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if(m) return new Date(parseInt(m[3]), parseInt(m[1])-1, parseInt(m[2]));
+  m = s.match(/^(\d{2})\.(\d{2})$/); if(m) return new Date(new Date().getFullYear(), parseInt(m[2])-1, parseInt(m[1]));
+  let num = parseFloat(s);
+  if (!isNaN(num) && num > 30000 && num < 70000) { const d=XLSX.SSF.parse_date_code(num); return d? new Date(d.y,d.m-1,d.d) : null; }
   return null;
 };
 
@@ -480,106 +451,86 @@ function buildDataset(sheetRows){
   const bad = v => { const s=String(v==null?'':v).trim().toLowerCase(); return !s || s==='наименование' || s==='артикул' || isSep(s); };
 
   let headerRow = 0;
-  for(let i=0; i<Math.min(5, sheetRows.length); i++) {
-      let text = sheetRows[i].join(' ').toLowerCase();
-      if(text.includes('артикул') || text.includes('наименовани')) {
-          headerRow = i; break;
-      }
+  for(let i=0; i<Math.min(10, sheetRows.length); i++) {
+      let text = (sheetRows[i]||[]).join(' ').toLowerCase();
+      if(text.includes('артикул') || text.includes('наименовани')) { headerRow = i; break; }
   }
   
   let headers = (sheetRows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
   const findIdx = (kws) => {
-      for(let kw of kws) {
-          let idx = headers.findIndex(h => h.includes(kw));
-          if(idx !== -1) return idx;
-      }
+      for(let kw of kws) { let idx = headers.findIndex(h => h.includes(kw)); if(idx !== -1) return idx; }
       return -1;
   };
 
-  let iDate = findIdx(['дата', 'date']);
   let iArt = findIdx(['артикул', 'код']);
   let iName = findIdx(['наименование', 'товар']);
   let iSeason = findIdx(['сезон']);
-  let iPrice = findIdx(['цена', 'розниц']);
+  let iPrice = findIdx(['цена', 'розниц', 'реализац']);
   let iCost = findIdx(['себест', 'закуп']);
-  let iStock = findIdx(['остаток', 'наличи']);
-  let iSales = findIdx(['продаж', 'кол', 'шт']);
-  let iRev = findIdx(['выручка', 'доход', 'сумма']);
-  let iProf = findIdx(['прибыль', 'маржа']);
+  
+  if(iArt === -1) iArt = 0; if(iName === -1) iName = 1;
 
-  // Если заголовки не распознались, берем жестко
-  if(iDate === -1) iDate = 0;
-  if(iArt === -1) iArt = 1;
-  if(iName === -1) iName = 2;
-  if(iSales === -1) iSales = 3;
+  let dateCols = [];
+  for (let c = 0; c < headers.length; c++) {
+      if (c === iArt || c === iName || c === iSeason || c === iPrice || c === iCost) continue;
+      let hStr = String(sheetRows[headerRow][c]||'').trim();
+      let d = pdate(hStr);
+      if (d) dateCols.push({ idx: c, label: hStr, dateStr: toLocalIso(d), dateObj: d });
+  }
 
   const products = {};
 
   for(let i = headerRow + 1; i < sheetRows.length; i++) {
       let r = sheetRows[i];
-      if(!r || r.length < 3 || bad(r[iName])) continue;
+      if(!r || r.length === 0 || bad(r[iName])) continue;
       
       let art = String(r[iArt]||'').trim();
-      if(!art) art = 'Б/А·' + cleanName(r[iName]);
+      let name = cleanName(r[iName]);
+      if(!art && !name) continue;
+      if(!art) art = 'Б/А·' + name;
       if(isSep(art)) continue;
 
       if(!products[art]) {
           products[art] = {
-              article: art, name: cleanName(r[iName]), season: iSeason !== -1 && r[iSeason] ? String(r[iSeason]).trim() : 'Не указан',
-              price: 0, costPrice: 0, stock: 0, sales: 0, profit: 0, revenueCsv: 0, totalCostAgg: 0, date: null
+              article: art, name: name, season: iSeason !== -1 && r[iSeason] ? String(r[iSeason]).trim() : 'Не указан',
+              price: iPrice !== -1 ? pnum(r[iPrice]) : 0, costPrice: iCost !== -1 ? pnum(r[iCost]) : 0,
+              dailySales: {}, totalSales: 0
           };
       }
 
       let p = products[art];
-      if (iSeason !== -1 && r[iSeason] && String(r[iSeason]).trim()) p.season = String(r[iSeason]).trim();
+      if (p.season === 'Не указан' && iSeason !== -1 && r[iSeason] && String(r[iSeason]).trim()) p.season = String(r[iSeason]).trim();
+      if (p.price === 0 && iPrice !== -1) p.price = pnum(r[iPrice]);
+      if (p.costPrice === 0 && iCost !== -1) p.costPrice = pnum(r[iCost]);
 
-      let s = iSales !== -1 ? pnum(r[iSales]) : 0;
-      let cst = iCost !== -1 ? pnum(r[iCost]) : (r[4] ? pnum(r[4]) : 0); 
-      let rev = iRev !== -1 ? pnum(r[iRev]) : (r[5] ? pnum(r[5]) : 0); 
-      let prof = iProf !== -1 ? pnum(r[iProf]) : (r[6] ? pnum(r[6]) : 0); 
-      let stk = iStock !== -1 ? pnum(r[iStock]) : 0;
-      let prc = iPrice !== -1 ? pnum(r[iPrice]) : 0;
-
-      p.sales += s; p.totalCostAgg += cst; p.profit += prof; p.revenueCsv += rev;
-      if(stk !== 0) p.stock = stk;
-      if(prc !== 0) p.price = prc;
-      
-      if (iDate !== -1) {
-          let d = pdate(r[iDate]);
-          if(d && (!p.date || d > p.date)) p.date = d;
+      for (let dc of dateCols) {
+          let qty = pnum(r[dc.idx]);
+          if (qty > 0) {
+              p.dailySales[dc.dateStr] = (p.dailySales[dc.dateStr] || 0) + qty;
+              p.totalSales += qty;
+          }
       }
   }
-
-  Object.values(products).forEach(p => {
-      if(!p.season) p.season = 'Не указан';
-      if (p.sales > 0 && p.totalCostAgg !== 0) { p.costPrice = p.totalCostAgg / p.sales; } 
-      else { p.costPrice = p.price > 0 ? (p.price * 0.55) : 0; }
-      p.unitProfit = p.sales > 0 ? (p.profit / p.sales) : 0;
-      p.calcIncome = p.costPrice * p.sales;
-      if (p.price === 0 && p.sales > 0 && p.revenueCsv > 0) p.price = p.revenueCsv / p.sales;
-  });
 
   return Object.values(products);
 }
 
 function updateDataMerge(newData){
-    DATA = newData; changedSet = new Set(); F.onlyChanged = false; page=1;
-    saveToStorage(); initDashboard(); updateChangedUI();
+    DATA = newData; page=1;
+    saveToStorage(); initDashboard(); 
 }
 
-function saveToStorage(){ try{ const plain=DATA.map(r=>({...r, date: toLocalIso(r.date) })); localStorage.setItem(LS_KEY, JSON.stringify(plain)); }catch(e){} }
+function saveToStorage(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DATA)); }catch(e){} }
 function loadFromStorage(){
   try{ const raw=localStorage.getItem(LS_KEY); if(!raw) return null; const arr=JSON.parse(raw);
-    if(!Array.isArray(arr) || !arr.length) return null;
-    return arr.map(r=>({...r, date: pdate(r.date), season: r.season||'Не указан'}));
+    if(!Array.isArray(arr) || !arr.length) return null; return arr;
   }catch(e){ return null; }
 }
 
 /* ================= SMART SYNC API (CORS BYPASS) ================= */
-// Мы используем GViz API, так как он игнорирует блокировку CORS от браузера
 function sanitizeUrlToGviz(url) {
     if (!url) return '';
-    let sid = '', gid = '0';
+    let sid = '', gid = '476452638'; 
     const sidMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
     if (sidMatch) sid = sidMatch[1];
     const gidMatch = url.match(/gid=(\d+)/);
@@ -589,18 +540,10 @@ function sanitizeUrlToGviz(url) {
 }
 
 const DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg/edit?gid=476452638#gid=476452638';
-const SYNC = { 
-  dataUrl: DEFAULT_URL, 
-  intervalMin: 5, enabled: true, lastRun: null, lastResult: '' 
-};
+const SYNC = { dataUrl: DEFAULT_URL, intervalMin: 5, enabled: true, lastRun: null, lastResult: '' };
 let syncTimer=null; let syncInFlight=false;
 
-function openSyncModal(){ 
-  document.getElementById('syncInterval').value=SYNC.intervalMin||5; 
-  document.getElementById('syncDataUrl').value=SYNC.dataUrl||DEFAULT_URL;
-  updateSyncStatusText(); 
-  document.getElementById('syncOverlay').style.display='flex'; 
-}
+function openSyncModal(){ document.getElementById('syncInterval').value=SYNC.intervalMin||5; document.getElementById('syncDataUrl').value=SYNC.dataUrl||DEFAULT_URL; updateSyncStatusText(); document.getElementById('syncOverlay').style.display='flex'; }
 function closeSyncModal(){ document.getElementById('syncOverlay').style.display='none'; }
 function updateSyncStatusText(){
   const el=document.getElementById('syncStatus'); if(!el) return;
@@ -608,70 +551,52 @@ function updateSyncStatusText(){
   let txt='Активно · '+SYNC.intervalMin+' мин'; if(SYNC.lastRun) txt+=' · Обновлено: '+new Date(SYNC.lastRun).toLocaleTimeString('ru-RU'); el.textContent=txt;
   const dot=document.getElementById('syncDot'); if(dot) dot.style.display='inline-block';
 }
-
 function saveSyncSettings(enable){
   SYNC.intervalMin=Math.max(1, parseInt(document.getElementById('syncInterval').value,10)||5); 
   SYNC.dataUrl = document.getElementById('syncDataUrl').value.trim() || DEFAULT_URL;
-  SYNC.enabled=!!enable; 
-  const dot=document.getElementById('syncDot'); if(dot) dot.style.display = SYNC.enabled ? 'inline-block' : 'none';
-  restartSyncTimer(); 
-  if(enable && SYNC.enabled){ toast('Настройки сохранены. Обновляю...'); showLoader(); runAutoSync(true); } 
-  else { toast('Автообновление отключено'); }
+  SYNC.enabled=!!enable; const dot=document.getElementById('syncDot'); if(dot) dot.style.display = SYNC.enabled ? 'inline-block' : 'none';
+  restartSyncTimer(); if(enable && SYNC.enabled){ toast('Автообновление включено'); showLoader(); runAutoSync(true); } else { toast('Автообновление выключено'); }
   updateSyncStatusText(); closeSyncModal();
 }
 function restartSyncTimer(){ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } if(SYNC.enabled){ syncTimer=setInterval(()=>runAutoSync(true), Math.max(1,SYNC.intervalMin)*60000); } }
 
 function csvUrlToRows(csvText){ 
-    // Защита от кривого CSV из Google GViz
-    const cleanedText = csvText.replace(/^"|"$/g, '').replace(/","/g, '","');
-    const wb=XLSX.read(cleanedText,{type:'string', raw:true}); 
+    const wb=XLSX.read(csvText,{type:'string', raw:true}); 
     return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}); 
+}
+
+async function fetchCsv(url){ 
+  const bust = url + '&_ts=' + Date.now(); 
+  const res = await fetch(bust, {cache:'no-store'}); 
+  if(!res.ok) throw new Error('HTTP '+res.status); 
+  const text = await res.text();
+  if(text.trim().toLowerCase().startsWith('<!doctype html>') || text.includes('<html')) throw new Error('ACCESS_DENIED');
+  return text; 
+}
+function showLoader() { 
+    document.getElementById('loaderText').textContent = 'Подключаемся к Google Таблицам...';
+    const loader = document.getElementById('globalLoader'); 
+    if(loader) { loader.style.display = 'flex'; loader.style.opacity = '0.98'; } 
 }
 
 async function runAutoSync(silent){
   if(!SYNC.enabled || syncInFlight) return; syncInFlight=true;
   try{
     const safeApiUrl = sanitizeUrlToGviz(SYNC.dataUrl);
-    const bust = safeApiUrl + '&_ts=' + Date.now(); 
-    
-    const res = await fetch(bust, {cache:'no-store'}); 
-    if(!res.ok) throw new Error('HTTP '+res.status); 
-    
-    const text = await res.text();
-    if(text.trim().toLowerCase().startsWith('<!doctype html>') || text.includes('<html')) {
-        throw new Error('ACCESS_DENIED');
-    }
-    
-    const rows = buildDataset(csvUrlToRows(text));
+    const dataTxt = await fetchCsv(safeApiUrl);
+    const rows = buildDataset(csvUrlToRows(dataTxt));
     if(!rows || !rows.length) throw new Error('Empty');
-    
     updateDataMerge(rows); SYNC.lastRun=Date.now();
-    SYNC.lastResult='Обновлено: '+fmt(rows.length); 
-    if(!silent) toast('Синхронизировано: загружено '+fmt(rows.length)+' позиций');
+    SYNC.lastResult='Обновлено: '+fmt(rows.length); if(!silent) toast('Синхронизировано: загружено '+fmt(rows.length)+' позиций');
   }catch(err){ 
-    SYNC.lastResult='Ошибка сети/доступа'; 
+    SYNC.lastResult='Ошибка доступа'; 
     if(!silent) {
-        if(err.message === 'ACCESS_DENIED') {
-            toast('❌ Таблица закрыта! Нажмите "Поделиться" -> "Всем, у кого есть ссылка"');
-            document.getElementById('loaderText').style.color = 'var(--rose)';
-            document.getElementById('loaderText').textContent = 'Таблица заблокирована. Требуется доступ.';
-        } else {
-            toast('❌ Ошибка загрузки. Убедитесь, что ссылка верная.');
-        }
+        if(err.message === 'ACCESS_DENIED') toast('❌ Таблица закрыта! Нажмите "Поделиться" -> "Всем, у кого есть ссылка"');
+        else toast('❌ Ошибка сети. Проверьте права.');
     }
     if(DATA.length > 0) initDashboard();
   }
-  finally{ 
-      updateSyncStatusText(); syncInFlight=false; 
-      const loader = document.getElementById('globalLoader'); 
-      if(loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 400); } 
-  }
-}
-
-function toggleOnlyChanged(){ F.onlyChanged=!F.onlyChanged; page=1; updateChangedUI(); renderAll(); }
-function updateChangedUI(){
-  const btn=document.getElementById('onlyChangedBtn');
-  if(btn){ document.getElementById('changedCount').textContent=fmt(changedSet.size); btn.style.display = changedSet.size>0 ? 'inline-flex' : 'none'; btn.classList.toggle('btn-toggle-active', F.onlyChanged); }
+  finally{ updateSyncStatusText(); syncInFlight=false; const loader = document.getElementById('globalLoader'); if(loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 400); } }
 }
 
 /* ================= FILTERS ================= */
@@ -705,22 +630,42 @@ function selectAllSeasons(on){ page=1; F.seasons = on? new Set(uniqueSeasons()) 
 function updateMsSeasonLabel(){ document.getElementById('msSeasonLabel').textContent = F.seasons.size===0? 'Все сезоны' : 'Выбрано: '+F.seasons.size; }
 
 function setSalesFilter(v){ page=1; F.sales=v; renderAll(); }
-function setStockFilter(v){ page=1; F.stock=v; renderAll(); }
 function setSearch(v){ page=1; F.search=v.toLowerCase(); renderAll(); }
 function resetFilters(){
-  page=1; F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.onlyChanged=false;
+  page=1; F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.search=''; 
   document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value=''; document.getElementById('tblSearch').value='';
-  document.querySelector('input[name="sf"][value="all"]').checked=true; document.querySelector('input[name="stf"][value="all"]').checked=true;
-  updateChangedUI(); renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll(); toast('Фильтры успешно сброшены');
+  document.querySelector('input[name="sf"][value="all"]').checked=true; 
+  renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll(); toast('Фильтры успешно сброшены');
 }
 
 /* ================= PIPELINE ================= */
-function statusOf(r){ if(r.stock<=0) return 'out'; if(r.stock<=3) return 'low'; if(r.stock>50) return 'over'; return 'ok'; }
 function applyFilters(){
-  let rows = DATA.filter(r=>{
-    if(F.from && r.date && r.date < new Date(F.from)) return false;
-    if(F.to && r.date){ const t=new Date(F.to); t.setDate(t.getDate()+1); if(r.date>=t) return false; } return true;
+  let rows = DATA.map(r => {
+      let filteredSales = 0;
+      let lastSaleDate = null;
+      
+      for (let dStr in r.dailySales) {
+          let qty = r.dailySales[dStr];
+          if(qty <= 0) continue;
+          
+          const d = new Date(dStr + "T00:00:00");
+          if(F.from && d < new Date(F.from + "T00:00:00")) continue;
+          if(F.to) { const t = new Date(F.to + "T00:00:00"); t.setDate(t.getDate()+1); if(d >= t) continue; }
+          
+          filteredSales += qty;
+          if (!lastSaleDate || d > lastSaleDate) lastSaleDate = d;
+      }
+      
+      return {
+          ...r,
+          sales: filteredSales,
+          date: lastSaleDate,
+          revenue: r.costPrice * filteredSales, 
+          profit: (r.price - r.costPrice) * filteredSales,
+          unitProfit: r.price - r.costPrice
+      };
   });
+
   if(F.brands.size) rows = rows.filter(r => F.brands.has(brandOf(r.name)));
   if(F.articles.size) rows = rows.filter(r => F.articles.has(r.article));
   if(F.seasons.size) rows = rows.filter(r => F.seasons.has(r.season||'Не указан'));
@@ -732,9 +677,7 @@ function applyFilters(){
     if(F.sales==='low') rows=rows.filter(r=>r.sales>0 && r.sales<=q25);
     if(F.sales==='zero') rows=rows.filter(r=>r.sales===0);
   }
-  if(F.stock!=='all') rows=rows.filter(r=>statusOf(r)===F.stock);
   if(F.search) rows=rows.filter(r=> (r.article+' '+r.name).toLowerCase().includes(F.search));
-  if(F.onlyChanged) rows=rows.filter(r=>changedSet.has(r.article));
   return rows;
 }
 
@@ -747,36 +690,20 @@ function animateNum(el, to, isMoney){
 
 function renderAll(){
   const rows = applyFilters(); const base = DATA;
-  const sv=base.map(r=>r.sales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
-  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.sales>0&&r.sales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.sales>q25&&r.sales<q75).length); setCnt('cnt-low',base.filter(r=>r.sales>0&&r.sales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.sales===0).length);
-  setCnt('scnt-all',base.length); setCnt('scnt-ok',base.filter(r=>statusOf(r)==='ok').length); setCnt('scnt-low',base.filter(r=>statusOf(r)==='low').length); setCnt('scnt-out',base.filter(r=>statusOf(r)==='out').length); setCnt('scnt-over',base.filter(r=>statusOf(r)==='over').length);
-
-  const stock=rows.reduce((s,r)=>s+r.stock,0); const cap=rows.reduce((s,r)=>s+r.stock*r.price,0); 
+  const sv=base.map(r=>r.totalSales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
+  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.totalSales>0&&r.totalSales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.totalSales>q25&&r.totalSales<q75).length); setCnt('cnt-low',base.filter(r=>r.totalSales>0&&r.totalSales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.totalSales===0).length);
   
+  const totalRev = rows.reduce((s,r)=>s+r.revenue,0); 
   const totalProf = rows.reduce((s,r)=>s+r.profit,0);
-  const totalStockCost = rows.reduce((s,r) => s + (r.stock > 0 ? r.stock * r.costPrice : 0), 0);
-  const avgUnitCost = stock > 0 ? totalStockCost / stock : 0;
   
   const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
-  const totalCalcIncome = rows.reduce((s,r)=>s+r.calcIncome, 0); // Доход = Себест * Продажи
+  const noSales=rows.filter(r=>r.sales===0).length;
   
-  let marginText = '0%';
-  if (totalCalcIncome > 0) {
-      marginText = money(salesQty > 0 ? (totalProf/salesQty) : 0);
-  }
-
-  const noSales=rows.filter(r=>r.sales===0).length; const out=rows.filter(r=>r.stock<=0).length, low=rows.filter(r=>r.stock>0&&r.stock<=3).length;
-  
-  animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
-  animateNum(document.getElementById('kCap'),cap,true); document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
-  animateNum(document.getElementById('kTotalCost'), totalStockCost, true); document.getElementById('kAvgCost').textContent=money(avgUnitCost);
-  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalCalcIncome);
-  animateNum(document.getElementById('kProfit'),totalProf,true); 
-  document.getElementById('kMargin').textContent=marginText;
-  
-  document.getElementById('kLeader').textContent=leader? leader.name : '—'; document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
   animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
-  animateNum(document.getElementById('kRisk'),out+low); document.getElementById('kOut').textContent=fmt(out); document.getElementById('kLow').textContent=fmt(low);
+  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kLeader').textContent=leader? leader.name : '—';
+  animateNum(document.getElementById('kRevenue'),totalRev,true); 
+  animateNum(document.getElementById('kProfit'),totalProf,true); 
+  document.getElementById('kMargin').textContent= (totalRev>0 ? (totalProf/totalRev*100).toFixed(1) : '0')+'%';
 
   updateCharts(rows); renderTable(rows);
   document.getElementById('tblSub').textContent='Отображено '+fmt(rows.length)+' позиций (Всего в базе: '+fmt(DATA.length)+')';
@@ -784,6 +711,13 @@ function renderAll(){
 function setCnt(id,n){ const el=document.getElementById(id); if(el) el.textContent=fmt(n); }
 
 /* ================= CHARTS ================= */
+function bucket(d){
+  if(F.period==='day') return dstr(d);
+  if(F.period==='month') return d.toLocaleDateString('ru-RU',{month:'short',year:'2-digit'});
+  if(F.period==='year') return String(d.getFullYear());
+  const onejan=new Date(d.getFullYear(),0,1); const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7); return d.getFullYear()+' W'+w;
+}
+
 function initCharts(){
   Chart.defaults.font.family='Plus Jakarta Sans';
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -805,10 +739,10 @@ function initCharts(){
     data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:6}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>' продано: '+fmt(c.parsed.x)+' шт'}}}, scales:{x:{grid:grid},y:{grid:{display:false}}}}});
   charts.seg=new Chart(document.getElementById('chSeg'),{type:'bar',
-    data:{labels:['до 15k','15–25k','25–35k','35–50k','50k+'],datasets:[ {label:'SKU',data:[],backgroundColor:'rgba(16, 185, 129, 0.8)',borderRadius:6}, {label:'Капитализация (млн)',data:[],backgroundColor:'rgba(59, 130, 246, 0.8)',borderRadius:6}]},
+    data:{labels:['до 15k','15–25k','25–35k','35–50k','50k+'],datasets:[ {label:'SKU',data:[],backgroundColor:'rgba(16, 185, 129, 0.8)',borderRadius:6}, {label:'Продажи (шт)',data:[],backgroundColor:'rgba(59, 130, 246, 0.8)',borderRadius:6}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}}, scales:{x:{grid:{display:false}},y:{grid:grid}}}});
   charts.status=new Chart(document.getElementById('chStatus'),{type:'doughnut',
-    data:{labels:['В наличии','Заканчивается','Нет в наличии','Избыток'],datasets:[{data:[0,0,0,0],backgroundColor:['#10b981','#f59e0b','#f43f5e','#8b5cf6'],borderWidth:3,borderColor:bColor,hoverOffset:8}]},
+    data:{labels:[],datasets:[{data:[],backgroundColor:['#10b981','#f59e0b','#f43f5e','#8b5cf6','#3b82f6','#06b6d4'],borderWidth:3,borderColor:bColor,hoverOffset:8}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'70%', plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:10}}}}});
 }
 
@@ -832,20 +766,37 @@ function updateChartTheme() {
 
 function updateCharts(rows){
   const groups={}; const gdate={};
-  rows.forEach(r=>{ if(!r.date) return; const k=r.date.getTime(); (groups[k]=groups[k]||{s:0,v:0, d:r.date}); groups[k].s+=r.sales; groups[k].v+=r.calcIncome; gdate[k]=r.date; });
-  const keys=Object.keys(groups).sort((a,b)=>a-b);
-  charts.dyn.data.labels=keys.map(k=>dstr(groups[k].d)); 
-  charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s); 
-  charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); 
-  charts.dyn.update();
+  rows.forEach(r=>{ 
+      for (let dStr in r.dailySales) {
+          let qty = r.dailySales[dStr];
+          if(qty <= 0) continue;
+          const d = new Date(dStr + "T00:00:00");
+          if(F.from && d < new Date(F.from + "T00:00:00")) continue;
+          if(F.to) { const t = new Date(F.to + "T00:00:00"); t.setDate(t.getDate()+1); if(d >= t) continue; }
+          const k = bucket(d);
+          groups[k]=groups[k]||{s:0,v:0, d:d}; groups[k].s+=qty; groups[k].v+=(r.costPrice*qty); gdate[k]=d; 
+      }
+  });
+  const keys=Object.keys(groups).sort((a,b)=>gdate[a]-gdate[b]);
+  charts.dyn.data.labels=keys; charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s); charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); charts.dyn.update();
 
-  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.calcIncome; });
+  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenue; });
   let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]); let bvals=bk.map(k=>bm[k]);
   if(bk.length>7){ const other=bvals.slice(7).reduce((s,v)=>s+v,0); bk=bk.slice(0,7).concat(['Прочие']); bvals=bvals.slice(0,7).concat([other]); }
   charts.brand.data.labels=bk; charts.brand.data.datasets[0].data=bvals; charts.brand.update();
 
   const wg = {}; const wd = {};
-  rows.forEach(r=>{ if(!r.date) return; const onejan=new Date(r.date.getFullYear(),0,1); const w=Math.ceil((((r.date-onejan)/86400000)+onejan.getDay()+1)/7); const wk = r.date.getFullYear() + ' W' + w; wg[wk] = (wg[wk]||0) + r.sales; wd[wk] = r.date; });
+  rows.forEach(r=>{ 
+      for (let dStr in r.dailySales) {
+          let qty = r.dailySales[dStr];
+          if(qty <= 0) continue;
+          const d = new Date(dStr + "T00:00:00");
+          if(F.from && d < new Date(F.from + "T00:00:00")) continue;
+          if(F.to) { const t = new Date(F.to + "T00:00:00"); t.setDate(t.getDate()+1); if(d >= t) continue; }
+          const onejan=new Date(d.getFullYear(),0,1); const w=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7); const wk = d.getFullYear() + ' W' + w; 
+          wg[wk] = (wg[wk]||0) + qty; wd[wk] = d; 
+      }
+  });
   const wkeys = Object.keys(wg).sort((a,b)=>wd[a]-wd[b]);
   charts.week.data.labels = wkeys; charts.week.data.datasets[0].data = wkeys.map(k=>wg[k]); charts.week.update();
 
@@ -853,20 +804,22 @@ function updateCharts(rows){
   charts.top.data.labels=top.map(r=>r.article); charts.top.data.datasets[0].data=top.map(r=>r.sales); charts.top.data.datasets[0].backgroundColor=top.map((_,i)=>PALETTE[i%PALETTE.length]); charts.top.update();
 
   const bounds=[0,15000,25000,35000,50000,Infinity]; const skuC=[0,0,0,0,0], capC=[0,0,0,0,0];
-  rows.forEach(r=>{ for(let i=0;i<5;i++){ if(r.price>=bounds[i]&&r.price<bounds[i+1]){ skuC[i]++; capC[i]+=r.stock*r.price; break; } } });
-  charts.seg.data.datasets[0].data=skuC; charts.seg.data.datasets[1].data=capC.map(v=>Math.round(v/1e6*10)/10); charts.seg.update();
+  rows.forEach(r=>{ for(let i=0;i<5;i++){ if(r.price>=bounds[i]&&r.price<bounds[i+1]){ skuC[i]++; capC[i]+=r.sales; break; } } });
+  charts.seg.data.datasets[0].data=skuC; charts.seg.data.datasets[1].data=capC; charts.seg.update();
 
-  const sc={ok:0,low:0,out:0,over:0}; rows.forEach(r=>sc[statusOf(r)]++);
-  charts.status.data.datasets[0].data=[sc.ok,sc.low,sc.out,sc.over]; charts.status.update();
+  const sm={}; rows.forEach(r=>{ sm[r.season]=(sm[r.season]||0)+r.revenue; });
+  let sk=Object.keys(sm).sort((a,b)=>sm[b]-sm[a]); let svals=sk.map(k=>sm[k]);
+  if(sk.length>5){ const other=svals.slice(5).reduce((s,v)=>s+v,0); sk=sk.slice(0,5).concat(['Прочие']); svals=svals.slice(0,5).concat([other]); }
+  charts.status.data.labels = sk; charts.status.data.datasets[0].data = svals; charts.status.update();
 }
 
 /* ================= TABLE & EXPORT ================= */
 const COLS=[
   {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},
-  {k:'price',l:'Цена (Розница)',num:1,money:1},
   {k:'costPrice',l:'Себест. (1 шт)',num:1,money:1},
-  {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},{k:'sales',l:'Продажи',num:1},
-  {k:'calcIncome',l:'Доход (Себ×Кол)',num:1,money:1},
+  {k:'price',l:'Цена (Розница)',num:1,money:1},
+  {k:'sales',l:'Продажи (шт)',num:1},
+  {k:'revenue',l:'Доход (Себ×Кол)',num:1,money:1},
   {k:'unitProfit',l:'Прибыль (1 шт)',num:1,money:1},
   {k:'profit',l:'Общ. Прибыль',num:1,money:1},
   {k:'date',l:'Посл. продажа'}
@@ -874,22 +827,19 @@ const COLS=[
 function renderTable(rows){
   const head=document.getElementById('tblHead'); head.innerHTML=COLS.map(c=>'<th onclick="setSort(\''+c.k+'\')">'+c.l+(sortKey===c.k?'<span class="arr">'+(sortDir>0?'▲':'▼')+'</span>':'')+'</th>').join('');
   const body=document.getElementById('tblBody');
-  const sorted=[...rows].sort((a,b)=>{ let x=a[sortKey],y=b[sortKey]; if(sortKey==='status'){x=statusOf(a);y=statusOf(b);} if(x instanceof Date||y instanceof Date){x=x?x.getTime():0;y=y?y.getTime():0;} if(typeof x==='string') return sortDir*x.localeCompare(y,'ru'); return sortDir*((x||0)-(y||0)); });
+  const sorted=[...rows].sort((a,b)=>{ let x=a[sortKey],y=b[sortKey]; if(x instanceof Date||y instanceof Date){x=x?x.getTime():0;y=y?y.getTime():0;} if(typeof x==='string') return sortDir*x.localeCompare(y,'ru'); return sortDir*((x||0)-(y||0)); });
   const maxPage=Math.max(1,Math.ceil(sorted.length/PAGE_SIZE)); if(page>maxPage)page=maxPage;
   const slice=sorted.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE); const maxSales=Math.max(1,...rows.map(r=>r.sales));
-  const SB={ok:['b-ok','В наличии'],low:['b-low','Заканчивается'],out:['b-out','Нет в наличии'],over:['b-over','Избыток']};
+  
   body.innerHTML=slice.map(r=>{
-    const st=SB[statusOf(r)]; const isChanged=changedSet.has(r.article);
-    return '<tr'+(isChanged?' class="is-new"':'')+'>'+
-      '<td class="art">'+esc(r.article)+(isChanged?'<span class="new-badge">NEW</span>':'')+'</td>'+
+    return '<tr>'+
+      '<td class="art">'+esc(r.article)+'</td>'+
       '<td style="white-space:normal;min-width:180px;font-weight:700;color:var(--ink)">'+esc(r.name)+'</td>'+
       '<td><span class="badge" style="background:var(--badge-bg);color:var(--muted);font-weight:700;border:1px solid var(--badge-border);">'+esc(r.season||'—')+'</span></td>'+
-      '<td class="num" style="color:var(--muted)">'+money(r.price)+'</td>'+
       '<td class="num" style="color:var(--cyan)">'+money(r.costPrice)+'</td>'+
-      '<td class="num">'+fmt(r.stock)+'</td>'+
-      '<td><span class="badge '+st[0]+'">'+st[1]+'</span></td>'+
+      '<td class="num" style="color:var(--muted)">'+money(r.price)+'</td>'+
       '<td class="num"><span class="mini-bar"><i style="width:'+Math.round(r.sales/maxSales*100)+'%"></i></span>'+fmt(r.sales)+'</td>'+
-      '<td class="num" style="color:var(--amber)">'+money(r.calcIncome)+'</td>'+
+      '<td class="num" style="color:var(--amber)">'+money(r.revenue)+'</td>'+
       '<td class="num" style="color:var(--green)">'+money(r.unitProfit)+'</td>'+
       '<td class="num" style="color:'+(r.profit<0?'var(--rose)':'inherit')+'">'+money(r.profit)+'</td>'+
       '<td>'+dstr(r.date)+'</td></tr>';
@@ -907,24 +857,23 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;} renderAll(); }
 
 function exportCSV(){
-  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
-  const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
+  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Себест_1шт','Цена_Реализ','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
+  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.price,r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Analytics_Export.csv'; a.click(); toast('CSV выгружен ('+rows.length+' строк)');
 }
 function exportExcel(){
-  const rows=applyFilters(); const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const aoa=[['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
-    .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.unitProfit,r.profit,dstr(r.date)]));
-  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:13},{wch:14}];
+  const rows=applyFilters(); 
+  const aoa=[['Артикул','Наименование','Сезон','Себест_1шт','Цена_Реализ','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
+    .concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.price,r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:13},{wch:12},{wch:13},{wch:14}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Экспорт'); XLSX.writeFile(wb,'Analytics_Export.xlsx'); toast('Excel выгружен ('+rows.length+' строк)');
 }
 
 /* ================= BOOT ================= */
 let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),5000); }
 function initDashboard(){
-  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.from=null; F.to=null;
+  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.search=''; F.from=null; F.to=null;
   renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll();
 }
 
