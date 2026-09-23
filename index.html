@@ -322,7 +322,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div></div>
       <div class="kpi-val" id="kSales">0</div>
       <div class="kpi-lbl">Продажи за период (шт)</div>
-      <div class="kpi-sub">Доход (Выручка): <b id="kRevenue">0 ₸</b></div>
+      <div class="kpi-sub">Доход (Себ×Кол): <b id="kRevenue">0 ₸</b></div>
     </div>
     <div class="kpi" style="--c:var(--green)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
@@ -410,7 +410,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
   </div>
 
   <p class="footer-note">PRO Analytics Engine · Безопасное подключение к Google Sheets.<br>
-  Система работает надежно, без использования зависающих фильтров данных.</p>
+  Система синхронизируется по API каждые 5 минут и работает строго в локальной среде браузера.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
@@ -421,7 +421,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <h3>Настройки синхронизации API</h3>
       <button onclick="closeSyncModal()" style="border:none;background:var(--badge-bg);width:32px;height:32px;border-radius:10px;cursor:pointer;color:var(--muted);transition:0.2s">✕</button>
     </div>
-    <p>Дашборд работает через прямое API-подключение. Пожалуйста, убедитесь, что в Google Таблицах открыт доступ «Всем, у кого есть ссылка».</p>
+    <p>Дашборд работает через API-подключение к вашим Google Таблицам. Если зависает загрузка, убедитесь, что таблица доступна <b>«Всем, у кого есть ссылка»</b>.</p>
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
       <label style="font-size:13px;font-weight:700;color:var(--ink)">Проверять обновления каждые (минут)
         <input id="syncInterval" type="number" min="1" max="120" value="5">
@@ -743,6 +743,7 @@ function renderAll(){
   const totalProf = rows.reduce((s,r)=>s+r.profit,0);
   const totalStockCost = rows.reduce((s,r) => s + (r.stock > 0 ? r.stock * r.costPrice : 0), 0);
   const avgUnitCost = stock > 0 ? totalStockCost / stock : 0;
+  const totalCalcIncome = rows.reduce((s,r)=>s+r.calcIncome, 0); // Доход = Себест * Продажи
   
   const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
   const noSales=rows.filter(r=>r.sales===0).length; const out=rows.filter(r=>r.stock<=0).length, low=rows.filter(r=>r.stock>0&&r.stock<=3).length;
@@ -750,7 +751,7 @@ function renderAll(){
   animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
   animateNum(document.getElementById('kCap'),cap,true); document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
   animateNum(document.getElementById('kTotalCost'), totalStockCost, true); document.getElementById('kAvgCost').textContent=money(avgUnitCost);
-  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalRevCsv);
+  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalCalcIncome);
   animateNum(document.getElementById('kProfit'),totalProf,true); document.getElementById('kMargin').textContent=(totalRevCsv>0? (totalProf/totalRevCsv*100).toFixed(1) : '0')+'%';
   document.getElementById('kLeader').textContent=leader? leader.name : '—'; document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
   animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
@@ -778,7 +779,7 @@ function initCharts(){
   const grid = { color: gridColor, drawBorder: false };
   
   charts.dyn=new Chart(document.getElementById('chDyn'),{type:'bar',
-    data:{labels:[],datasets:[ {label:'Продажи (шт)',data:[],backgroundColor:'rgba(139, 92, 246, 0.8)',borderRadius:6,yAxisID:'y',order:2}, {label:'Выручка (₸)',data:[],borderColor:'#3b82f6',backgroundColor:'rgba(59, 130, 246, 0.15)',fill:true,tension:0.4,yAxisID:'y1',type:'line',pointRadius:0,pointHoverRadius:6,borderWidth:3,order:1}]},
+    data:{labels:[],datasets:[ {label:'Продажи (шт)',data:[],backgroundColor:'rgba(139, 92, 246, 0.8)',borderRadius:6,yAxisID:'y',order:2}, {label:'Доход (Себ×Кол)',data:[],borderColor:'#3b82f6',backgroundColor:'rgba(59, 130, 246, 0.15)',fill:true,tension:0.4,yAxisID:'y1',type:'line',pointRadius:0,pointHoverRadius:6,borderWidth:3,order:1}]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false}, plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}}, scales:{x:{grid:{display:false}},y:{grid:grid,title:{display:false}},y1:{position:'right',grid:{display:false},title:{display:false}}}}});
   charts.brand=new Chart(document.getElementById('chBrand'),{type:'doughnut',
     data:{labels:[],datasets:[{data:[],backgroundColor:PALETTE,borderWidth:3,borderColor:bColor,hoverOffset:8}]},
@@ -817,11 +818,11 @@ function updateChartTheme() {
 
 function updateCharts(rows){
   const groups={}; const gdate={};
-  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date); (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.revenueCsv; gdate[k]=r.date; });
+  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date); (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.calcIncome; gdate[k]=r.date; });
   const keys=Object.keys(groups).sort((a,b)=>gdate[a]-gdate[b]);
   charts.dyn.data.labels=keys; charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s); charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); charts.dyn.update();
 
-  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenueCsv; });
+  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.calcIncome; });
   let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]); let bvals=bk.map(k=>bm[k]);
   if(bk.length>7){ const other=bvals.slice(7).reduce((s,v)=>s+v,0); bk=bk.slice(0,7).concat(['Прочие']); bvals=bvals.slice(0,7).concat([other]); }
   charts.brand.data.labels=bk; charts.brand.data.datasets[0].data=bvals; charts.brand.update();
@@ -844,7 +845,7 @@ function updateCharts(rows){
 
 /* ================= TABLE & EXPORT ================= */
 const COLS=[
-  {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},
+  {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},{k:'price',l:'Цена (Розница)',num:1,money:1},
   {k:'costPrice',l:'Себест. (1 шт)',num:1,money:1},
   {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},{k:'sales',l:'Продажи',num:1},
   {k:'calcIncome',l:'Доход (Себ×Кол)',num:1,money:1},
@@ -866,12 +867,13 @@ function renderTable(rows){
       '<td class="art">'+esc(r.article)+(isChanged?'<span class="new-badge">NEW</span>':'')+'</td>'+
       '<td style="white-space:normal;min-width:180px;font-weight:700;color:var(--ink)">'+esc(r.name)+'</td>'+
       '<td><span class="badge" style="background:var(--badge-bg);color:var(--muted);font-weight:700;border:1px solid var(--badge-border);">'+esc(r.season||'—')+'</span></td>'+
+      '<td class="num">'+money(r.price)+'</td>'+
       '<td class="num" style="color:var(--cyan)">'+money(r.costPrice)+'</td>'+
       '<td class="num">'+fmt(r.stock)+'</td>'+
       '<td><span class="badge '+st[0]+'">'+st[1]+'</span></td>'+
       '<td class="num"><span class="mini-bar"><i style="width:'+Math.round(r.sales/maxSales*100)+'%"></i></span>'+fmt(r.sales)+'</td>'+
       '<td class="num" style="color:var(--amber)">'+money(r.calcIncome)+'</td>'+
-      '<td class="num">'+money(r.revenueCsv)+'</td>'+
+      '<td class="num" style="color:var(--muted)">'+money(r.revenueCsv)+'</td>'+
       '<td class="num" style="color:var(--green)">'+money(r.unitProfit)+'</td>'+
       '<td class="num" style="color:'+(r.profit<0?'var(--rose)':'inherit')+'">'+money(r.profit)+'</td>'+
       '<td>'+dstr(r.date)+'</td></tr>';
@@ -889,17 +891,17 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;} renderAll(); }
 
 function exportCSV(){
-  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
+  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
   const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
+  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Analytics_Export.csv'; a.click(); toast('CSV выгружен ('+rows.length+' строк)');
 }
 function exportExcel(){
   const rows=applyFilters(); const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const aoa=[['Артикул','Наименование','Сезон','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
-    .concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)]));
-  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:12},{wch:13},{wch:14}];
+  const aoa=[['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
+    .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:12},{wch:13},{wch:14}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Экспорт'); XLSX.writeFile(wb,'Analytics_Export.xlsx'); toast('Excel выгружен ('+rows.length+' строк)');
 }
 
