@@ -410,7 +410,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
   </div>
 
   <p class="footer-note">PRO Analytics Engine · Безопасное подключение к Google Sheets.<br>
-  Система синхронизируется по API каждые 5 минут и работает строго в локальной среде браузера.</p>
+  Система работает надежно, без использования зависающих фильтров данных.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
@@ -421,7 +421,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <h3>Настройки синхронизации API</h3>
       <button onclick="closeSyncModal()" style="border:none;background:var(--badge-bg);width:32px;height:32px;border-radius:10px;cursor:pointer;color:var(--muted);transition:0.2s">✕</button>
     </div>
-    <p>Дашборд работает через API-подключение к вашим Google Таблицам. Если зависает загрузка, убедитесь, что таблица доступна <b>«Всем, у кого есть ссылка»</b>.</p>
+    <p>Дашборд работает через прямое API-подключение. Пожалуйста, убедитесь, что в Google Таблицах открыт доступ «Всем, у кого есть ссылка».</p>
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
       <label style="font-size:13px;font-weight:700;color:var(--ink)">Проверять обновления каждые (минут)
         <input id="syncInterval" type="number" min="1" max="120" value="5">
@@ -453,25 +453,33 @@ initTheme();
 window.addEventListener('load', () => {
     setTimeout(() => {
         const loader = document.getElementById('globalLoader');
-        if(loader && loader.style.display !== 'none') {
+        if(loader && loader.style.opacity !== '0') {
             loader.style.opacity = '0';
             setTimeout(() => { loader.style.display = 'none'; }, 400);
-            toast('❌ Таблица недоступна. Пожалуйста, откройте доступ по ссылке.');
+            toast('❌ Таблица недоступна или пуста. Проверьте права.');
+            if(DATA.length > 0) initDashboard();
         }
-    }, 7000); // Если грузится дольше 7 секунд - снимаем загрузку
+    }, 7000); 
 });
 
 /* ================= STATE ================= */
 let DATA = []; let charts = {}; let sortKey = 'sales', sortDir = -1; let page = 1; const PAGE_SIZE = 100;
 const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'', onlyChanged:false };
 const PALETTE = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899', '#f97316', '#84cc16', '#eab308'];
-let changedSet = new Set(); const LS_KEY = 'sklad_almaty_data_pro_v6';
+let changedSet = new Set(); const LS_KEY = 'sklad_almaty_data_pro_v8';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
-const pnum = v => { if(v==null||v==='') return 0; if(typeof v==='number') return v; const n=parseFloat(String(v).replace(/[\s ]|₸|р\.?/gi,'').replace(',','.')); return isNaN(n)?0:n; };
 
-/* ПРАВИЛЬНЫЙ ПАРСИНГ ДАТ */
+// Улучшенный парсер чисел (убирает пробелы, неразрывные пробелы и буквенные символы)
+const pnum = v => {
+  if(v == null || v === '') return 0;
+  if(typeof v === 'number') return v;
+  let s = String(v).replace(/[\s\u00A0₸рa-zA-Z]/g, '').replace(',', '.');
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+};
+
 const toLocalIso = d => {
   if (!d) return null;
   const pad = n => (n < 10 ? '0' + n : n);
@@ -518,12 +526,13 @@ function buildDataset(saleRows, stockRows, seasonRows){
       });
   }
 
-  const agg = {}; const A = a => agg[a] || (agg[a]={qty:0,income:0,profit:0,last:null,name:null});
+  const agg = {}; const A = a => agg[a] || (agg[a]={qty:0,income:0,profit:0,last:null,name:null,cost:0});
   if (saleRows) {
       saleRows.forEach(r=>{
-        if(!r || r.length < 6 || bad(r[2])) return;
+        if(!r || r.length < 5 || bad(r[2])) return;
         let a=String(r[1]==null?'':r[1]).trim(); if(!a) a='Б/А·'+cleanName(r[2]); if(isSep(a)) return;
         const g=A(a); g.qty+=pnum(r[3]); g.income+=pnum(r[5]); g.profit+=pnum(r[6]);
+        if(pnum(r[4]) > 0) g.cost = pnum(r[4]);
         const d=pdate(r[0]); if(d&&(!g.last||d>g.last)) g.last=d; g.name=cleanName(r[2]);
       });
   }
@@ -531,15 +540,25 @@ function buildDataset(saleRows, stockRows, seasonRows){
   const products = {};
   Object.keys(stock).forEach(a=>{ products[a]={article:a, name:stock[a].name, price:stock[a].price, stock:stock[a].qty}; });
   Object.keys(agg).forEach(a=>{
-    if(!(a in products)){ let price = 0; if(!price && agg[a].qty) price = Math.round(agg[a].income/agg[a].qty); products[a]={article:a, name:agg[a].name, price, stock:0}; }
+    if(!(a in products)){ products[a]={article:a, name:agg[a].name, price:0, stock:0}; }
   });
   
   Object.keys(products).forEach(a=>{
     const g=agg[a]; products[a].sales = g? g.qty : 0; products[a].date = g? g.last : null; products[a].season = seasonMap[a] || 'Не указан';
-    let unitProfit = 0;
-    if (g && g.qty > 0 && g.income > 0) { products[a].costPrice = (g.income - g.profit) / g.qty; unitProfit = g.profit / g.qty; } 
-    else { products[a].costPrice = products[a].price * 0.55; unitProfit = products[a].price * 0.45; }
-    products[a].unitProfit = unitProfit; products[a].revenue = products[a].costPrice * products[a].sales; products[a].profit = g ? g.profit : 0; 
+    
+    // Формула: Себестоимость = из колонки E (r[4]) или 55% от цены
+    let cost = g && g.cost > 0 ? g.cost : (products[a].price * 0.55);
+    products[a].costPrice = cost;
+    
+    // Выручка из CSV = r[5]. Прибыль = r[6].
+    products[a].revenueCsv = g ? g.income : 0; 
+    products[a].profit = g ? g.profit : 0; 
+    
+    // Формула 3: Прибыль 1 шт = Прибыль / Продажи
+    products[a].unitProfit = products[a].sales > 0 ? (products[a].profit / products[a].sales) : 0;
+    
+    // Формула 4: Доход (Себест * Продажи) - Как просил пользователь
+    products[a].calcIncome = products[a].costPrice * products[a].sales;
   });
   return Object.values(products);
 }
@@ -549,7 +568,7 @@ function updateDataMerge(newData){
     newData.forEach(r=>{
       const o=oldMap[r.article];
       if(!o) changed.add(r.article);
-      else if(o.stock!==r.stock || o.sales!==r.sales || o.revenue!==r.revenue || o.profit!==r.profit || o.price!==r.price || o.name!==r.name || o.season!==r.season) changed.add(r.article);
+      else if(o.stock!==r.stock || o.sales!==r.sales || o.profit!==r.profit || o.price!==r.price || o.season!==r.season) changed.add(r.article);
     });
     DATA=newData; changedSet=changed; F.onlyChanged = changed.size>0; page=1;
     saveToStorage(); initDashboard(); updateChangedUI();
@@ -563,9 +582,8 @@ function loadFromStorage(){
   }catch(e){ return null; }
 }
 
-/* ================= SYNC (ОБНОВЛЕННЫЕ ССЫЛКИ ПО GID) ================= */
+/* ================= SYNC API ================= */
 const SHEET_ID = '1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg';
-// Используем export?format=csv. Он работает в 10 раз стабильнее, чем gviz API.
 const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
 
 const SYNC = { 
@@ -593,8 +611,8 @@ function saveSyncSettings(enable){
 function restartSyncTimer(){ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } if(SYNC.enabled){ syncTimer=setInterval(()=>runAutoSync(true), Math.max(1,SYNC.intervalMin)*60000); } }
 
 function csvUrlToRows(csvText){ 
-    const wb=XLSX.read(csvText,{type:'string'}); 
-    return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true}); 
+    const wb=XLSX.read(csvText,{type:'string', raw:true}); 
+    return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}); 
 }
 
 async function fetchCsv(url){ 
@@ -607,7 +625,7 @@ async function fetchCsv(url){
 }
 
 function showLoader() { 
-    document.getElementById('loaderText').textContent = 'Подключаемся к Google Таблицам...';
+    document.getElementById('loaderText').textContent = 'Скачивание данных...';
     const loader = document.getElementById('globalLoader'); 
     if(loader) { loader.style.display = 'flex'; loader.style.opacity = '0.98'; } 
 }
@@ -624,10 +642,9 @@ async function runAutoSync(silent){
   }catch(err){ 
     SYNC.lastResult='Ошибка доступа'; 
     if(!silent) {
-        if(err.message === 'ACCESS_DENIED') toast('❌ ОШИБКА: Таблица закрыта! Сделайте доступ "Всем, у кого есть ссылка"');
-        else toast('❌ Сбой подключения. Проверьте права доступа.');
+        if(err.message === 'ACCESS_DENIED') toast('❌ Таблица закрыта! Откройте доступ "Всем, у кого есть ссылка"');
+        else toast('❌ Ошибка сети. Проверьте права.');
     }
-    // Если упало, но локальные данные есть, все равно покажем их
     if(DATA.length > 0) initDashboard();
   }
   finally{ 
@@ -722,7 +739,7 @@ function renderAll(){
 
   const stock=rows.reduce((s,r)=>s+r.stock,0); const cap=rows.reduce((s,r)=>s+r.stock*r.price,0); 
   
-  const totalRev = rows.reduce((s,r)=>s+r.revenue,0); 
+  const totalRevCsv = rows.reduce((s,r)=>s+r.revenueCsv,0); 
   const totalProf = rows.reduce((s,r)=>s+r.profit,0);
   const totalStockCost = rows.reduce((s,r) => s + (r.stock > 0 ? r.stock * r.costPrice : 0), 0);
   const avgUnitCost = stock > 0 ? totalStockCost / stock : 0;
@@ -733,8 +750,8 @@ function renderAll(){
   animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
   animateNum(document.getElementById('kCap'),cap,true); document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
   animateNum(document.getElementById('kTotalCost'), totalStockCost, true); document.getElementById('kAvgCost').textContent=money(avgUnitCost);
-  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalRev);
-  animateNum(document.getElementById('kProfit'),totalProf,true); document.getElementById('kMargin').textContent=(totalRev>0? (totalProf/totalRev*100).toFixed(1) : '0')+'%';
+  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalRevCsv);
+  animateNum(document.getElementById('kProfit'),totalProf,true); document.getElementById('kMargin').textContent=(totalRevCsv>0? (totalProf/totalRevCsv*100).toFixed(1) : '0')+'%';
   document.getElementById('kLeader').textContent=leader? leader.name : '—'; document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
   animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
   animateNum(document.getElementById('kRisk'),out+low); document.getElementById('kOut').textContent=fmt(out); document.getElementById('kLow').textContent=fmt(low);
@@ -800,11 +817,11 @@ function updateChartTheme() {
 
 function updateCharts(rows){
   const groups={}; const gdate={};
-  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date); (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.revenue; gdate[k]=r.date; });
+  rows.forEach(r=>{ if(!r.date) return; const k=bucket(r.date); (groups[k]=groups[k]||{s:0,v:0}); groups[k].s+=r.sales; groups[k].v+=r.revenueCsv; gdate[k]=r.date; });
   const keys=Object.keys(groups).sort((a,b)=>gdate[a]-gdate[b]);
   charts.dyn.data.labels=keys; charts.dyn.data.datasets[0].data=keys.map(k=>groups[k].s); charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); charts.dyn.update();
 
-  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenue; });
+  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenueCsv; });
   let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]); let bvals=bk.map(k=>bm[k]);
   if(bk.length>7){ const other=bvals.slice(7).reduce((s,v)=>s+v,0); bk=bk.slice(0,7).concat(['Прочие']); bvals=bvals.slice(0,7).concat([other]); }
   charts.brand.data.labels=bk; charts.brand.data.datasets[0].data=bvals; charts.brand.update();
@@ -827,10 +844,11 @@ function updateCharts(rows){
 
 /* ================= TABLE & EXPORT ================= */
 const COLS=[
-  {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},{k:'price',l:'Цена (Розница)',num:1,money:1},
+  {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},
   {k:'costPrice',l:'Себест. (1 шт)',num:1,money:1},
   {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},{k:'sales',l:'Продажи',num:1},
-  {k:'revenue',l:'Доход (Выручка)',num:1,money:1},
+  {k:'calcIncome',l:'Доход (Себ×Кол)',num:1,money:1},
+  {k:'revenueCsv',l:'Выручка',num:1,money:1},
   {k:'unitProfit',l:'Прибыль (1 шт)',num:1,money:1},
   {k:'profit',l:'Общ. Прибыль',num:1,money:1},
   {k:'date',l:'Посл. продажа'}
@@ -848,12 +866,12 @@ function renderTable(rows){
       '<td class="art">'+esc(r.article)+(isChanged?'<span class="new-badge">NEW</span>':'')+'</td>'+
       '<td style="white-space:normal;min-width:180px;font-weight:700;color:var(--ink)">'+esc(r.name)+'</td>'+
       '<td><span class="badge" style="background:var(--badge-bg);color:var(--muted);font-weight:700;border:1px solid var(--badge-border);">'+esc(r.season||'—')+'</span></td>'+
-      '<td class="num">'+money(r.price)+'</td>'+
       '<td class="num" style="color:var(--cyan)">'+money(r.costPrice)+'</td>'+
       '<td class="num">'+fmt(r.stock)+'</td>'+
       '<td><span class="badge '+st[0]+'">'+st[1]+'</span></td>'+
       '<td class="num"><span class="mini-bar"><i style="width:'+Math.round(r.sales/maxSales*100)+'%"></i></span>'+fmt(r.sales)+'</td>'+
-      '<td class="num" style="color:var(--amber)">'+money(r.revenue)+'</td>'+
+      '<td class="num" style="color:var(--amber)">'+money(r.calcIncome)+'</td>'+
+      '<td class="num">'+money(r.revenueCsv)+'</td>'+
       '<td class="num" style="color:var(--green)">'+money(r.unitProfit)+'</td>'+
       '<td class="num" style="color:'+(r.profit<0?'var(--rose)':'inherit')+'">'+money(r.profit)+'</td>'+
       '<td>'+dstr(r.date)+'</td></tr>';
@@ -871,22 +889,22 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;} renderAll(); }
 
 function exportCSV(){
-  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
+  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
   const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
+  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Analytics_Export.csv'; a.click(); toast('CSV выгружен ('+rows.length+' строк)');
 }
 function exportExcel(){
   const rows=applyFilters(); const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
-  const aoa=[['Артикул','Наименование','Сезон','Цена','Себест_1шт','Остаток','Статус','Продажи','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
-    .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)]));
-  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:13},{wch:14}];
+  const aoa=[['Артикул','Наименование','Сезон','Себест_1шт','Остаток','Статус','Продажи','Доход(Себ_Кол)','Выручка','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
+    .concat(rows.map(r=>[r.article,r.name,r.season,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.revenueCsv,r.unitProfit,r.profit,dstr(r.date)]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:12},{wch:13},{wch:14}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Экспорт'); XLSX.writeFile(wb,'Analytics_Export.xlsx'); toast('Excel выгружен ('+rows.length+' строк)');
 }
 
 /* ================= BOOT ================= */
-let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3500); }
+let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),4000); }
 function initDashboard(){
   F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.from=null; F.to=null;
   renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll();
