@@ -143,6 +143,10 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 .art { font-weight:800; color:var(--primary); }
 
 .badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:800; padding:6px 12px; border-radius:8px; letter-spacing: 0.3px; }
+.b-ok { background:rgba(16, 185, 129, 0.1); color:var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
+.b-low { background:rgba(245, 158, 11, 0.1); color:var(--amber); border: 1px solid rgba(245, 158, 11, 0.2); }
+.b-out { background:rgba(244, 63, 94, 0.1); color:var(--rose); border: 1px solid rgba(244, 63, 94, 0.2); }
+
 .mini-bar { width:50px; height:6px; border-radius:6px; background:var(--line); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:10px; }
 .mini-bar i { display:block; height:100%; border-radius:6px; background: linear-gradient(90deg, var(--primary), var(--cyan)); }
 
@@ -187,8 +191,8 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 
 <div id="globalLoader">
   <div class="spinner"></div>
-  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с базой...</h2>
-  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Подключение к Google Sheets</p>
+  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с 5 листами...</h2>
+  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Установка защищенного API-соединения</p>
 </div>
 
 <div class="wrap">
@@ -203,7 +207,7 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     <div class="actions">
       <button class="btn btn-ghost" id="themeToggleBtn" onclick="toggleTheme()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Тема</button>
       <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.1-5.7L3 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 1 0-2.1 5.7l2.1-1.7"/></svg>Обновить данные</button>
-      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
+      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
     </div>
   </header>
 
@@ -214,7 +218,7 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     </div>
     <div class="f-grid">
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период</div>
+        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период продаж</div>
         <div class="date-range">
           <input type="date" id="dateFrom" onchange="setDate()">
           <input type="date" id="dateTo" onchange="setDate()">
@@ -269,39 +273,48 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
           <label class="radio-item"><input type="radio" name="sf" value="zero" onchange="setSalesFilter('zero')"><span>Не продаются</span><span class="tag" id="cnt-zero">—</span></label>
         </div>
       </div>
+      <div class="f-group">
+        <div class="f-title"><span class="dot" style="background:var(--green)"></span>6 · Остаток</div>
+        <div class="radio-list">
+          <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')"><span>Любой статус</span><span class="tag" id="scnt-all">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии</span><span class="tag" id="scnt-ok">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')"><span>Заканчивается</span><span class="tag" id="scnt-low">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')"><span>Нет в наличии</span><span class="tag" id="scnt-out">—</span></label>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="kpi-grid">
     <div class="kpi" style="--c:var(--cyan)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
-      <div class="kpi-val" id="kSku">0</div>
-      <div class="kpi-lbl">Ассортимент (SKU)</div>
-      <div class="kpi-sub">Товаров без продаж: <b id="kNoSales">0</b></div>
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.3L12 13l8.7-4.7"/><path d="M12 13v9"/></svg></div></div>
+      <div class="kpi-val" id="kStock">0</div>
+      <div class="kpi-lbl">Общий остаток, шт</div>
+      <div class="kpi-sub">Товаров в базе: <b id="kStockSku">0</b></div>
     </div>
-    <div class="kpi" style="--c:var(--primary)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div></div>
+    <div class="kpi" style="--c:var(--purple)">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
       <div class="kpi-val" id="kSales">0</div>
       <div class="kpi-lbl">Продажи за период (шт)</div>
       <div class="kpi-sub">Товар-лидер: <b id="kLeader">—</b></div>
     </div>
-    <div class="kpi" style="--c:var(--amber)">
+    <div class="kpi" style="--c:var(--primary)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="M7 15h0M2 9.5h20"/></svg></div></div>
       <div class="kpi-val" id="kRevenue">0 ₸</div>
-      <div class="kpi-lbl">Выручка (Доход)</div>
+      <div class="kpi-lbl">Доход (Выручка)</div>
       <div class="kpi-sub">Формула: <b style="color:var(--muted)">Себест-сть × Кол-во</b></div>
     </div>
     <div class="kpi" style="--c:var(--green)">
       <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
       <div class="kpi-val" id="kProfit">0 ₸</div>
       <div class="kpi-lbl">Общая Прибыль</div>
-      <div class="kpi-sub">Средняя маржа: <b id="kMargin">0%</b></div>
+      <div class="kpi-sub">Формула: <b style="color:var(--muted)">Прибыль (1 шт) × Кол-во</b></div>
     </div>
   </div>
 
   <div class="charts">
     <div class="card c-line">
-      <h3>Динамика продаж и выручки</h3>
+      <h3>Динамика продаж и дохода</h3>
       <p class="sub" id="dynSub">Агрегация по дате продажи товаров</p>
       <div class="chart-box"><canvas id="chDyn"></canvas></div>
     </div>
@@ -312,23 +325,13 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     </div>
     <div class="card c-week">
       <h3>Еженедельные тренды</h3>
-      <p class="sub">Количество проданных товаров (шт)</p>
+      <p class="sub">Сумма проданных товаров (шт)</p>
       <div class="chart-box sm"><canvas id="chWeek"></canvas></div>
     </div>
     <div class="card c-bar">
       <h3>Топ-10 товаров</h3>
       <p class="sub">Артикулы-лидеры по штукам</p>
       <div class="chart-box sm"><canvas id="chTop"></canvas></div>
-    </div>
-    <div class="card c-seg">
-      <h3>Ценовые сегменты</h3>
-      <p class="sub">Количество товаров и объемы продаж</p>
-      <div class="chart-box sm"><canvas id="chSeg"></canvas></div>
-    </div>
-    <div class="card c-status">
-      <h3>Доход по сезонам</h3>
-      <p class="sub">Сравнение выручки</p>
-      <div class="chart-box sm"><canvas id="chStatus"></canvas></div>
     </div>
   </div>
 
@@ -357,8 +360,8 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     </div>
   </div>
 
-  <p class="footer-note">PRO Analytics Engine · Источник данных: Лист "Ежедневный продажа".<br>
-  Система синхронизируется по безопасному GViz API и использует локальные вычисления.</p>
+  <p class="footer-note">PRO Analytics Engine · Интеграция с 5 листами Google Таблиц.<br>
+  Система скачивает и сводит данные локально, без зависаний.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
@@ -369,12 +372,9 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
       <h3>Настройки синхронизации API</h3>
       <button onclick="closeSyncModal()" style="border:none;background:var(--badge-bg);width:32px;height:32px;border-radius:10px;cursor:pointer;color:var(--muted);transition:0.2s">✕</button>
     </div>
-    <p>Мы автоматически извлекаем данные из вашей Google Таблицы. Убедитесь, что таблица доступна <b>«Всем в интернете»</b>.</p>
+    <p>Дашборд сводит данные из 5 разных листов вашей таблицы. Убедитесь, что для Google Таблицы открыт доступ <b>«Всем, у кого есть ссылка»</b>.</p>
     
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
-      <label style="font-size:13px;font-weight:700;color:var(--ink)">Ссылка на Google Таблицу
-        <input id="syncDataUrl" type="text" placeholder="https://docs.google.com/spreadsheets/d/...">
-      </label>
       <label style="font-size:13px;font-weight:700;color:var(--ink)">Интервал обновления (минут)
         <input id="syncInterval" type="number" min="1" max="120" value="5">
       </label>
@@ -409,17 +409,17 @@ window.addEventListener('load', () => {
             loader.style.opacity = '0';
             setTimeout(() => { loader.style.display = 'none'; }, 400);
             const msg = document.getElementById('toastMsg');
-            if(msg && msg.textContent === '') toast('❌ Время ожидания истекло. Проверьте ссылку и права доступа.');
+            if(msg && msg.textContent === '') toast('❌ Время ожидания истекло. Проверьте права доступа.');
             if(DATA.length > 0) initDashboard();
         }
-    }, 8000); 
+    }, 10000); 
 });
 
 /* ================= STATE ================= */
 let DATA = []; let charts = {}; let sortKey = 'sales', sortDir = -1; let page = 1; const PAGE_SIZE = 100;
-const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', search:'' };
+const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'' };
 const PALETTE = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899', '#f97316', '#84cc16', '#eab308'];
-const LS_KEY = 'sklad_almaty_master_v9';
+const LS_KEY = 'sklad_almaty_master_v12';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
@@ -444,7 +444,6 @@ const pdate = v => {
   let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
   m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})/); if(m) return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
   m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if(m) return new Date(parseInt(m[3]), parseInt(m[1])-1, parseInt(m[2]));
-  m = s.match(/^(\d{2})\.(\d{2})$/); if(m) return new Date(new Date().getFullYear(), parseInt(m[2])-1, parseInt(m[1]));
   let num = parseFloat(s);
   if (!isNaN(num) && num > 30000 && num < 70000) { const d=XLSX.SSF.parse_date_code(num); return d? new Date(d.y,d.m-1,d.d) : null; }
   return null;
@@ -453,86 +452,112 @@ const pdate = v => {
 const dstr = d => { if(!d) return '—'; const pad = n => (n < 10 ? '0' + n : n); return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`; };
 const cleanName = s => String(s==null?'':s).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 
-/* ================= SINGLE SHEET PARSER ================= */
-function buildDataset(sheetRows){
-  const isSep = v => /^\d+-\d+$/.test(String(v==null?'':v).trim());
-  const bad = v => { const s=String(v==null?'':v).trim().toLowerCase(); return !s || s==='наименование' || s==='артикул' || isSep(s); };
-
-  let headerRow = 0;
-  for(let i=0; i<Math.min(10, sheetRows.length); i++) {
-      let text = (sheetRows[i]||[]).join(' ').toLowerCase();
-      if(text.includes('артикул') || text.includes('наименовани')) { headerRow = i; break; }
-  }
-  
-  let headers = (sheetRows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
-  const findIdx = (kws) => {
-      for(let kw of kws) { let idx = headers.findIndex(h => h.includes(kw)); if(idx !== -1) return idx; }
-      return -1;
-  };
-
-  let iArt = findIdx(['артикул', 'код']);
-  let iName = findIdx(['наименование', 'товар']);
-  let iSeason = findIdx(['сезон']);
-  let iPrice = findIdx(['цена', 'розниц', 'реализац']);
-  let iCost = findIdx(['себест', 'закуп']);
-  let iTotalSales = -1;
-  for(let c=0; c<headers.length; c++) {
-      if(headers[c].includes('общ.продаж') || headers[c].includes('общ. продаж')) { iTotalSales = c; break; }
-  }
-  if (iTotalSales === -1) iTotalSales = findIdx(['общ', 'итого']);
-  
-  if(iArt === -1) iArt = 0; if(iName === -1) iName = 1;
-
-  let dateCols = [];
-  for (let c = 0; c < headers.length; c++) {
-      if (c === iArt || c === iName || c === iSeason || c === iPrice || c === iCost || c === iTotalSales) continue;
-      let hStr = String(sheetRows[headerRow][c]||'').trim();
-      let d = pdate(hStr);
-      if (d) dateCols.push({ idx: c, label: hStr, dateStr: toLocalIso(d), dateObj: d });
-  }
-
+/* ================= 5-SHEET PARSER ================= */
+function buildDataset(salesArr, stockArr, costArr, profitArr, totalsArr) {
   const products = {};
+  const isSep = v => /^\d+-\d+$/.test(String(v==null?'':v).trim());
 
-  for(let i = headerRow + 1; i < sheetRows.length; i++) {
-      let r = sheetRows[i];
-      if(!r || r.length === 0 || bad(r[iName])) continue;
-      
-      let art = String(r[iArt]||'').trim();
-      let name = cleanName(r[iName]);
-      if(!art && !name) continue;
-      if(!art) art = 'Б/А·' + name;
-      if(isSep(art)) continue;
-
-      if(!products[art]) {
-          products[art] = {
-              article: art, name: name, season: iSeason !== -1 && r[iSeason] ? String(r[iSeason]).trim() : 'Не указан',
-              price: iPrice !== -1 ? pnum(r[iPrice]) : 0, costPrice: iCost !== -1 ? pnum(r[iCost]) : 0,
-              baseSales: 0, dailySales: {}, date: null
-          };
+  function parseSheet(sheetRows, processRowCb) {
+      if (!sheetRows || !sheetRows.length) return;
+      let headerRow = 0;
+      for(let i=0; i<Math.min(10, sheetRows.length); i++) {
+          let text = (sheetRows[i]||[]).join(' ').toLowerCase();
+          if(text.includes('артикул') || text.includes('наименовани')) { headerRow = i; break; }
       }
+      let headers = (sheetRows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
+      let iArt = headers.findIndex(h => h.includes('артикул') || h.includes('код'));
+      if (iArt === -1) iArt = 0;
+      
+      let iName = headers.findIndex(h => h.includes('наименовани') || h.includes('товар'));
+      if (iName === -1) iName = 1;
+      
+      for(let i = headerRow + 1; i < sheetRows.length; i++) {
+          let r = sheetRows[i];
+          if(!r || r.length === 0) continue;
+          let art = String(r[iArt]||'').trim();
+          let name = String(r[iName]||'').trim();
+          if(!art && !name) continue;
+          if(!art) art = 'Б/А·' + cleanName(name);
+          if(isSep(art)) continue;
+          
+          if(!products[art]) {
+              products[art] = {
+                  article: art, name: cleanName(name), season: 'Не указан',
+                  price: 0, costPrice: 0, stock: 0, sales: 0, profit: 0, calcIncome: 0,
+                  revenueCsv: 0, unitProfit: 0, dailySales: {}, date: null
+              };
+          }
+          if (name && !products[art].name) products[art].name = cleanName(name);
+          processRowCb(products[art], r, headers);
+      }
+  }
 
-      let p = products[art];
-      if (p.season === 'Не указан' && iSeason !== -1 && r[iSeason] && String(r[iSeason]).trim()) p.season = String(r[iSeason]).trim();
-      if (p.price === 0 && iPrice !== -1) p.price = pnum(r[iPrice]);
-      if (p.costPrice === 0 && iCost !== -1) p.costPrice = pnum(r[iCost]);
+  // 1. Итого по товарам
+  parseSheet(totalsArr, (p, r, h) => {
+      let iPrice = h.findIndex(x => x.includes('цена') || x.includes('розниц'));
+      let iRev = h.findIndex(x => x.includes('выручка') || x.includes('сумма'));
+      if(iPrice !== -1 && pnum(r[iPrice]) > 0) p.price = pnum(r[iPrice]);
+      if(iRev !== -1 && pnum(r[iRev]) !== 0) p.revenueCsv = pnum(r[iRev]);
+  });
 
-      let explicitTotal = iTotalSales !== -1 ? pnum(r[iTotalSales]) : 0;
+  // 2. Себестоимость
+  parseSheet(costArr, (p, r, h) => {
+      let iCost = h.findIndex(x => x.includes('себест') || x.includes('закуп'));
+      if (iCost === -1) iCost = h.length > 2 ? 2 : 1; 
+      if (pnum(r[iCost]) > 0) p.costPrice = pnum(r[iCost]);
+  });
+
+  // 3. ВАЛОВАЯ ПРИБЫЛЬ
+  parseSheet(profitArr, (p, r, h) => {
+      let iProf = h.findIndex(x => x.includes('прибыль') || x.includes('маржа'));
+      if (iProf === -1) iProf = h.length > 2 ? 2 : 1;
+      if (pnum(r[iProf]) !== 0) p.profit = pnum(r[iProf]);
+  });
+
+  // 4. Остаток
+  parseSheet(stockArr, (p, r, h) => {
+      let iStock = h.findIndex(x => x.includes('остаток') || x.includes('наличи'));
+      if (iStock === -1) iStock = h.length > 2 ? 2 : 1;
+      if (pnum(r[iStock]) !== 0) p.stock = pnum(r[iStock]);
+  });
+
+  // 5. ЕЖЕДНЕВНЫЙ ПРОДАЖА (Главный)
+  parseSheet(salesArr, (p, r, h) => {
+      let iSeason = h.findIndex(x => x.includes('сезон'));
+      if (iSeason !== -1 && String(r[iSeason]).trim()) p.season = String(r[iSeason]).trim();
+      
+      let iArt = h.findIndex(x => x.includes('артикул') || x.includes('код'));
+      if (iArt === -1) iArt = 0;
+      let iName = h.findIndex(x => x.includes('наименовани'));
+      if (iName === -1) iName = 1;
+      let iTotal = h.findIndex(x => x.includes('общ.продаж') || x.includes('итог'));
+      
       let dailySum = 0;
-
-      for (let dc of dateCols) {
-          let qty = pnum(r[dc.idx]);
-          if (qty > 0) {
-              p.dailySales[dc.dateStr] = (p.dailySales[dc.dateStr] || 0) + qty;
-              dailySum += qty;
-              if(!p.date || dc.dateObj > p.date) p.date = dc.dateObj;
+      for (let c = 0; c < h.length; c++) {
+          if (c === iArt || c === iName || c === iSeason || c === iTotal) continue;
+          let d = pdate(h[c]);
+          if (d) {
+              let qty = pnum(r[c]);
+              if (qty > 0) {
+                  let dStr = toLocalIso(d);
+                  p.dailySales[dStr] = (p.dailySales[dStr] || 0) + qty;
+                  dailySum += qty;
+                  if (!p.date || d > p.date) p.date = d;
+              }
           }
       }
-      
-      p.baseSales += (iTotalSales !== -1 && String(r[iTotalSales]).trim() !== '') ? explicitTotal : dailySum;
-  }
+      if (dailySum > 0) p.sales = dailySum; 
+  });
 
   Object.values(products).forEach(p => {
+      if (p.costPrice === 0 && p.price > 0) p.costPrice = p.price * 0.55; 
+      if (p.price === 0 && p.revenueCsv > 0 && p.sales > 0) p.price = p.revenueCsv / p.sales;
+      if (p.price === 0 && p.costPrice > 0) p.price = p.costPrice * 1.8; 
+
+      // Жёсткие формулы
       p.unitProfit = p.price - p.costPrice;
+      p.calcIncome = p.costPrice * p.sales;
+      p.profit = p.unitProfit * p.sales; 
   });
 
   return Object.values(products);
@@ -550,23 +575,16 @@ function loadFromStorage(){
   }catch(e){ return null; }
 }
 
-/* ================= SMART SYNC API (CORS BYPASS) ================= */
-function sanitizeUrlToGviz(url) {
-    if (!url) return '';
-    let sid = '', gid = '476452638'; 
-    const sidMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-    if (sidMatch) sid = sidMatch[1];
-    const gidMatch = url.match(/gid=(\d+)/);
-    if (gidMatch) gid = gidMatch[1];
-    if (sid) return `https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:csv&gid=${gid}`;
-    return url;
-}
+/* ================= MULTI-SHEET SYNC API ================= */
+const SHEET_ID = '1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg';
+const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
 
-const DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg/edit?gid=476452638#gid=476452638';
-const SYNC = { dataUrl: DEFAULT_URL, intervalMin: 5, enabled: true, lastRun: null, lastResult: '' };
+const SYNC = { 
+  intervalMin: 5, enabled: true, lastRun: null, lastResult: '' 
+};
 let syncTimer=null; let syncInFlight=false;
 
-function openSyncModal(){ document.getElementById('syncInterval').value=SYNC.intervalMin||5; document.getElementById('syncDataUrl').value=SYNC.dataUrl||DEFAULT_URL; updateSyncStatusText(); document.getElementById('syncOverlay').style.display='flex'; }
+function openSyncModal(){ document.getElementById('syncInterval').value=SYNC.intervalMin||5; updateSyncStatusText(); document.getElementById('syncOverlay').style.display='flex'; }
 function closeSyncModal(){ document.getElementById('syncOverlay').style.display='none'; }
 function updateSyncStatusText(){
   const el=document.getElementById('syncStatus'); if(!el) return;
@@ -577,7 +595,6 @@ function updateSyncStatusText(){
 
 function saveSyncSettings(enable){
   SYNC.intervalMin=Math.max(1, parseInt(document.getElementById('syncInterval').value,10)||5); 
-  SYNC.dataUrl = document.getElementById('syncDataUrl').value.trim() || DEFAULT_URL;
   SYNC.enabled=!!enable; const dot=document.getElementById('syncDot'); if(dot) dot.style.display = SYNC.enabled ? 'inline-block' : 'none';
   restartSyncTimer(); if(enable && SYNC.enabled){ toast('Настройки сохранены. Обновляю...'); showLoader(); runAutoSync(true); } 
   else { toast('Автообновление отключено'); }
@@ -586,26 +603,55 @@ function saveSyncSettings(enable){
 function restartSyncTimer(){ if(syncTimer){ clearInterval(syncTimer); syncTimer=null; } if(SYNC.enabled){ syncTimer=setInterval(()=>runAutoSync(true), Math.max(1,SYNC.intervalMin)*60000); } }
 
 function csvUrlToRows(csvText){ 
+    if(!csvText) return [];
     const cleanedText = csvText.replace(/^"|"$/g, '').replace(/","/g, '","');
     const wb=XLSX.read(cleanedText,{type:'string', raw:true}); 
     return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''}); 
 }
 
+async function safeFetchCsv(url){ 
+  try {
+      const bust = url + '&_ts=' + Date.now(); 
+      const res = await fetch(bust, {cache:'no-store'}); 
+      if(!res.ok) return ""; 
+      const text = await res.text();
+      if(text.trim().toLowerCase().startsWith('<!doctype html>') || text.includes('<html')) throw new Error('ACCESS_DENIED');
+      return text;
+  } catch(e) {
+      if(e.message === 'ACCESS_DENIED') throw e;
+      return "";
+  }
+}
+
+function showLoader() { 
+    document.getElementById('loaderText').textContent = 'Подключаемся к 5 листам Google...';
+    const loader = document.getElementById('globalLoader'); 
+    if(loader) { loader.style.display = 'flex'; loader.style.opacity = '0.98'; } 
+}
+
 async function runAutoSync(silent){
   if(!SYNC.enabled || syncInFlight) return; syncInFlight=true;
   try{
-    const safeApiUrl = sanitizeUrlToGviz(SYNC.dataUrl);
-    const bust = safeApiUrl + '&_ts=' + Date.now(); 
+    const urls = [
+        csvUrlGid('476452638'),   // Sales
+        csvUrlGid('2055556445'),  // Stock
+        csvUrlGid('1449864217'),  // Cost
+        csvUrlGid('1658889858'),  // Profit
+        csvUrlGid('1353794655')   // Totals
+    ];
+
+    const responses = await Promise.all(urls.map(safeFetchCsv));
     
-    const res = await fetch(bust, {cache:'no-store'}); 
-    if(!res.ok) throw new Error('HTTP '+res.status); 
-    
-    const text = await res.text();
-    if(text.trim().toLowerCase().startsWith('<!doctype html>') || text.includes('<html')) {
-        throw new Error('ACCESS_DENIED');
-    }
-    
-    const rows = buildDataset(csvUrlToRows(text));
+    if(!responses[0] && !responses[1] && !responses[4]) throw new Error('ACCESS_DENIED');
+
+    const rows = buildDataset(
+        csvUrlToRows(responses[0]),
+        csvUrlToRows(responses[1]),
+        csvUrlToRows(responses[2]),
+        csvUrlToRows(responses[3]),
+        csvUrlToRows(responses[4])
+    );
+
     if(!rows || !rows.length) throw new Error('Empty');
     
     updateDataMerge(rows); SYNC.lastRun=Date.now();
@@ -662,15 +708,17 @@ function selectAllSeasons(on){ page=1; F.seasons = on? new Set(uniqueSeasons()) 
 function updateMsSeasonLabel(){ document.getElementById('msSeasonLabel').textContent = F.seasons.size===0? 'Все сезоны' : 'Выбрано: '+F.seasons.size; }
 
 function setSalesFilter(v){ page=1; F.sales=v; renderAll(); }
+function setStockFilter(v){ page=1; F.stock=v; renderAll(); }
 function setSearch(v){ page=1; F.search=v.toLowerCase(); renderAll(); }
 function resetFilters(){
-  page=1; F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.search=''; 
+  page=1; F.from=F.to=null; F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search='';
   document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value=''; document.getElementById('tblSearch').value='';
-  document.querySelector('input[name="sf"][value="all"]').checked=true; 
+  document.querySelector('input[name="sf"][value="all"]').checked=true; document.querySelector('input[name="stf"][value="all"]').checked=true;
   renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll(); toast('Фильтры успешно сброшены');
 }
 
 /* ================= PIPELINE ================= */
+function statusOf(r){ if(r.stock<=0) return 'out'; if(r.stock<=3) return 'low'; if(r.stock>50) return 'over'; return 'ok'; }
 function applyFilters(){
   let rows = DATA.map(r => {
       let filteredSales = 0;
@@ -681,16 +729,14 @@ function applyFilters(){
           for (let dStr in r.dailySales) {
               let qty = r.dailySales[dStr];
               if(qty <= 0) continue;
-              
               const d = new Date(dStr + "T00:00:00");
               if(F.from && d < new Date(F.from + "T00:00:00")) continue;
               if(F.to) { const t = new Date(F.to + "T00:00:00"); t.setDate(t.getDate()+1); if(d >= t) continue; }
-              
               filteredSales += qty;
               if (!lastSaleDate || d > lastSaleDate) lastSaleDate = d;
           }
       } else {
-          filteredSales = r.baseSales;
+          filteredSales = r.sales; 
           let latestStr = Object.keys(r.dailySales).sort().pop();
           if(latestStr) lastSaleDate = new Date(latestStr + "T00:00:00");
       }
@@ -699,7 +745,7 @@ function applyFilters(){
           ...r,
           sales: filteredSales,
           date: lastSaleDate,
-          revenue: r.costPrice * filteredSales, 
+          calcIncome: r.costPrice * filteredSales, 
           profit: r.unitProfit * filteredSales
       };
   });
@@ -715,6 +761,7 @@ function applyFilters(){
     if(F.sales==='low') rows=rows.filter(r=>r.sales>0 && r.sales<=q25);
     if(F.sales==='zero') rows=rows.filter(r=>r.sales===0);
   }
+  if(F.stock!=='all') rows=rows.filter(r=>statusOf(r)===F.stock);
   if(F.search) rows=rows.filter(r=> (r.article+' '+r.name).toLowerCase().includes(F.search));
   return rows;
 }
@@ -728,20 +775,20 @@ function animateNum(el, to, isMoney){
 
 function renderAll(){
   const rows = applyFilters(); const base = DATA;
-  const sv=base.map(r=>r.baseSales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
-  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.baseSales>0&&r.baseSales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.baseSales>q25&&r.baseSales<q75).length); setCnt('cnt-low',base.filter(r=>r.baseSales>0&&r.baseSales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.baseSales===0).length);
+  const sv=base.map(r=>r.sales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
+  setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.sales>0&&r.sales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.sales>q25&&r.sales<q75).length); setCnt('cnt-low',base.filter(r=>r.sales>0&&r.sales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.sales===0).length);
+  setCnt('scnt-all',base.length); setCnt('scnt-ok',base.filter(r=>statusOf(r)==='ok').length); setCnt('scnt-low',base.filter(r=>statusOf(r)==='low').length); setCnt('scnt-out',base.filter(r=>statusOf(r)==='out').length); setCnt('scnt-over',base.filter(r=>statusOf(r)==='over').length);
   
-  const totalRev = rows.reduce((s,r)=>s+r.revenue,0); 
+  const stock=rows.reduce((s,r)=>s+r.stock,0); 
   const totalProf = rows.reduce((s,r)=>s+r.profit,0);
-  
   const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
+  const totalCalcIncome = rows.reduce((s,r)=>s+r.calcIncome, 0); 
   const noSales=rows.filter(r=>r.sales===0).length;
   
-  animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
+  animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
   animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kLeader').textContent=leader? leader.name : '—';
-  animateNum(document.getElementById('kRevenue'),totalRev,true); 
+  animateNum(document.getElementById('kRevenue'),totalCalcIncome,true); 
   animateNum(document.getElementById('kProfit'),totalProf,true); 
-  document.getElementById('kMargin').textContent= (totalRev>0 ? (totalProf/totalRev*100).toFixed(1) : '0')+'%';
 
   updateCharts(rows); renderTable(rows);
   document.getElementById('tblSub').textContent='Отображено '+fmt(rows.length)+' позиций (Всего в базе: '+fmt(DATA.length)+')';
@@ -776,12 +823,6 @@ function initCharts(){
   charts.top=new Chart(document.getElementById('chTop'),{type:'bar',
     data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:6}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>' продано: '+fmt(c.parsed.x)+' шт'}}}, scales:{x:{grid:grid},y:{grid:{display:false}}}}});
-  charts.seg=new Chart(document.getElementById('chSeg'),{type:'bar',
-    data:{labels:['до 15k','15–25k','25–35k','35–50k','50k+'],datasets:[ {label:'SKU',data:[],backgroundColor:'rgba(16, 185, 129, 0.8)',borderRadius:6}, {label:'Продажи (шт)',data:[],backgroundColor:'rgba(59, 130, 246, 0.8)',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}}}, scales:{x:{grid:{display:false}},y:{grid:grid}}}});
-  charts.status=new Chart(document.getElementById('chStatus'),{type:'doughnut',
-    data:{labels:[],datasets:[{data:[],backgroundColor:['#10b981','#f59e0b','#f43f5e','#8b5cf6','#3b82f6','#06b6d4'],borderWidth:3,borderColor:bColor,hoverOffset:8}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'70%', plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:10}}}}});
 }
 
 function updateChartTheme() {
@@ -821,7 +862,7 @@ function updateCharts(rows){
   charts.dyn.data.datasets[1].data=keys.map(k=>groups[k].v); 
   charts.dyn.update();
 
-  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.revenue; });
+  const bm={}; rows.forEach(r=>{ const b=brandOf(r.name); bm[b]=(bm[b]||0)+r.calcIncome; });
   let bk=Object.keys(bm).sort((a,b)=>bm[b]-bm[a]); let bvals=bk.map(k=>bm[k]);
   if(bk.length>7){ const other=bvals.slice(7).reduce((s,v)=>s+v,0); bk=bk.slice(0,7).concat(['Прочие']); bvals=bvals.slice(0,7).concat([other]); }
   charts.brand.data.labels=bk; charts.brand.data.datasets[0].data=bvals; charts.brand.update();
@@ -843,15 +884,6 @@ function updateCharts(rows){
 
   const top=[...rows].sort((a,b)=>b.sales-a.sales).slice(0,10);
   charts.top.data.labels=top.map(r=>r.article); charts.top.data.datasets[0].data=top.map(r=>r.sales); charts.top.data.datasets[0].backgroundColor=top.map((_,i)=>PALETTE[i%PALETTE.length]); charts.top.update();
-
-  const bounds=[0,15000,25000,35000,50000,Infinity]; const skuC=[0,0,0,0,0], capC=[0,0,0,0,0];
-  rows.forEach(r=>{ for(let i=0;i<5;i++){ if(r.price>=bounds[i]&&r.price<bounds[i+1]){ skuC[i]++; capC[i]+=r.sales; break; } } });
-  charts.seg.data.datasets[0].data=skuC; charts.seg.data.datasets[1].data=capC; charts.seg.update();
-
-  const sm={}; rows.forEach(r=>{ sm[r.season]=(sm[r.season]||0)+r.revenue; });
-  let sk=Object.keys(sm).sort((a,b)=>sm[b]-sm[a]); let svals=sk.map(k=>sm[k]);
-  if(sk.length>5){ const other=svals.slice(5).reduce((s,v)=>s+v,0); sk=sk.slice(0,5).concat(['Прочие']); svals=svals.slice(0,5).concat([other]); }
-  charts.status.data.labels = sk; charts.status.data.datasets[0].data = svals; charts.status.update();
 }
 
 /* ================= TABLE & EXPORT ================= */
@@ -859,8 +891,9 @@ const COLS=[
   {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},
   {k:'price',l:'Цена (Реализация)',num:1,money:1},
   {k:'costPrice',l:'Себест. (1 шт)',num:1,money:1},
+  {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},
   {k:'sales',l:'Продажи (шт)',num:1},
-  {k:'revenue',l:'Доход (Себ×Кол)',num:1,money:1},
+  {k:'calcIncome',l:'Доход (Себ×Кол)',num:1,money:1},
   {k:'unitProfit',l:'Прибыль (1 шт)',num:1,money:1},
   {k:'profit',l:'Общ. Прибыль',num:1,money:1},
   {k:'date',l:'Послед. продажа'}
@@ -871,16 +904,20 @@ function renderTable(rows){
   const sorted=[...rows].sort((a,b)=>{ let x=a[sortKey],y=b[sortKey]; if(x instanceof Date||y instanceof Date){x=x?x.getTime():0;y=y?y.getTime():0;} if(typeof x==='string') return sortDir*x.localeCompare(y,'ru'); return sortDir*((x||0)-(y||0)); });
   const maxPage=Math.max(1,Math.ceil(sorted.length/PAGE_SIZE)); if(page>maxPage)page=maxPage;
   const slice=sorted.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE); const maxSales=Math.max(1,...rows.map(r=>r.sales));
+  const SB={ok:['b-ok','В наличии'],low:['b-low','Заканчивается'],out:['b-out','Нет в наличии'],over:['b-over','Избыток']};
   
   body.innerHTML=slice.map(r=>{
+    const st=SB[statusOf(r)];
     return '<tr>'+
       '<td class="art">'+esc(r.article)+'</td>'+
       '<td style="white-space:normal;min-width:180px;font-weight:700;color:var(--ink)">'+esc(r.name)+'</td>'+
       '<td><span class="badge" style="background:var(--badge-bg);color:var(--muted);font-weight:700;border:1px solid var(--badge-border);">'+esc(r.season||'—')+'</span></td>'+
       '<td class="num" style="color:var(--muted)">'+money(r.price)+'</td>'+
       '<td class="num" style="color:var(--cyan)">'+money(r.costPrice)+'</td>'+
+      '<td class="num">'+fmt(r.stock)+'</td>'+
+      '<td><span class="badge '+st[0]+'">'+st[1]+'</span></td>'+
       '<td class="num"><span class="mini-bar"><i style="width:'+Math.round(r.sales/maxSales*100)+'%"></i></span>'+fmt(r.sales)+'</td>'+
-      '<td class="num" style="color:var(--amber)">'+money(r.revenue)+'</td>'+
+      '<td class="num" style="color:var(--amber)">'+money(r.calcIncome)+'</td>'+
       '<td class="num" style="color:var(--green)">'+money(r.unitProfit)+'</td>'+
       '<td class="num" style="color:'+(r.profit<0?'var(--rose)':'inherit')+'">'+money(r.profit)+'</td>'+
       '<td>'+dstr(r.date)+'</td></tr>';
@@ -898,23 +935,24 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;} renderAll(); }
 
 function exportCSV(){
-  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена_Реализ','Себест_1шт','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
-  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
+  const rows=applyFilters(); const head=['Артикул','Наименование','Сезон','Цена_Реализ','Себест_1шт','Остаток','Статус','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа'];
+  const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
+  const lines=[head.join(';')].concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.unitProfit,r.profit,dstr(r.date)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')));
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Analytics_Export.csv'; a.click(); toast('CSV выгружен ('+rows.length+' строк)');
 }
 function exportExcel(){
-  const rows=applyFilters(); 
-  const aoa=[['Артикул','Наименование','Сезон','Цена_Реализ','Себест_1шт','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
-    .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.sales,r.revenue,r.unitProfit,r.profit,dstr(r.date)]));
-  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:13},{wch:12},{wch:13},{wch:14}];
+  const rows=applyFilters(); const SB={ok:'В наличии',low:'Заканчивается',out:'Нет в наличии',over:'Избыток'};
+  const aoa=[['Артикул','Наименование','Сезон','Цена_Реализ','Себест_1шт','Остаток','Статус','Продажи_шт','Доход','Прибыль_1шт','Общ_Прибыль','Последняя_продажа']]
+    .concat(rows.map(r=>[r.article,r.name,r.season,r.price,r.costPrice,r.stock,SB[statusOf(r)],r.sales,r.calcIncome,r.unitProfit,r.profit,dstr(r.date)]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:14},{wch:32},{wch:12},{wch:11},{wch:11},{wch:9},{wch:16},{wch:9},{wch:13},{wch:12},{wch:13},{wch:14}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Экспорт'); XLSX.writeFile(wb,'Analytics_Export.xlsx'); toast('Excel выгружен ('+rows.length+' строк)');
 }
 
 /* ================= BOOT ================= */
 let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),5000); }
 function initDashboard(){
-  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.search=''; F.from=null; F.to=null;
+  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.from=null; F.to=null;
   renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll();
 }
 
@@ -923,14 +961,13 @@ document.getElementById('msSearch').addEventListener('input',renderArticleList);
 document.getElementById('msBrandSearch').addEventListener('input',renderBrandList);
 document.getElementById('msSeasonSearch').addEventListener('input',renderSeasonList);
 
-initCharts(); updateChangedUI();
+initCharts();
 
 const STORED = loadFromStorage();
 if(STORED) { DATA = STORED; initDashboard(); }
 
-if(SYNC.enabled){ 
-    document.getElementById('syncDot').style.display='inline-block'; restartSyncTimer(); showLoader(); runAutoSync(true);
-} else { document.getElementById('globalLoader').style.display = 'none'; initDashboard(); }
+// Запускаем обновление при старте
+document.getElementById('syncDot').style.display='inline-block'; restartSyncTimer(); showLoader(); runAutoSync(true);
 
 document.getElementById('syncOverlay').addEventListener('click',e=>{ if(e.target.id==='syncOverlay') closeSyncModal(); });
 </script>
