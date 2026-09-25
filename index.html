@@ -37,7 +37,7 @@ body::after { bottom: -100px; right: -100px; width: 500px; height: 500px; backgr
 
 header { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:32px; flex-wrap:wrap; }
 .brand { display:flex; align-items:center; gap:18px; }
-.logo { width:52px; height:52px; border-radius:14px; background: linear-gradient(135deg, var(--primary), var(--cyan)); display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 24px var(--primary-glow); }
+.logo { width:52px; height:52px; border-radius:14px; background: linear-gradient(135deg, var(--primary), var(--purple)); display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 24px var(--primary-glow); }
 .logo svg { width:26px; height:26px; stroke:#fff; }
 .brand h1 { font-size:24px; font-weight:800; letter-spacing:-0.5px; margin-bottom: 4px; }
 .brand p { font-size:13px; color:var(--muted); display:flex; align-items:center; gap: 8px; font-weight: 500;}
@@ -146,9 +146,14 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 .b-ok { background:rgba(16, 185, 129, 0.1); color:var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
 .b-low { background:rgba(245, 158, 11, 0.1); color:var(--amber); border: 1px solid rgba(245, 158, 11, 0.2); }
 .b-out { background:rgba(244, 63, 94, 0.1); color:var(--rose); border: 1px solid rgba(244, 63, 94, 0.2); }
+.b-over { background:rgba(139, 92, 246, 0.1); color:var(--purple); border: 1px solid rgba(139, 92, 246, 0.2); }
 
 .mini-bar { width:50px; height:6px; border-radius:6px; background:var(--line); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:10px; }
 .mini-bar i { display:block; height:100%; border-radius:6px; background: linear-gradient(90deg, var(--primary), var(--cyan)); }
+
+tbody tr.is-new td { background: rgba(16, 185, 129, 0.05); }
+tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
+.new-badge { display:inline-block; margin-left:8px; font-size:10px; font-weight:800; letter-spacing:0.5px; color:#fff; background:var(--green); padding:2px 8px; border-radius:6px; vertical-align:middle; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
 
 .empty { padding:80px 20px; text-align:center; color:var(--muted); font-size:14px; font-weight: 600; }
 .pager { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 24px; border-top:1px solid var(--line); background:var(--bg); flex-wrap:wrap; }
@@ -191,8 +196,8 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 
 <div id="globalLoader">
   <div class="spinner"></div>
-  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с 5 листами...</h2>
-  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Установка защищенного API-соединения</p>
+  <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с базой...</h2>
+  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Подключение к Google Sheets</p>
 </div>
 
 <div class="wrap">
@@ -207,7 +212,7 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     <div class="actions">
       <button class="btn btn-ghost" id="themeToggleBtn" onclick="toggleTheme()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Тема</button>
       <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.1-5.7L3 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 1 0-2.1 5.7l2.1-1.7"/></svg>Обновить данные</button>
-      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
+      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
     </div>
   </header>
 
@@ -218,7 +223,7 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     </div>
     <div class="f-grid">
       <div class="f-group">
-        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период продаж</div>
+        <div class="f-title"><span class="dot" style="background:var(--primary)"></span>1 · Период</div>
         <div class="date-range">
           <input type="date" id="dateFrom" onchange="setDate()">
           <input type="date" id="dateTo" onchange="setDate()">
@@ -277,9 +282,10 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
         <div class="f-title"><span class="dot" style="background:var(--green)"></span>6 · Остаток</div>
         <div class="radio-list">
           <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')"><span>Любой статус</span><span class="tag" id="scnt-all">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии</span><span class="tag" id="scnt-ok">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии (4–50)</span><span class="tag" id="scnt-ok">—</span></label>
           <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')"><span>Заканчивается</span><span class="tag" id="scnt-low">—</span></label>
           <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')"><span>Нет в наличии</span><span class="tag" id="scnt-out">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="over" onchange="setStockFilter('over')"><span>Избыток (>50)</span><span class="tag" id="scnt-over">—</span></label>
         </div>
       </div>
     </div>
@@ -287,19 +293,19 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 
   <div class="kpi-grid">
     <div class="kpi" style="--c:var(--cyan)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 8.3L12 13l8.7-4.7"/><path d="M12 13v9"/></svg></div></div>
-      <div class="kpi-val" id="kStock">0</div>
-      <div class="kpi-lbl">Общий остаток, шт</div>
-      <div class="kpi-sub">Товаров в базе: <b id="kStockSku">0</b></div>
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
+      <div class="kpi-val" id="kSku">0</div>
+      <div class="kpi-lbl">Ассортимент (SKU)</div>
+      <div class="kpi-sub">Товаров без продаж: <b id="kNoSales">0</b></div>
     </div>
-    <div class="kpi" style="--c:var(--purple)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
+    <div class="kpi" style="--c:var(--primary)">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div></div>
       <div class="kpi-val" id="kSales">0</div>
       <div class="kpi-lbl">Продажи за период (шт)</div>
       <div class="kpi-sub">Товар-лидер: <b id="kLeader">—</b></div>
     </div>
-    <div class="kpi" style="--c:var(--primary)">
-      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="M7 15h0M2 9.5h20"/></svg></div></div>
+    <div class="kpi" style="--c:var(--amber)">
+      <div class="kpi-top"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M15 9.5c0-1.4-1.3-2.3-3-2.3s-3 .9-3 2.1c0 3.1 6 1.5 6 4.7 0 1.3-1.3 2.2-3 2.2s-3-.9-3-2.2"/></svg></div></div>
       <div class="kpi-val" id="kRevenue">0 ₸</div>
       <div class="kpi-lbl">Доход (Выручка)</div>
       <div class="kpi-sub">Формула: <b style="color:var(--muted)">Себест-сть × Кол-во</b></div>
@@ -360,7 +366,7 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
     </div>
   </div>
 
-  <p class="footer-note">PRO Analytics Engine · Интеграция с 5 листами Google Таблиц.<br>
+  <p class="footer-note">PRO Analytics Engine · Безопасная интеграция с 5 листами Google Таблиц через GViz API.<br>
   Система скачивает и сводит данные локально, без зависаний.</p>
 </div>
 
@@ -408,8 +414,7 @@ window.addEventListener('load', () => {
         if(loader && loader.style.opacity !== '0') {
             loader.style.opacity = '0';
             setTimeout(() => { loader.style.display = 'none'; }, 400);
-            const msg = document.getElementById('toastMsg');
-            if(msg && msg.textContent === '') toast('❌ Время ожидания истекло. Проверьте права доступа.');
+            toast('❌ Таблица недоступна или пуста. Проверьте права доступа.');
             if(DATA.length > 0) initDashboard();
         }
     }, 10000); 
@@ -419,7 +424,7 @@ window.addEventListener('load', () => {
 let DATA = []; let charts = {}; let sortKey = 'sales', sortDir = -1; let page = 1; const PAGE_SIZE = 100;
 const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'' };
 const PALETTE = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899', '#f97316', '#84cc16', '#eab308'];
-const LS_KEY = 'sklad_almaty_master_v12';
+const LS_KEY = 'sklad_almaty_master_v15';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
@@ -453,114 +458,143 @@ const dstr = d => { if(!d) return '—'; const pad = n => (n < 10 ? '0' + n : n)
 const cleanName = s => String(s==null?'':s).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 
 /* ================= 5-SHEET PARSER ================= */
+function findHeaderRow(rows) {
+    for (let i=0; i<Math.min(10, rows.length); i++) {
+        let r = rows[i]; if (!r) continue;
+        let str = r.join(' ').toLowerCase();
+        if (str.includes('арт') || str.includes('наим') || str.includes('товар') || str.includes('код') || str.includes('остат')) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+const getProd = (map, art, name) => {
+    if (!map[art]) {
+        map[art] = {
+            article: art, name: cleanName(name) || art, season: 'Не указан',
+            price: 0, costPrice: 0, stock: 0, sales: 0, profit: 0, calcIncome: 0,
+            unitProfit: 0, dailySales: {}, date: null
+        };
+    }
+    return map[art];
+};
+
+function processDataSheet(rows, products, valKeywords, fieldName) {
+    if (!rows || rows.length < 2) return;
+    let headerRow = findHeaderRow(rows);
+    let headers = (rows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
+
+    let iArt = headers.findIndex(h => h.includes('арт') || h.includes('код'));
+    if (iArt === -1) iArt = 0;
+    let iName = headers.findIndex(h => h.includes('наим') || h.includes('товар'));
+    if (iName === -1) iName = 1;
+
+    let iVal = -1;
+    for (let kw of valKeywords) {
+        iVal = headers.findIndex(h => h.includes(kw));
+        if (iVal !== -1) break;
+    }
+    if (iVal === -1) iVal = 2; // fallback
+
+    let iSeason = headers.findIndex(h => h.includes('сезон'));
+
+    for (let i = headerRow + 1; i < rows.length; i++) {
+        let r = rows[i]; if(!r || r.length===0) continue;
+        let art = String(r[iArt] || '').trim();
+        if (!art) continue;
+        let p = getProd(products, art, r[iName]);
+
+        if (iSeason !== -1 && r[iSeason]) p.season = String(r[iSeason]).trim();
+        let val = pnum(r[iVal]);
+        if (val !== 0) p[fieldName] = val; 
+    }
+}
+
+function processSalesSheet(rows, products) {
+    if (!rows || rows.length < 2) return;
+    let headerRow = findHeaderRow(rows);
+    let headers = (rows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
+
+    let iArt = headers.findIndex(h => h.includes('арт') || h.includes('код'));
+    let iName = headers.findIndex(h => h.includes('наим') || h.includes('товар'));
+    let iSeason = headers.findIndex(h => h.includes('сезон'));
+
+    let dateCols = [];
+    for (let c = 0; c < headers.length; c++) {
+        let d = pdate(String(rows[headerRow][c]));
+        if (d && c !== iArt && c !== iName && c !== iSeason) {
+            dateCols.push({ idx: c, dateStr: toLocalIso(d), dateObj: d });
+        }
+    }
+
+    if (dateCols.length >= 3) {
+        if (iArt === -1) iArt = 0; if (iName === -1) iName = 1;
+        for (let i = headerRow + 1; i < rows.length; i++) {
+            let r = rows[i]; if(!r || r.length===0) continue;
+            let art = String(r[iArt] || '').trim();
+            if (!art) continue;
+            let p = getProd(products, art, r[iName]);
+            if (iSeason !== -1 && r[iSeason]) p.season = String(r[iSeason]).trim();
+
+            for (let dc of dateCols) {
+                let qty = pnum(r[dc.idx]);
+                if (qty > 0) {
+                    p.sales += qty;
+                    p.dailySales[dc.dateStr] = (p.dailySales[dc.dateStr] || 0) + qty;
+                    if (!p.date || dc.dateObj > p.date) p.date = dc.dateObj;
+                }
+            }
+        }
+    } else {
+        if (iArt === -1) iArt = 1; if (iName === -1) iName = 2;
+        let iDate = headers.findIndex(h => h.includes('дат') || h.includes('date'));
+        if (iDate === -1) iDate = 0; 
+        let iQty = headers.findIndex(h => h.includes('кол') || h.includes('шт') || h.includes('прод'));
+        if (iQty === -1) iQty = 3; 
+
+        for (let i = headerRow + 1; i < rows.length; i++) {
+            let r = rows[i]; if(!r || r.length===0) continue;
+            let art = String(r[iArt] || '').trim();
+            if (!art) continue;
+            let p = getProd(products, art, r[iName]);
+            if (iSeason !== -1 && r[iSeason]) p.season = String(r[iSeason]).trim();
+
+            let qty = pnum(r[iQty]);
+            if (qty > 0) {
+                p.sales += qty;
+                let dObj = null;
+                if (r[iDate]) {
+                    dObj = pdate(r[iDate]);
+                    if (dObj) {
+                        let dStr = toLocalIso(dObj);
+                        p.dailySales[dStr] = (p.dailySales[dStr] || 0) + qty;
+                        if (!p.date || dObj > p.date) p.date = dObj;
+                    }
+                }
+            }
+        }
+    }
+}
+
 function buildDataset(salesArr, stockArr, costArr, profitArr, totalsArr) {
-  const products = {};
-  const isSep = v => /^\d+-\d+$/.test(String(v==null?'':v).trim());
+  const productsMap = {};
 
-  function parseSheet(sheetRows, processRowCb) {
-      if (!sheetRows || !sheetRows.length) return;
-      let headerRow = 0;
-      for(let i=0; i<Math.min(10, sheetRows.length); i++) {
-          let text = (sheetRows[i]||[]).join(' ').toLowerCase();
-          if(text.includes('артикул') || text.includes('наименовани')) { headerRow = i; break; }
-      }
-      let headers = (sheetRows[headerRow]||[]).map(s=>String(s).toLowerCase().trim());
-      let iArt = headers.findIndex(h => h.includes('артикул') || h.includes('код'));
-      if (iArt === -1) iArt = 0;
+  processSalesSheet(salesArr, productsMap);
+  processDataSheet(stockArr, productsMap, ['остат', 'наличи', 'кол'], 'stock');
+  processDataSheet(costArr, productsMap, ['себест', 'закуп'], 'costPrice');
+  processDataSheet(totalsArr, productsMap, ['цена', 'розниц'], 'price');
+
+  Object.values(productsMap).forEach(p => {
+      if (!p.season) p.season = 'Не указан';
       
-      let iName = headers.findIndex(h => h.includes('наименовани') || h.includes('товар'));
-      if (iName === -1) iName = 1;
-      
-      for(let i = headerRow + 1; i < sheetRows.length; i++) {
-          let r = sheetRows[i];
-          if(!r || r.length === 0) continue;
-          let art = String(r[iArt]||'').trim();
-          let name = String(r[iName]||'').trim();
-          if(!art && !name) continue;
-          if(!art) art = 'Б/А·' + cleanName(name);
-          if(isSep(art)) continue;
-          
-          if(!products[art]) {
-              products[art] = {
-                  article: art, name: cleanName(name), season: 'Не указан',
-                  price: 0, costPrice: 0, stock: 0, sales: 0, profit: 0, calcIncome: 0,
-                  revenueCsv: 0, unitProfit: 0, dailySales: {}, date: null
-              };
-          }
-          if (name && !products[art].name) products[art].name = cleanName(name);
-          processRowCb(products[art], r, headers);
-      }
-  }
-
-  // 1. Итого по товарам
-  parseSheet(totalsArr, (p, r, h) => {
-      let iPrice = h.findIndex(x => x.includes('цена') || x.includes('розниц'));
-      let iRev = h.findIndex(x => x.includes('выручка') || x.includes('сумма'));
-      if(iPrice !== -1 && pnum(r[iPrice]) > 0) p.price = pnum(r[iPrice]);
-      if(iRev !== -1 && pnum(r[iRev]) !== 0) p.revenueCsv = pnum(r[iRev]);
-  });
-
-  // 2. Себестоимость
-  parseSheet(costArr, (p, r, h) => {
-      let iCost = h.findIndex(x => x.includes('себест') || x.includes('закуп'));
-      if (iCost === -1) iCost = h.length > 2 ? 2 : 1; 
-      if (pnum(r[iCost]) > 0) p.costPrice = pnum(r[iCost]);
-  });
-
-  // 3. ВАЛОВАЯ ПРИБЫЛЬ
-  parseSheet(profitArr, (p, r, h) => {
-      let iProf = h.findIndex(x => x.includes('прибыль') || x.includes('маржа'));
-      if (iProf === -1) iProf = h.length > 2 ? 2 : 1;
-      if (pnum(r[iProf]) !== 0) p.profit = pnum(r[iProf]);
-  });
-
-  // 4. Остаток
-  parseSheet(stockArr, (p, r, h) => {
-      let iStock = h.findIndex(x => x.includes('остаток') || x.includes('наличи'));
-      if (iStock === -1) iStock = h.length > 2 ? 2 : 1;
-      if (pnum(r[iStock]) !== 0) p.stock = pnum(r[iStock]);
-  });
-
-  // 5. ЕЖЕДНЕВНЫЙ ПРОДАЖА (Главный)
-  parseSheet(salesArr, (p, r, h) => {
-      let iSeason = h.findIndex(x => x.includes('сезон'));
-      if (iSeason !== -1 && String(r[iSeason]).trim()) p.season = String(r[iSeason]).trim();
-      
-      let iArt = h.findIndex(x => x.includes('артикул') || x.includes('код'));
-      if (iArt === -1) iArt = 0;
-      let iName = h.findIndex(x => x.includes('наименовани'));
-      if (iName === -1) iName = 1;
-      let iTotal = h.findIndex(x => x.includes('общ.продаж') || x.includes('итог'));
-      
-      let dailySum = 0;
-      for (let c = 0; c < h.length; c++) {
-          if (c === iArt || c === iName || c === iSeason || c === iTotal) continue;
-          let d = pdate(h[c]);
-          if (d) {
-              let qty = pnum(r[c]);
-              if (qty > 0) {
-                  let dStr = toLocalIso(d);
-                  p.dailySales[dStr] = (p.dailySales[dStr] || 0) + qty;
-                  dailySum += qty;
-                  if (!p.date || d > p.date) p.date = d;
-              }
-          }
-      }
-      if (dailySum > 0) p.sales = dailySum; 
-  });
-
-  Object.values(products).forEach(p => {
-      if (p.costPrice === 0 && p.price > 0) p.costPrice = p.price * 0.55; 
-      if (p.price === 0 && p.revenueCsv > 0 && p.sales > 0) p.price = p.revenueCsv / p.sales;
-      if (p.price === 0 && p.costPrice > 0) p.price = p.costPrice * 1.8; 
-
-      // Жёсткие формулы
+      // Формулы пользователя
       p.unitProfit = p.price - p.costPrice;
       p.calcIncome = p.costPrice * p.sales;
       p.profit = p.unitProfit * p.sales; 
   });
 
-  return Object.values(products);
+  return Object.values(productsMap);
 }
 
 function updateDataMerge(newData){
@@ -571,17 +605,16 @@ function updateDataMerge(newData){
 function saveToStorage(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DATA)); }catch(e){} }
 function loadFromStorage(){
   try{ const raw=localStorage.getItem(LS_KEY); if(!raw) return null; const arr=JSON.parse(raw);
-    if(!Array.isArray(arr) || !arr.length) return null; return arr;
+    if(!Array.isArray(arr) || !arr.length) return null;
+    return arr.map(r=>({...r, date: pdate(r.date), season: r.season||'Не указан'}));
   }catch(e){ return null; }
 }
 
 /* ================= MULTI-SHEET SYNC API ================= */
 const SHEET_ID = '1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg';
-const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}`;
 
-const SYNC = { 
-  intervalMin: 5, enabled: true, lastRun: null, lastResult: '' 
-};
+const SYNC = { intervalMin: 5, enabled: true, lastRun: null, lastResult: '' };
 let syncTimer=null; let syncInFlight=false;
 
 function openSyncModal(){ document.getElementById('syncInterval').value=SYNC.intervalMin||5; updateSyncStatusText(); document.getElementById('syncOverlay').style.display='flex'; }
@@ -624,7 +657,7 @@ async function safeFetchCsv(url){
 }
 
 function showLoader() { 
-    document.getElementById('loaderText').textContent = 'Подключаемся к 5 листам Google...';
+    document.getElementById('loaderText').textContent = 'Подключаемся к Google...';
     const loader = document.getElementById('globalLoader'); 
     if(loader) { loader.style.display = 'flex'; loader.style.opacity = '0.98'; } 
 }
@@ -636,12 +669,11 @@ async function runAutoSync(silent){
         csvUrlGid('476452638'),   // Sales
         csvUrlGid('2055556445'),  // Stock
         csvUrlGid('1449864217'),  // Cost
-        csvUrlGid('1658889858'),  // Profit
-        csvUrlGid('1353794655')   // Totals
+        csvUrlGid('1658889858'),  // Profit (optional)
+        csvUrlGid('1353794655')   // Totals (Price)
     ];
 
     const responses = await Promise.all(urls.map(safeFetchCsv));
-    
     if(!responses[0] && !responses[1] && !responses[4]) throw new Error('ACCESS_DENIED');
 
     const rows = buildDataset(
@@ -778,17 +810,24 @@ function renderAll(){
   const sv=base.map(r=>r.sales).sort((a,b)=>a-b); const q=p=>sv.length?sv[Math.min(sv.length-1,Math.floor(p*sv.length))]:0; const q25=q(.25),q75=q(.75);
   setCnt('cnt-all',base.length); setCnt('cnt-hit',base.filter(r=>r.sales>0&&r.sales>=q75).length); setCnt('cnt-mid',base.filter(r=>r.sales>q25&&r.sales<q75).length); setCnt('cnt-low',base.filter(r=>r.sales>0&&r.sales<=q25).length); setCnt('cnt-zero',base.filter(r=>r.sales===0).length);
   setCnt('scnt-all',base.length); setCnt('scnt-ok',base.filter(r=>statusOf(r)==='ok').length); setCnt('scnt-low',base.filter(r=>statusOf(r)==='low').length); setCnt('scnt-out',base.filter(r=>statusOf(r)==='out').length); setCnt('scnt-over',base.filter(r=>statusOf(r)==='over').length);
-  
-  const stock=rows.reduce((s,r)=>s+r.stock,0); 
+
+  const stock=rows.reduce((s,r)=>s+r.stock,0); const cap=rows.reduce((s,r)=>s+r.stock*r.price,0); 
   const totalProf = rows.reduce((s,r)=>s+r.profit,0);
+  const totalStockCost = rows.reduce((s,r) => s + (r.stock > 0 ? r.stock * r.costPrice : 0), 0);
+  const avgUnitCost = stock > 0 ? totalStockCost / stock : 0;
+  
   const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
   const totalCalcIncome = rows.reduce((s,r)=>s+r.calcIncome, 0); 
   const noSales=rows.filter(r=>r.sales===0).length;
   
   animateNum(document.getElementById('kStock'),stock); document.getElementById('kStockSku').textContent=fmt(rows.length);
-  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kLeader').textContent=leader? leader.name : '—';
-  animateNum(document.getElementById('kRevenue'),totalCalcIncome,true); 
+  animateNum(document.getElementById('kCap'),cap,true); document.getElementById('kAvgPrice').textContent=money(stock>0? cap/stock : 0);
+  animateNum(document.getElementById('kTotalCost'), totalStockCost, true); document.getElementById('kAvgCost').textContent=money(avgUnitCost);
+  animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kRevenue').textContent=money(totalCalcIncome);
   animateNum(document.getElementById('kProfit'),totalProf,true); 
+  document.getElementById('kMargin').textContent=money(salesQty > 0 ? (totalProf/salesQty) : 0);
+  
+  document.getElementById('kLeader').textContent=leader? leader.name : '—'; document.getElementById('kLeaderQty').textContent=fmt(leader?leader.sales:0)+' шт';
 
   updateCharts(rows); renderTable(rows);
   document.getElementById('tblSub').textContent='Отображено '+fmt(rows.length)+' позиций (Всего в базе: '+fmt(DATA.length)+')';
