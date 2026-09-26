@@ -154,7 +154,6 @@ td.num { font-variant-numeric:tabular-nums; font-weight:700; letter-spacing: -0.
 tbody tr.is-new td { background: rgba(16, 185, 129, 0.05); }
 tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
 .new-badge { display:inline-block; margin-left:8px; font-size:10px; font-weight:800; letter-spacing:0.5px; color:#fff; background:var(--green); padding:2px 8px; border-radius:6px; vertical-align:middle; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
-.btn-toggle-active { background: var(--green)!important; color:#fff!important; box-shadow:0 4px 15px rgba(16,185,129,0.3)!important; border-color:transparent!important; }
 
 .empty { padding:80px 20px; text-align:center; color:var(--muted); font-size:14px; font-weight: 600; }
 .pager { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 24px; border-top:1px solid var(--line); background:var(--bg); flex-wrap:wrap; }
@@ -198,7 +197,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
 <div id="globalLoader">
   <div class="spinner"></div>
   <h2 style="font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing: -0.5px;">Синхронизация с базой...</h2>
-  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Подключение к 5 листам Google Sheets</p>
+  <p style="color:var(--muted); font-size:14px; text-align:center; font-weight: 500;" id="loaderText">Подключение к 3 листам Google Sheets</p>
 </div>
 
 <div class="wrap">
@@ -213,7 +212,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
     <div class="actions">
       <button class="btn btn-ghost" id="themeToggleBtn" onclick="toggleTheme()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Тема</button>
       <button class="btn btn-primary" onclick="showLoader(); runAutoSync(false)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.1-5.7L3 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 1 0-2.1 5.7l2.1-1.7"/></svg>Обновить данные</button>
-      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
+      <button class="btn btn-ghost" id="syncBtn" onclick="openSyncModal()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 0 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.06z"/></svg>Настройки API</button>
     </div>
   </header>
 
@@ -283,7 +282,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
         <div class="f-title"><span class="dot" style="background:var(--green)"></span>6 · Остаток</div>
         <div class="radio-list">
           <label class="radio-item"><input type="radio" name="stf" value="all" checked onchange="setStockFilter('all')"><span>Любой статус</span><span class="tag" id="scnt-all">—</span></label>
-          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии</span><span class="tag" id="scnt-ok">—</span></label>
+          <label class="radio-item"><input type="radio" name="stf" value="ok" onchange="setStockFilter('ok')"><span>В наличии (4–50)</span><span class="tag" id="scnt-ok">—</span></label>
           <label class="radio-item"><input type="radio" name="stf" value="low" onchange="setStockFilter('low')"><span>Заканчивается</span><span class="tag" id="scnt-low">—</span></label>
           <label class="radio-item"><input type="radio" name="stf" value="out" onchange="setStockFilter('out')"><span>Нет в наличии</span><span class="tag" id="scnt-out">—</span></label>
           <label class="radio-item"><input type="radio" name="stf" value="over" onchange="setStockFilter('over')"><span>Избыток (>50)</span><span class="tag" id="scnt-over">—</span></label>
@@ -367,8 +366,8 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
     </div>
   </div>
 
-  <p class="footer-note">PRO Analytics Engine · Строгая математика на основе 5 листов Google Таблиц.<br>
-  Система скачивает и сводит данные локально, без зависаний.</p>
+  <p class="footer-note">PRO Analytics Engine · Строгая математика на основе 3 листов Google Таблиц.<br>
+  Система скачивает данные поочередно для обхода блокировок Google.</p>
 </div>
 
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
@@ -379,8 +378,7 @@ tbody tr.is-new:hover td { background: rgba(16, 185, 129, 0.1); }
       <h3>Настройки синхронизации API</h3>
       <button onclick="closeSyncModal()" style="border:none;background:var(--badge-bg);width:32px;height:32px;border-radius:10px;cursor:pointer;color:var(--muted);transition:0.2s">✕</button>
     </div>
-    <p>Дашборд сводит данные из 5 разных листов вашей таблицы. Убедитесь, что для Google Таблицы открыт доступ <b>«Всем, у кого есть ссылка»</b>.</p>
-    
+    <p>Мы автоматически скачиваем данные из Google Таблицы. Убедитесь, что для неё открыт доступ <b>«Всем, у кого есть ссылка»</b>.</p>
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
       <label style="font-size:13px;font-weight:700;color:var(--ink)">Интервал обновления (минут)
         <input id="syncInterval" type="number" min="1" max="120" value="5">
@@ -408,11 +406,24 @@ function updateThemeUI(theme) {
 }
 initTheme();
 
+/* ================= FAILSAFE: REMOVE LOADER IF STUCK ================= */
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const loader = document.getElementById('globalLoader');
+        if(loader && loader.style.opacity !== '0') {
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.display = 'none'; }, 400);
+            toast('❌ Таблица долго не отвечает. Проверьте права.');
+            if(DATA.length > 0) initDashboard();
+        }
+    }, 12000); 
+});
+
 /* ================= STATE ================= */
 let DATA = []; let charts = {}; let sortKey = 'sales', sortDir = -1; let page = 1; const PAGE_SIZE = 100;
 const F = { from:null, to:null, period:'day', articles:new Set(), brands:new Set(), seasons:new Set(), sales:'all', stock:'all', search:'' };
 const PALETTE = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#ec4899', '#f97316', '#84cc16', '#eab308'];
-const LS_KEY = 'sklad_almaty_master_v18';
+const LS_KEY = 'sklad_almaty_master_v19';
 
 const fmt  = n => (n==null||isNaN(n))? '0' : Math.round(n).toLocaleString('ru-RU');
 const money= n => fmt(n)+' ₸';
@@ -445,12 +456,12 @@ const pdate = v => {
 const dstr = d => { if(!d) return '—'; const pad = n => (n < 10 ? '0' + n : n); return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`; };
 const cleanName = s => String(s==null?'':s).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 
-/* ================= 5-SHEET PARSER ================= */
+/* ================= 3-SHEET PARSER ================= */
 function findHeaderRow(rows) {
     for (let i=0; i<Math.min(10, rows.length); i++) {
         let r = rows[i]; if (!r) continue;
         let str = r.join(' ').toLowerCase();
-        if (str.includes('арт') || str.includes('наим') || str.includes('товар') || str.includes('код') || str.includes('остат')) {
+        if (str.includes('арт') || str.includes('наим') || str.includes('код') || str.includes('остат')) {
             return i;
         }
     }
@@ -474,7 +485,6 @@ function processSalesSheet(rows, products) {
     let hr = findHeaderRow(rows);
     let headers = (rows[hr]||[]).map(s=>String(s).toLowerCase().trim());
 
-    // Ищем колонки по названиям (как на скриншоте ЕЖЕДНЕВНЫЙ ПРОДАЖА)
     let iDate = headers.findIndex(h => h.includes('дат') || h.includes('date'));
     let iArt = headers.findIndex(h => h.includes('арт') || h.includes('код'));
     let iName = headers.findIndex(h => h.includes('наим') || h.includes('товар'));
@@ -482,16 +492,14 @@ function processSalesSheet(rows, products) {
     let iQty = headers.findIndex(h => h.includes('кол') || h.includes('шт') || h.includes('прод'));
     let iProf = headers.findIndex(h => h.includes('прибыл') || h.includes('марж'));
 
-    if (iDate === -1) iDate = 0;
-    if (iArt === -1) iArt = 1;
-    if (iName === -1) iName = 2;
-    if (iQty === -1) iQty = 3;
-    if (iProf === -1) iProf = 5;
+    if (iDate === -1) iDate = 0; if (iArt === -1) iArt = 1; if (iName === -1) iName = 2;
+    if (iQty === -1) iQty = 3; if (iProf === -1) iProf = 5;
 
     for (let i = hr + 1; i < rows.length; i++) {
         let r = rows[i]; if(!r || r.length===0) continue;
         let art = String(r[iArt] || '').trim();
         if (!art) continue;
+        
         let p = getProd(products, art, r[iName]);
         if (iSeason !== -1 && r[iSeason]) p.season = String(r[iSeason]).trim();
 
@@ -501,7 +509,7 @@ function processSalesSheet(rows, products) {
 
         if (qty > 0) {
             p.sales += qty;
-            p.rawProfit += prof; // Суммируем сырую прибыль из таблицы продаж
+            p.rawProfit += prof; 
             
             if (d) {
                 let dStr = toLocalIso(d);
@@ -516,18 +524,18 @@ function processCostSheet(rows, products) {
     if (!rows || rows.length < 2) return;
     let hr = findHeaderRow(rows);
     
-    // В листе 1449864217: Столбец D (индекс 3) = Себестоимость, Столбец F (индекс 5) = Цена реализации
+    // Пользователь: "gid=1449864217 = F столбик (цена реализации), D столбик (Себестоимость)"
     for (let i = hr + 1; i < rows.length; i++) {
         let r = rows[i]; if(!r || r.length===0) continue;
-        let art = String(r[0] || '').trim(); // Артикул обычно в A
+        let art = String(r[0] || '').trim(); // Артикул обычно в A (0)
         if (!art) continue;
         
         let p = getProd(products, art, '');
-        let cost = pnum(r[3]); // D
-        let price = pnum(r[5]); // F
+        let cost = pnum(r[3]); // D = индекс 3
+        let price = pnum(r[5]); // F = индекс 5
         
-        if (cost > 0) p.costPrice = cost;
-        if (price > 0) p.price = price;
+        if (cost !== 0) p.costPrice = cost;
+        if (price !== 0) p.price = price;
     }
 }
 
@@ -559,16 +567,15 @@ function buildDataset(salesArr, stockArr, costArr) {
   processStockSheet(stockArr, productsMap);
 
   Object.values(productsMap).forEach(p => {
-      // Строгая математика, которую запросил пользователь
-      
-      // 1. Прибыль (1 шт) = Прибыль ÷ Кол (из листа продаж)
+      // Строгая математика по запросу пользователя:
+      // Прибыль 1 шт = Прибыль ÷ Кол
       p.unitProfit = p.sales > 0 ? (p.rawProfit / p.sales) : 0;
       
-      // 2. Общ. Прибыль = остается общей прибылью (или unitProfit * sales)
-      p.profit = p.rawProfit;
-
-      // 3. Доход (Себ × Кол) = Себестоимость × Кол
+      // Доход (Себ × Кол) = Себестоимость × Кол.
       p.calcIncome = p.costPrice * p.sales;
+      
+      // Общая прибыль
+      p.profit = p.rawProfit; 
   });
 
   return Object.values(productsMap);
@@ -587,7 +594,7 @@ function loadFromStorage(){
   }catch(e){ return null; }
 }
 
-/* ================= MULTI-SHEET SYNC API ================= */
+/* ================= MULTI-SHEET SYNC API (Sequential Loading) ================= */
 const SHEET_ID = '1QLHhcQvpVEQNbrlVaE6tAt5AJJVC7Dx-j7zyVp86ZSg';
 const csvUrlGid = gid => `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
 
@@ -634,7 +641,6 @@ async function safeFetchCsv(url){
 }
 
 function showLoader() { 
-    document.getElementById('loaderText').textContent = 'Подключаемся к листам Google...';
     const loader = document.getElementById('globalLoader'); 
     if(loader) { loader.style.display = 'flex'; loader.style.opacity = '0.98'; } 
 }
@@ -648,7 +654,12 @@ async function runAutoSync(silent){
         csvUrlGid('1449864217')   // Cost & Price
     ];
 
-    const responses = await Promise.all(urls.map(safeFetchCsv));
+    const responses = [];
+    for(let i=0; i<urls.length; i++) {
+        if(!silent) document.getElementById('loaderText').textContent = `Загрузка листа ${i+1} из 3...`;
+        responses.push(await safeFetchCsv(urls[i]));
+        await new Promise(r => setTimeout(r, 400)); // Задержка от спам-фильтра Google
+    }
     
     if(!responses[0] && !responses[1] && !responses[2]) throw new Error('ACCESS_DENIED');
 
@@ -791,14 +802,11 @@ function renderAll(){
   const salesQty=rows.reduce((s,r)=>s+r.sales,0); const leader=rows.reduce((m,r)=> r.sales>(m?m.sales:-1)?r:m,null);
   const totalCalcIncome = rows.reduce((s,r)=>s+r.calcIncome, 0); 
   const noSales=rows.filter(r=>r.sales===0).length;
-  const out=rows.filter(r=>r.stock<=0).length, low=rows.filter(r=>r.stock>0&&r.stock<=3).length;
   
   animateNum(document.getElementById('kSku'),rows.length); document.getElementById('kNoSales').textContent=fmt(noSales);
   animateNum(document.getElementById('kSales'),salesQty); document.getElementById('kLeader').textContent=leader? leader.name : '—';
   animateNum(document.getElementById('kRevenue'),totalCalcIncome,true); 
   animateNum(document.getElementById('kProfit'),totalProf,true); 
-  animateNum(document.getElementById('kStock'),stock); 
-  animateNum(document.getElementById('kRisk'),out+low); document.getElementById('kOut').textContent=fmt(out); document.getElementById('kLow').textContent=fmt(low);
 
   updateCharts(rows); renderTable(rows);
   document.getElementById('tblSub').textContent='Отображено '+fmt(rows.length)+' позиций (Всего в базе: '+fmt(DATA.length)+')';
@@ -899,7 +907,7 @@ function updateCharts(rows){
 /* ================= TABLE & EXPORT ================= */
 const COLS=[
   {k:'article',l:'Артикул'},{k:'name',l:'Наименование'},{k:'season',l:'Сезон'},
-  {k:'price',l:'Цена (Розница)',num:1,money:1},
+  {k:'price',l:'Цена (Реализация)',num:1,money:1},
   {k:'costPrice',l:'Себест. (1 шт)',num:1,money:1},
   {k:'stock',l:'Остаток',num:1},{k:'status',l:'Статус'},
   {k:'sales',l:'Продажи (шт)',num:1},
@@ -962,7 +970,7 @@ function exportExcel(){
 /* ================= BOOT ================= */
 let toastTimer=null; function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),5000); }
 function initDashboard(){
-  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.stock='all'; F.search=''; F.from=null; F.to=null;
+  F.articles=new Set(); F.brands=new Set(); F.seasons=new Set(); F.sales='all'; F.search=''; F.from=null; F.to=null;
   renderBrandList(); updateMsBrandLabel(); renderArticleList(); updateMsLabel(); renderSeasonList(); updateMsSeasonLabel(); renderAll();
 }
 
